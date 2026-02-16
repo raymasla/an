@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>誰是臥底 - 斷線重連版</title>
+    <style>
+        :root {
+            /* 配色升級：現代簡約深色風格 (Modern Dark Premium) */
+            --primary: #4f46e5;       /* Indigo */
+            --primary-hover: #4338ca;
+            --danger: #e11d48;        /* Rose */
+            --success: #059669;       /* Emerald */
+            --warning: #d97706;       /* Amber */
+            
+            /* 背景漸層：深岩灰至午夜藍 */
+            --bg-grad-1: #0f172a;     /* Slate 900 */
+            --bg-grad-2: #1e293b;     /* Slate 800 */
+            --bg-grad-3: #172554;     /* Blue 950 */
+            
+            /* 玻璃擬態變數 */
+            --glass-bg: rgba(30, 41, 59, 0.7); 
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            
+            --text: #f8fafc;          /* Slate 50 */
+            --text-muted: #94a3b8;    /* Slate 400 */
+            
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(15, 23, 42, 0.6);
+        }
+
+        /* 保留原本流暢的動畫 Keyframes */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            60% { transform: scale(1.02); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes subtle-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));
+            background-size: 200% 200%;
+            animation: gradientBG 20s ease infinite;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 滾動條美化 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 92vh;
+            overflow-y: auto;
+            transition: height 0.3s ease;
+        }
+
+        h1, h2, h3 { 
+            text-align: center; 
+            color: var(--text); 
+            margin-top: 0; 
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+        .screen { display: none; }
+        .screen.active { 
+            display: block; 
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        /* 按鈕樣式 */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        button:hover { 
+            background: var(--primary-hover);
+            transform: translateY(-1px); 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        button:active { transform: translateY(0); opacity: 0.9; }
+        button:disabled { background: #334155; cursor: not-allowed; color: #64748b; border-color: transparent; box-shadow: none; }
+        
+        button.danger { background: var(--danger); }
+        button.danger:hover { background: #be123c; }
+        
+        button.secondary { background: #334155; color: #e2e8f0; }
+        button.secondary:hover { background: #475569; }
+        
+        button.success { background: var(--success); }
+        button.success:hover { background: #047857; }
+        
+        button.small-btn { width: auto; padding: 8px 16px; font-size: 13px; margin: 0; border-radius: 8px; }
+        
+        /* 輸入框樣式 */
+        input, select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        input:focus, select:focus { 
+            border-color: var(--primary); 
+            outline: none; 
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        input::placeholder { color: #475569; }
+
+        /* 列表項目 */
+        .room-item, .player-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        
+        #player-list .player-card, #room-list .room-item {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+        #player-list .player-card:nth-child(1) { animation-delay: 0.05s; }
+        #player-list .player-card:nth-child(2) { animation-delay: 0.1s; }
+        #player-list .player-card:nth-child(3) { animation-delay: 0.15s; }
+        #player-list .player-card:nth-child(4) { animation-delay: 0.2s; }
+        #player-list .player-card:nth-child(5) { animation-delay: 0.25s; }
+
+        .room-item:hover, .player-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .player-card.is-me { 
+            border: 1px solid var(--primary); 
+            background: rgba(79, 70, 229, 0.1);
+        }
+        .player-card.dead { 
+            opacity: 0.5; 
+            background: rgba(0, 0, 0, 0.2); 
+        }
+        .player-card.dead strong { text-decoration: line-through; color: var(--danger); }
+
+        /* 詞語顯示卡片 */
+        .word-display {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            padding: 30px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            border-radius: 16px;
+            margin: 25px 0;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+            user-select: none;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .word-display.hidden {
+            background: repeating-linear-gradient(
+                45deg,
+                #1e293b,
+                #1e293b 10px,
+                #0f172a 10px,
+                #0f172a 20px
+            );
+            color: transparent;
+        }
+        .word-display.hidden::after {
+            content: "點擊查看身分";
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        .word-display.hidden #my-word { opacity: 0; }
+        
+        .word-display.revealed {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: white;
+            animation: subtle-pulse 3s infinite;
+        }
+        
+        .word-display:active { transform: scale(0.98); }
+
+        /* 標籤 Tag */
+        .tag {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #334155;
+            color: #cbd5e1;
+            margin-left: 8px;
+            vertical-align: middle;
+            font-weight: 500;
+        }
+        .tag.host { background: var(--warning); color: #fff; }
+        .tag.vote-count { background: var(--danger); color: white; }
+        .tag.score { background: rgba(79, 70, 229, 0.2); color: #818cf8; border: 1px solid rgba(79, 70, 229, 0.3); }
+        .tag.offline { background: #475569; color: #94a3b8; border: 1px dashed #64748b; }
+
+        .vote-btn {
+            background: var(--danger);
+            width: auto;
+            padding: 6px 14px;
+            font-size: 12px;
+            margin: 0;
+            border-radius: 20px;
+            box-shadow: none;
+            border: none;
+        }
+        .vote-btn:hover { background: #be123c; transform: none; }
+
+        /* 自訂詞語區域 */
+        #custom-words-area {
+            display: none;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed #475569;
+            margin-top: 15px;
+            animation: fadeInUp 0.3s;
+        }
+        .custom-word-item {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* 遮罩層 */
+        #overlay-result {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 0.2s;
+        }
+        
+        .result-container {
+            animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            width: 85%;
+            max-width: 350px;
+        }
+
+        .result-title { font-size: 14px; color: #94a3b8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        .result-name { font-size: 36px; font-weight: 800; color: white; margin: 10px 0; }
+        .result-role { font-size: 24px; margin-bottom: 25px; font-weight: 600; }
+        .result-role.spy { color: var(--danger); }
+        .result-role.civilian { color: var(--success); }
+        
+        .result-status { 
+            font-size: 18px; 
+            border: 1px solid #475569; 
+            padding: 8px 24px; 
+            border-radius: 50px; 
+            margin-top: 20px; 
+            display: inline-block;
+            background: #0f172a;
+            color: #cbd5e1;
+        }
+        
+        .admin-nuke-btn {
+            background: transparent;
+            border: 1px solid #64748b;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+        }
+        .admin-nuke-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+        
+        .identity-reveal {
+            font-size: 12px;
+            font-family: monospace;
+            margin-top: 6px;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: table;
+            border-left-width: 3px;
+            border-left-style: solid;
+        }
+
+        /* 聊天室樣式 */
+        #chat-section {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 280px; 
+        }
+        #chat-messages {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 16px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .chat-msg { 
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            line-height: 1.5;
+            word-break: break-all;
+            position: relative;
+            animation: fadeInUp 0.2s;
+            font-size: 14px;
+            background: #334155;
+            color: #f1f5f9;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .chat-msg.is-me {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-sender { 
+            display: block;
+            font-size: 11px;
+            color: #94a3b8; 
+            margin-bottom: 2px;
+        }
+        .chat-msg.is-me .chat-sender { color: rgba(255,255,255,0.7); text-align: right;}
+        
+        .chat-input-wrapper { display: flex; gap: 10px; }
+        .chat-input-wrapper input { margin: 0; flex: 1; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 12px 18px;}
+        .chat-input-wrapper button { width: auto; margin: 0; padding: 0 20px; border-radius: 20px; background: var(--primary); }
+
+    </style>
+</head>
+<body>
+
+<div id="overlay-result">
+    <div class="result-container">
+        <div class="result-title">本輪投票結果</div>
+        <div id="res-name" class="result-name">???</div>
+        <div id="res-role" class="result-role">身分：<span id="res-role-text">---</span></div>
+        
+        <div id="res-game-status" class="result-status">遊戲繼續</div>
+
+        <div style="margin-top: 40px; width: 100%;">
+            <button onclick="app.closeOverlay()" class="secondary">關閉</button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div id="screen-login" class="screen active">
+        <h1>🕵️ 誰是臥底</h1>
+        <p style="text-align:center; color:var(--text-muted); margin-bottom:30px; font-size:14px;">斷線重連加強版<br>請輸入暱稱開始遊戲！</p>
+        <input type="text" id="username" placeholder="請輸入你的暱稱..." autocomplete="off">
+        <button onclick="app.login()">進入大廳</button>
+    </div>
+
+    <div id="screen-lobby" class="screen">
+        <h2>遊戲大廳</h2>
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background:rgba(255,255,255,0.05); padding:12px; border-radius:12px;">
+            <span>玩家: <span id="display-name" style="font-weight:600; color:var(--text);"></span></span>
+            <button class="success small-btn" onclick="app.showCreateRoom()">+ 創建房間</button>
+        </div>
+        <h3 style="text-align:left; font-size:14px; color:var(--text-muted); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; margin-bottom:15px;">房間列表</h3>
+        <div id="room-list">
+            <div style="text-align:center; padding:20px; color:var(--text-muted);">正在連接伺服器...</div>
+        </div>
+    </div>
+
+    <div id="screen-create" class="screen">
+        <h2>創建新房間</h2>
+        
+        <label>房間名稱</label>
+        <input type="text" id="room-name-input" placeholder="例如：可疑的房間" value="來當臥底囉">
+
+        <label>臥底人數</label>
+        <select id="spy-count">
+            <option value="1">1人</option>
+            <option value="2">2人</option>
+            <option value="3">3人</option>
+        </select>
+
+        <div style="margin-top: 15px; margin-bottom: 5px;">
+            <label style="margin-bottom:5px; display:block;">獲勝積分設定</label>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <span style="font-size:12px; color:var(--text-muted);">平民獲勝 (+分)</span>
+                    <input type="number" id="score-civ" value="1" placeholder="1">
+                </div>
+                <div style="flex:1;">
+                    <span style="font-size:12px; color:var(--text-muted);">臥底獲勝 (+分)</span>
+                    <input type="number" id="score-spy" value="2" placeholder="2">
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label style="margin:0;">詞語設定</label>
+                <button class="secondary small-btn" type="button" onclick="app.toggleCustomWords()">+ 自訂詞語</button>
+            </div>
+            
+            <div id="custom-words-area">
+                <p style="margin:0 0 10px 0; font-size:12px; color:var(--text-muted);">輸入後點擊「新增」。若有新增，遊戲將只使用此列表。</p>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="custom-civ" placeholder="平民詞 (如: 蘋果)" style="margin:0;">
+                    <input type="text" id="custom-spy" placeholder="臥底詞 (如: 香蕉)" style="margin:0;">
+                </div>
+                <button type="button" class="success small-btn" style="width:100%; margin-top:10px;" onclick="app.addCustomWord()">新增詞組</button>
+                
+                <div id="custom-words-list" style="margin-top:10px; max-height:100px; overflow-y:auto;">
+                    </div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <button class="secondary" onclick="app.switchScreen('screen-lobby')">取消</button>
+            <button onclick="app.createRoom()">確認創建</button>
+        </div>
+    </div>
+
+    <div id="screen-room" class="screen">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+            <div style="display:flex; flex-direction:column;">
+                <strong id="room-name-display" style="font-size: 18px; color: var(--text);">房間名稱</strong>
+                <span id="room-id-display" style="font-size: 12px; color: var(--text-muted); font-family:monospace;">ID: ----</span>
+            </div>
+            <button class="secondary small-btn" onclick="app.leaveRoom()">
+                離開
+            </button>
+        </div>
+
+        <div id="game-area" style="display:none;">
+            <div class="word-display hidden" id="word-card">
+                <div style="font-size:12px; opacity:0.7; margin-bottom:5px; text-transform: uppercase; letter-spacing:1px;">你的詞語</div>
+                <span id="my-word">???</span>
+            </div>
+            <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:-15px; margin-bottom: 20px;">
+                👆 點擊卡片 查看/隱藏 你的詞語
+            </p>
+        </div>
+
+        <div style="display:flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px;">
+            <h3 style="margin:0; font-size:15px; color:var(--text-muted);">玩家列表 (<span id="player-count">0</span>人)</h3>
+            <span id="status-badge" class="tag" style="font-size:12px; padding: 4px 10px;">等待中</span>
+        </div>
+        
+        <div id="player-list"></div>
+
+        <div id="host-controls" style="display:none; border-top: 1px dashed rgba(255,255,255,0.15); padding-top:20px; margin-top:20px;">
+            <p style="text-align:center; color:var(--warning); font-size:11px; margin:0 0 10px 0; letter-spacing:1px; font-weight:600;">HOST CONTROLS</p>
+            
+            <button onclick="app.startGame()" id="btn-start" class="success">🚀 開始遊戲</button>
+            
+            <div id="ingame-controls" style="display:none;">
+                <button onclick="app.startVoting()" id="btn-start-vote">📢 開始投票</button>
+                <button onclick="app.endVoting()" id="btn-end-vote" class="danger" style="display:none;">🛑 結束投票並揭曉</button>
+            </div>
+
+            <button onclick="app.nextRound()" id="btn-restart" style="display:none;">🔄 下一局 (換詞)</button>
+            
+            <button class="danger small-btn" onclick="app.deleteRoom()" style="margin-top:20px; background: transparent; border:1px solid var(--danger); color: var(--danger); opacity:0.7;">
+                ⚠️ 解散房間
+            </button>
+        </div>
+
+        <div id="chat-section">
+            <div id="chat-messages">
+                <div style="color:var(--text-muted); font-style:italic; text-align:center; padding:20px;">-- 聊天室已連接 --</div>
+            </div>
+            <div class="chat-input-wrapper">
+                <input type="text" id="chat-input" placeholder="輸入訊息..." autocomplete="off">
+                <button onclick="app.sendChat()" class="small-btn">➤</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, update, remove, onDisconnect, get, child, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    // --- 1. 配置與初始化 ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyC7PZLTTNf17cfp9gCHudWiWX8SYPSCdDI",
+        authDomain: "onlineeasyraygame.firebaseapp.com",
+        databaseURL: "https://onlineeasyraygame-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "onlineeasyraygame",
+        storageBucket: "onlineeasyraygame.firebasestorage.app",
+        messagingSenderId: "622138442346",
+        appId: "1:622138442346:web:02745ec52f0e83ad428013",
+        measurementId: "G-PZB26XW21J"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // --- 2. 詞語庫 (省略內容，功能不變) ---
+    const rawWords = `
+守歲——熬夜
+打麻將——玩撲克牌
+要紅包——找人討債
+鞭炮——煙火
+水餃——餛飩
+紅包——錢包
+10$——十萬$
+電話亭——手機
+行動充電器——插座
+星星——太陽
+鋼筆——毛筆
+鐵道——軌道
+月光——星光
+螞蟻——蜜蜂
+火車——地鐵
+草莓——藍莓
+戰鬥機——坦克
+直升機——飛機
+國中——高中
+國小——幼稚園
+今天——明天
+昨天——前天
+海豚——鯨魚
+海盜船——雲霄飛車
+太陽能——風能
+塑膠——玻璃
+高畫質——藍光
+沙漠——森林
+泰迪熊——熊貓
+蚊子——蒼蠅
+信封——郵票
+燒烤——烤串
+棉花糖——巧克力
+薯條——薯片
+口紅——唇膏
+葡萄——葡萄汁
+衛星——月亮
+電梯——扶梯
+綠茶——紅茶
+長頸鹿——斑馬
+壁紙——牆畫
+手套——襪子
+甘蔗——竹子
+冰淇淋——棒冰
+火箭——飛彈
+地球——火星
+鋼琴——小提琴
+手機——電腦
+紙巾——面紙
+黑板——白板
+蜘蛛網——漁網
+宇宙——銀河
+心跳——脈搏
+漫畫——動畫
+童話——寓言
+蝸牛——烏龜
+海浪——海嘯
+玄武岩——安山岩
+花崗岩——花崗片麻岩
+指甲刀——剪刀
+背包——手提包
+手錶——時鐘
+手電筒——燈籠
+雪橇——滑板
+公雞——母雞
+奶茶——冷飲
+咖啡——可可
+鋼琴——鍵盤
+拖鞋——涼鞋
+演唱會——音樂會
+電影——電視劇
+橙子——檸檬
+餅乾——糖果
+竹筏——木筏
+酒店——客棧
+學生——學徒
+噴泉——瀑布
+金屬——合金
+衝浪——滑雪
+盆栽——花束
+鞋帶——腰帶
+棉被——羽絨被
+氣球——泡泡
+汽車——摩托車
+坐墊——靠墊
+尿尿——大便
+蠟燭——螢火
+字典——百科全書
+手電筒——檯燈
+平底鍋——電飯鍋
+日記——日程表
+傳真——電報
+寫信——網路
+微波爐——烤箱
+機器人——克隆
+海灘——沙灘
+火山——地震
+詞典——詞條
+創可貼——繃帶
+收音機——音響
+咖哩——辣椒
+珍珠——寶石
+扳手——螺絲起子
+弓箭——長矛
+黑棋——白棋
+松樹——柏樹
+螳螂——蟬
+火腿——香腸
+手機——平板
+呼啦圈——跳繩
+天文望遠鏡——顯微鏡
+彩虹——極光
+油畫——素描
+河豚——金魚
+黑糖——白糖
+晚禮服——小禮服
+漢堡皮——漢堡餡
+枕頭——棉被
+寒假——暑假
+奶茶——咖啡
+葡萄——蘋果
+橘子——橙子
+運動鞋——皮鞋
+唇膏——口紅
+牛奶——豆漿
+鍵盤——滑鼠
+圍巾——領帶
+肥皂——香皂
+游泳——跳水
+警察——警衛
+老師——同學
+麵包——蛋糕
+自信——自戀
+旅遊——流浪
+紙巾——手帕
+雨傘——陽傘
+玫瑰——月季
+蝴蝶——蜜蜂
+平板——手機
+鋼琴——手風琴
+蘋果——梨子
+跑步——競走
+閃婚——裸婚
+牛肉乾——豬肉脯
+肯德基——麥當勞
+班導——學務主任
+眉毛——睫毛
+腳踏車——摩托車
+電扶梯——樓梯
+烤肉——火鍋
+襯衫——T恤
+森林——公園
+太陽——月亮
+帆布鞋——高跟鞋
+饅頭——包子
+餃子——餛飩
+披薩——烤餅
+漢堡——三明治
+泡麵——拉麵
+壽司——飯糰
+吐司——貝果
+爆米花——薯條
+甜甜圈——鬆餅
+蛋塔——布丁
+巧克力——糖果
+冰淇淋——雪酪
+蛋糕——派
+月餅——太陽餅
+鳳梨酥——蛋黃酥
+麻糬——湯圓
+雞排——鹹酥雞
+滷味——關東煮
+牛排——羊排
+烤鴨——炸雞
+涼麵——泡麵
+燕麥——麥片
+優格——優酪乳
+奶酪——豆腐
+鬆餅——舒芙蕾
+馬卡龍——牛粒
+綠豆湯——紅豆湯
+豆花——豆腐腦
+臭豆腐——炸豆腐
+蔥油餅——蛋餅
+蚵仔煎——蝦仁煎
+乾麵——炸醬麵
+燒賣——蝦餃
+小籠包——生煎包
+糯米腸——香腸
+豬血糕——米血糕
+仙草——愛玉
+提拉米蘇——起司蛋糕
+爆米花——蝦片
+棒棒糖——棉花糖
+夾心餅乾——威化餅
+堅果——花生
+洋芋片——玉米片
+咖啡——拿鐵
+紅茶——綠茶
+奶茶——鮮奶茶
+可樂——雪碧
+豆漿——米漿
+果汁——汽水
+礦泉水——純水
+珍珠奶茶——椰果奶茶
+檸檬汁——金桔檸檬
+拿鐵——卡布奇諾
+濃縮咖啡——美式咖啡
+香檳——氣泡酒
+調酒——果酒
+蜂蜜——糖漿
+醋——醬油
+牛奶——羊奶
+巧克力牛奶——奶昔
+冰沙——奶昔
+抹茶——綠茶粉
+烏龍茶——綠茶
+大麻——薄荷
+雞湯——魚湯
+豆漿——豆腐乳
+舒跑——Fin運動飲
+蘇打水——氣泡水
+椰子水——甘蔗汁
+酸梅湯——楊桃汁
+冬瓜茶——仙草乾茶
+甜不辣——雞排
+珍珠奶茶——檸檬紅茶
+熱可可——阿華田
+養樂多——優酪乳
+蘋果汁——柳橙汁
+白開水——蒸餾水
+冰塊——乾冰
+蘋果——水梨
+香蕉——芭樂
+西瓜——哈密瓜
+鳳梨——芒果
+葡萄——藍莓
+橘子——柳丁
+奇異果——黃金奇異果
+柚子——葡萄柚
+高麗菜——大白菜
+空心菜——地瓜葉
+茄子——小黃瓜
+胡蘿蔔——白蘿蔔
+南瓜——地瓜
+馬鈴薯——芋頭
+玉米——爆米花
+洋蔥——大蒜
+辣椒——青椒
+鹽巴——甜椒
+芹菜——香菜
+四季豆——豌豆
+酪梨——奶油
+椰子——棕櫚
+荔枝——龍眼
+火龍果——仙人掌果
+百香果——釋迦
+楊桃——蓮霧
+蔥——韭菜
+蜜蜂——蜂蜜
+薄荷——薄荷糖
+冰箱——冷凍櫃
+洗衣機——烘衣機
+電風扇——冷氣
+電視——投影機
+電腦——筆電
+相機——攝影機
+微波爐——烤箱
+電鍋——壓力鍋
+吸塵器——掃地機器人
+吹風機——捲髮棒
+刮鬍刀——除毛刀
+手錶——鬧鐘
+檯燈——手電筒
+耳機——音響
+滑鼠——觸控板
+鍵盤——打字機
+牙刷——電動牙刷
+毛巾——浴巾
+肥皂——沐浴乳
+洗髮精——潤髮乳
+洗面乳——卸妝油
+牙膏——漱口水
+衛生紙——濕紙巾
+鏡子——玻璃
+梳子——刷子
+雨傘——雨衣
+信用卡——儲值卡
+錢包——皮夾
+鑰匙——鎖頭
+指甲剪——鋸子
+棉花棒——衛生棉
+垃圾桶——回收箱
+衣架——夾子
+枕頭——抱枕
+棉被——毛毯
+床單——被套
+窗簾——百葉窗
+地毯——棉被
+花瓶——盆栽
+蠟燭——油燈
+打火機——火柴
+針線——膠水
+剪刀——美工刀
+膠帶——訂書機
+溫度計——尺
+保溫杯——水壺
+碗——盤子
+筷子——湯勺
+叉子——湯匙
+襯衫——T恤
+牛子褲——休閒褲
+西裝——禮服
+洋裝——裙子
+外套——大衣
+毛衣——衛衣
+背心——吊帶
+短褲——熱褲
+襪子——絲襪
+鞋子——靴子
+運動鞋——皮鞋
+帽子——貝雷帽
+手套——圍巾
+皮帶——吊帶
+領帶——領結
+眼鏡——墨鏡
+戒指——手環
+項鍊——耳環
+手錶——手鍊
+胸針——徽章
+泳衣——潛水衣
+睡衣——浴袍
+內衣——背心
+內褲——運動褲
+斗篷——披肩
+運動鞋——板鞋
+棒球帽——鴨舌帽
+草帽——遮陽帽
+髮夾——髮帶
+口罩——面罩
+護腕——護膝
+懷錶——手錶
+絲巾——領巾
+假髮——髮片
+袖扣——領夾
+運動服——瑜伽服
+制服——迷彩服
+旗袍——和服
+雨鞋——膠鞋
+隱形眼鏡——美瞳
+化妝包——零錢包
+登山鞋——健走鞋
+高跟鞋——跑步鞋
+涼鞋——藍白拖
+寬褲——喇叭褲
+皮夾克——風衣
+棒球外套——飛行外套
+公事包——電腦包
+遮陽傘——雨傘
+平板——筆電
+螞蟻——蟑螂
+珠寶——飾品
+貓——狗
+老虎——獅子
+豹——貓頭鷹
+大象——河馬
+長頸鹿——斑馬
+猴子——猩猩
+兔子——倉鼠
+老鼠——松鼠
+狐狸——狼
+熊——熊貓
+企鵝——海豹
+海豚——鯨魚
+鯊魚——鯨魚
+螃蟹——龍蝦
+章魚——烏賊
+烏龜——蝸牛
+蜘蛛——蜈蚣
+螞蟻——蚱蜢
+雞——鴨
+鵝——天鵝
+鷹——隼
+鸚鵡——鴿子
+蛇——蜥蜴
+青蛙——蟾蜍
+鱷魚——恐龍
+蝙蝠——燕子
+駱駝——羊駝
+袋鼠——無尾熊
+犀牛——河馬
+鴕鳥——孔雀
+螢火蟲——蟬
+浣熊——臭鼬
+北極熊——棕熊
+變色龍——壁虎
+蜜獾——鼬鼠
+斑馬——驢子
+騾子——馬
+犀牛——大象
+鳳凰——龍
+獨角獸——天馬
+醫生——護士
+老師——教授
+警察——保安
+廚師——服務生
+司機——機師
+演員——歌手
+模特兒——網紅
+律師——法官
+工程師——設計師
+記者——主持人
+運動員——教練
+消防員——救生員
+秘書——助理
+校長——班導
+爸爸——媽媽
+爺爺——奶奶
+哥哥——弟弟
+姐姐——妹妹
+朋友——同學
+鄰居——室友
+房東——房客
+老闆——員工
+顧客——觀眾
+偵探——間諜
+海盜——小偷
+英雄——超人
+外星人——機械人
+殭屍——吸血鬼
+巫師——老師
+天使——精靈
+畫家——雕塑家
+作家——詩人
+牙醫——獸醫
+藥師——護理師
+導遊——領隊
+郵差——快遞員
+水電工——木工
+理髮師——化妝師
+宇航員——天文學家
+考古學家——歷史學家
+攝影師——導演
+音樂家——指揮家
+翻譯——口譯
+保母——幼教老師
+市長——總統
+砲兵——將軍
+傳教士——修女
+僧侶——道士
+仙女——女巫
+巨人——矮人
+籃球——排球
+足球——橄欖球
+羽球——網球
+棒球——壘球
+乒乓球——桌球
+游泳——跳水
+跑步——馬拉松
+健身——瑜伽
+登山——攀岩
+滑雪——滑板
+單車——摩托車
+小說——漫畫
+繪畫——攝影
+舞蹈——芭蕾
+音樂——戲劇
+吉他——貝斯
+鼓——敲擊樂
+魔術——特技
+象棋——圍棋
+撲克牌——麻將
+拼圖——樂高
+捉迷藏——鬼抓人
+雲霄飛車——摩天輪
+旋轉木馬——海盜船
+博物館——美術館
+電玩——桌遊
+撞球——高爾夫
+保齡球——飛鏢
+衝浪——帆船
+划船——獨木舟
+跆拳道——空手道
+擊劍——射箭
+體操——雜技
+芭蕾——現代舞
+街舞——爵士舞
+相聲——脫口秀
+歌劇——音樂劇
+芭比娃娃——泰迪熊
+風箏——氣球
+萬花筒——望遠鏡
+地球儀——地圖
+素描——水彩畫
+毛筆——鋼筆
+粘土——陶瓷
+書法——印章
+风鈴——鈴鐺
+煙火——鞭炮
+森林——叢林
+海洋——湖泊
+河流——溪流
+高山——丘陵
+沙漠——草原
+星星——行星
+地球——火星
+雲——霧
+雨——雪
+風——颱風
+雷——電
+彩虹——極光
+火山——地獄
+瀑布——噴泉
+岩石——沙子
+島嶼——半島
+洞穴——隧道
+溫泉——噴泉
+黎明——黃昏
+春天——秋天
+夏天——冬天
+颱風——龍捲風
+海浪——潮汐
+懸崖——山谷
+玉山——阿里山
+冰山——冰河
+泥土——灰塵
+露水——霜
+珊瑚——貝殼
+珍珠——鑽石
+黃金——白銀
+煤炭——石油
+森林——公園
+農場——牧場
+鄉村——城市
+亞洲——歐洲
+南極——北極
+太平洋——大西洋
+赤道——南北極
+隕石——流星
+黑洞——星系
+地殼——地核
+大氣層——臭氧層
+盆地——平原
+沼澤——濕地
+海灘——礁石
+梯田——麥田
+喜歡——愛
+高興——興奮
+生氣——憤怒
+難過——絕望
+害怕——擔心
+聰明——天才
+漂亮——可愛
+成功——勝利
+夢想——幻想
+秘密——謊言
+時間——空間
+過去——未來
+開始——結束
+跑步——走路
+跳躍——飛翔
+睡覺——做夢
+說話——唱歌
+讀書——寫字
+買東西——賣東西
+禮物——驚喜
+麥當勞——肯德基
+可口可樂——百事可樂
+星巴克——路易莎
+蘋果(品牌)——三星(品牌)
+迪士尼——環球影城
+全家——7-11
+蝦皮——淘寶
+YouTube——TikTok
+Facebook——Instagram
+谷歌——百度
+婚禮——葬禮
+糾正——糾舉
+刑罰——行政罰
+蔣中正——賴清德
+考試——比賽
+旅行——出差
+加班——放假
+減肥——健身
+化妝——整容
+懷孕——生病
+點讚——轉發
+掃碼——刷卡
+外送——快遞
+網購——逛街
+直播——錄影
+投訴——建議
+迷路——到達
+緣分——巧合
+嫉妒——羨慕
+驕傲——自信
+正義——邪惡
+誰是臥底——狼人殺
+塑膠——壓克力
+袋鼠——無尾熊
+媽媽——爸爸
+補習班——安親班
+暗戀期——曖昧期
+壓歲錢——零用錢
+給老師的信——情書
+死亡筆記本——日記
+要紅包——搶劫
+在床上睡覺——上課偷睡覺
+    `;
+
+    // 解析新格式 (WordA——WordB)
+    const wordPairs = rawWords.trim().split('\n').map(line => {
+        const parts = line.split(/——/);
+        if(parts.length >= 2) return [parts[0].trim(), parts[1].trim()];
+        return null;
+    }).filter(p => p !== null && p[0] && p[1]);
+
+    // --- 3. 遊戲邏輯與全域變數 ---
+    const generateId = () => Math.random().toString(36).substr(2, 9);
+    
+    // 初始化使用者狀態 (從 LocalStorage 讀取以確保斷線重連後 ID 不變)
+    const initUser = () => {
+        let stored = localStorage.getItem('whois_user');
+        if (stored) {
+            return JSON.parse(stored);
+        } else {
+            return { name: "", id: generateId() };
+        }
+    };
+
+    window.gameState = {
+        user: initUser(),
+        currentRoomId: null,
+        isHost: false,
+        wordVisible: false,
+        localVoteTarget: null,
+        isAdmin: false,
+        tempCustomWords: [], 
+        chatListener: null 
+    };
+
+    window.app = {
+        login: () => {
+            const name = document.getElementById('username').value.trim();
+            if (!name) return alert("請輸入暱稱！");
+            gameState.user.name = name;
+            
+            if (name === "araygame") {
+                gameState.isAdmin = true;
+            }
+
+            // 儲存到 LocalStorage
+            localStorage.setItem('whois_user', JSON.stringify(gameState.user));
+            
+            document.getElementById('display-name').innerText = name;
+            window.app.switchScreen('screen-lobby');
+            
+            const roomsRef = ref(db, 'whois_room');
+            onValue(roomsRef, (snapshot) => {
+                const rooms = snapshot.val();
+                renderRoomList(rooms);
+            });
+        },
+
+        switchScreen: (screenId) => {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        },
+
+        showCreateRoom: () => {
+            gameState.tempCustomWords = [];
+            document.getElementById('custom-words-list').innerHTML = '';
+            document.getElementById('custom-words-area').style.display = 'none';
+            document.getElementById('custom-civ').value = '';
+            document.getElementById('custom-spy').value = '';
+            document.getElementById('room-name-input').value = "來當臥底囉"; 
+            document.getElementById('score-civ').value = 1;
+            document.getElementById('score-spy').value = 2;
+            window.app.switchScreen('screen-create');
+        },
+
+        toggleCustomWords: () => {
+            const area = document.getElementById('custom-words-area');
+            area.style.display = area.style.display === 'none' ? 'block' : 'none';
+        },
+
+        addCustomWord: () => {
+            const civ = document.getElementById('custom-civ').value.trim();
+            const spy = document.getElementById('custom-spy').value.trim();
+            
+            if (!civ || !spy) return alert("請輸入完整的平民詞和臥底詞");
+            
+            gameState.tempCustomWords.push([civ, spy]);
+            
+            const div = document.createElement('div');
+            div.className = 'custom-word-item';
+            div.innerHTML = `<span>${civ} —— ${spy}</span>`;
+            document.getElementById('custom-words-list').appendChild(div);
+            
+            document.getElementById('custom-civ').value = '';
+            document.getElementById('custom-spy').value = '';
+        },
+
+        createRoom: async () => {
+            const maxPlayers = 999; 
+            const spyCount = parseInt(document.getElementById('spy-count').value);
+            const roomName = document.getElementById('room-name-input').value.trim() || "未命名房間"; 
+            
+            const civScore = parseInt(document.getElementById('score-civ').value) || 10;
+            const spyScore = parseInt(document.getElementById('score-spy').value) || 20;
+            
+            if (spyCount < 1) return alert("臥底至少要有一人");
+
+            const roomId = Math.floor(1000 + Math.random() * 9000).toString();
+            gameState.currentRoomId = roomId;
+            gameState.isHost = true;
+
+            const roomRef = ref(db, 'whois_room/' + roomId);
+            await set(roomRef, {
+                config: { 
+                    roomName, 
+                    maxPlayers, 
+                    spyCount,
+                    hostName: gameState.user.name, 
+                    customWords: gameState.tempCustomWords,
+                    scoreSettings: {
+                        civ: civScore,
+                        spy: spyScore
+                    }
+                },
+                status: 'waiting', 
+                players: {
+                    [gameState.user.id]: {
+                        name: gameState.user.name,
+                        isHost: true,
+                        status: 'alive',
+                        votes: 0,
+                        score: 0, 
+                        voteTarget: null,
+                        isOnline: true // 標記在線狀態
+                    }
+                },
+                result: null,
+                createdAt: Date.now()
+            });
+
+            // 關鍵修改：創建房間時不設置自動刪除，只有在線狀態改變
+            onDisconnect(ref(db, `whois_room/${roomId}/players/${gameState.user.id}/isOnline`)).set(false);
+            
+            localStorage.setItem('last_room_id', roomId);
+            enterRoom(roomId);
+        },
+
+        deleteRoom: async () => {
+             if(!confirm("確定要解散房間嗎？")) return;
+             await remove(ref(db, `whois_room/${gameState.currentRoomId}`));
+             window.app.leaveRoom();
+        },
+
+        adminForceDelete: async (targetRoomId) => {
+            if(!confirm(`[管理員] 確定強制解散房間 ${targetRoomId}？`)) return;
+            await remove(ref(db, `whois_room/${targetRoomId}`));
+        },
+
+        joinRoom: async (roomId) => {
+            const roomRef = ref(db, `whois_room/${roomId}`);
+            gameState.currentRoomId = roomId;
+            gameState.isHost = false; // 初始設為 false，之後由 roomData 修正
+
+            const playerRef = ref(db, `whois_room/${roomId}/players/${gameState.user.id}`);
+            const snapshot = await get(playerRef);
+
+            // 關鍵修改：如果玩家資料已存在(斷線重連)，不要覆蓋掉 role/word/score
+            if (snapshot.exists()) {
+                // 只是更新上線狀態和暱稱(若有變)
+                await update(playerRef, {
+                    name: gameState.user.name,
+                    isOnline: true
+                });
+                console.log("歡迎回來，檢測到斷線重連，已恢復您的數據。");
+            } else {
+                // 真·新玩家
+                await set(playerRef, {
+                    name: gameState.user.name,
+                    isHost: false, 
+                    status: 'alive',
+                    votes: 0,
+                    score: 0, 
+                    voteTarget: null,
+                    isOnline: true
+                });
+            }
+            
+            // 關鍵修改：移除 onDisconnect().remove()，改為設置 isOnline: false
+            onDisconnect(child(playerRef, 'isOnline')).set(false);
+            
+            localStorage.setItem('last_room_id', roomId);
+            enterRoom(roomId);
+        },
+
+        leaveRoom: async () => {
+            if(gameState.currentRoomId) {
+                // 主動離開才真的刪除資料
+                const playerRef = ref(db, `whois_room/${gameState.currentRoomId}/players/${gameState.user.id}`);
+                await remove(playerRef);
+            }
+            gameState.currentRoomId = null;
+            gameState.isHost = false;
+            localStorage.removeItem('last_room_id');
+            
+            if (gameState.chatListener) {
+                gameState.chatListener = null;
+            }
+
+            window.app.switchScreen('screen-lobby');
+        },
+
+        // --- 聊天室功能 ---
+        sendChat: () => {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            const roomId = gameState.currentRoomId;
+            const messagesRef = ref(db, `whois_room/${roomId}/messages`);
+            
+            push(messagesRef, {
+                sender: gameState.user.name,
+                text: text,
+                timestamp: Date.now()
+            });
+            
+            input.value = '';
+        },
+
+        startGame: async () => {
+            const roomId = gameState.currentRoomId;
+            
+            const roomSnapshot = await get(child(ref(db), `whois_room/${roomId}`));
+            const roomData = roomSnapshot.val();
+            
+            const players = roomData.players || {};
+            // 為了公平，只計算在線且活著的玩家，或者簡單計算所有玩家
+            const playerKeys = Object.keys(players);
+            const playerCount = playerKeys.length;
+
+            if (playerCount <= roomData.config.spyCount + 1) {
+                alert(`人數不足！目前 ${playerCount} 人，臥底設定 ${roomData.config.spyCount} 人。至少需要 ${roomData.config.spyCount + 2} 人才能開始。`);
+                return;
+            }
+
+            let currentPool = wordPairs; 
+            
+            if (roomData.config && roomData.config.customWords && roomData.config.customWords.length > 0) {
+                currentPool = roomData.config.customWords;
+            }
+
+            const pair = currentPool[Math.floor(Math.random() * currentPool.length)];
+            
+            if (!pair) {
+                alert("詞庫發生錯誤，請重試");
+                return;
+            }
+
+            const flip = Math.random() > 0.5;
+            const civilianWord = flip ? pair[0] : pair[1];
+            const spyWord = flip ? pair[1] : pair[0];
+
+            update(ref(db, `whois_room/${roomId}`), { 
+                status: 'processing', 
+                words: { civilian: civilianWord, spy: spyWord },
+                result: null 
+            });
+        },
+
+        startVoting: async () => {
+            const roomId = gameState.currentRoomId;
+            update(ref(db, `whois_room/${roomId}`), { status: 'voting' });
+        },
+
+        votePlayer: async (targetId) => {
+            const roomId = gameState.currentRoomId;
+            const myId = gameState.user.id;
+            
+            const myRef = ref(db, `whois_room/${roomId}/players/${myId}`);
+            await update(myRef, { voteTarget: targetId });
+        },
+
+        endVoting: async () => {
+            const roomId = gameState.currentRoomId;
+            
+            const configSnapshot = await get(child(ref(db), `whois_room/${roomId}/config`));
+            const config = configSnapshot.val();
+            const civWinScore = (config.scoreSettings && config.scoreSettings.civ) ? parseInt(config.scoreSettings.civ) : 10;
+            const spyWinScore = (config.scoreSettings && config.scoreSettings.spy) ? parseInt(config.scoreSettings.spy) : 20;
+
+            onValue(ref(db, `whois_room/${roomId}/players`), async (snapshot) => {
+                const players = snapshot.val();
+                if(!players) return;
+
+                const voteCounts = {};
+                let maxVotes = -1;
+                let eliminatedId = null;
+                let isTie = false;
+
+                Object.values(players).forEach(p => {
+                    if (p.status === 'alive' && p.voteTarget) {
+                        const target = p.voteTarget;
+                        voteCounts[target] = (voteCounts[target] || 0) + 1;
+                    }
+                });
+
+                Object.keys(voteCounts).forEach(pid => {
+                    const count = voteCounts[pid];
+                    if (count > maxVotes) {
+                        maxVotes = count;
+                        eliminatedId = pid;
+                        isTie = false;
+                    } else if (count === maxVotes) {
+                        isTie = true;
+                    }
+                });
+
+                let resultMessage = {};
+                let nextStatus = 'playing'; 
+                
+                const updates = {};
+
+                if (maxVotes === -1 || isTie) {
+                    resultMessage = { name: isTie ? "平票" : "無人投票", role: "none", statusText: "無人出局，遊戲繼續", type: "continue" };
+                } else {
+                    const deadPlayer = players[eliminatedId];
+                    const deadRole = deadPlayer.role === 'spy' ? '臥底' : '平民';
+                    
+                    updates[`players/${eliminatedId}/status`] = 'dead';
+
+                    let spyCount = 0;
+                    let civCount = 0;
+                    Object.keys(players).forEach(pid => {
+                        let status = players[pid].status;
+                        if(pid === eliminatedId) status = 'dead'; 
+                        
+                        if(status === 'alive') {
+                            if (players[pid].role === 'spy') spyCount++;
+                            else civCount++;
+                        }
+                    });
+
+                    let winningTeam = null; 
+
+                    if (spyCount === 0) {
+                        resultMessage = { name: deadPlayer.name, role: deadPlayer.role, statusText: "🎉 平民獲勝！", type: "win" };
+                        nextStatus = 'waiting'; 
+                        winningTeam = 'civilian';
+                    } else if (spyCount >= civCount) {
+                        resultMessage = { name: deadPlayer.name, role: deadPlayer.role, statusText: "😈 臥底獲勝！", type: "win" };
+                        nextStatus = 'waiting'; 
+                        winningTeam = 'spy';
+                    } else {
+                        resultMessage = { name: deadPlayer.name, role: deadPlayer.role, statusText: "遊戲繼續", type: "continue" };
+                        nextStatus = 'playing'; 
+                    }
+
+                    if (winningTeam) {
+                        Object.keys(players).forEach(pid => {
+                            const p = players[pid];
+                            let currentScore = p.score || 0;
+                            let addedScore = 0;
+                            
+                            let pStatus = p.status;
+                            if (pid === eliminatedId) pStatus = 'dead';
+
+                            if (winningTeam === 'spy') {
+                                if (p.role === 'spy') {
+                                    addedScore = spyWinScore;
+                                }
+                            } else if (winningTeam === 'civilian') {
+                                if (p.role === 'civilian' && pStatus === 'alive') {
+                                    addedScore = civWinScore;
+                                }
+                            }
+
+                            if (addedScore > 0) {
+                                updates[`players/${pid}/score`] = currentScore + addedScore;
+                            }
+                        });
+                    }
+                }
+
+                resultMessage.nextGameStatus = nextStatus;
+
+                await update(ref(db, `whois_room/${roomId}`), {
+                    status: 'revealing',
+                    result: resultMessage
+                });
+                
+                Object.keys(players).forEach(pid => {
+                    updates[`players/${pid}/voteTarget`] = null;
+                });
+                
+                await update(ref(db, `whois_room/${roomId}`), updates);
+
+            }, { onlyOnce: true });
+        },
+
+        closeOverlay: () => {
+             document.getElementById('overlay-result').style.display = 'none';
+             if (gameState.isHost) {
+                 const roomId = gameState.currentRoomId;
+                 const statusText = document.getElementById('res-game-status').innerText;
+                 let nextState = 'playing';
+                 if (statusText.includes("獲勝")) nextState = 'waiting';
+                 update(ref(db, `whois_room/${roomId}`), { status: nextState });
+             }
+        },
+
+        nextRound: () => window.app.startGame()
+    };
+
+    // --- UI 渲染邏輯 ---
+
+    function renderRoomList(rooms) {
+        const list = document.getElementById('room-list');
+        list.innerHTML = "";
+        if (!rooms) {
+            list.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>目前沒有房間</p>";
+            return;
+        }
+
+        Object.keys(rooms).forEach(key => {
+            const room = rooms[key];
+            const pCount = room.players ? Object.keys(room.players).length : 0;
+            const statusMap = { 'waiting': '等待中', 'playing': '遊戲中', 'voting': '投票中', 'revealing': '揭曉中' };
+            const statusText = statusMap[room.status] || '進行中';
+            const roomName = (room.config && room.config.roomName) ? room.config.roomName : `房間 ${key}`;
+
+            let adminControls = '';
+            if (gameState.isAdmin) {
+                adminControls = `<button class="admin-nuke-btn" onclick="app.adminForceDelete('${key}')">[X]</button>`;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'room-item';
+            div.innerHTML = `
+                <div>
+                    <strong style="color:var(--text); font-size:16px;">${roomName}</strong> 
+                    <span style="font-size:12px; color:var(--text-muted); margin-left:10px;">ID:${key}</span>
+                    <br>
+                    <div style="margin-top:6px;">
+                        <span class="tag ${room.status === 'playing' ? 'host' : ''}">${statusText}</span>
+                        <span class="tag" style="background:#334155;">${pCount}人</span>
+                        ${adminControls}
+                    </div>
+                </div>
+                <button class="small-btn secondary" style="width:auto; margin:0;" onclick="app.joinRoom('${key}')">加入</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function enterRoom(roomId) {
+        window.app.switchScreen('screen-room');
+        document.getElementById('room-id-display').innerText = `ID: ${roomId}`;
+        document.getElementById('room-name-display').innerText = "載入中...";
+
+        const chatContainer = document.getElementById('chat-messages');
+        chatContainer.innerHTML = '<div style="color:var(--text-muted); font-style:italic; margin-bottom:5px; text-align:center;">-- 聊天室已連接 --</div>';
+
+        onValue(ref(db, `whois_room/${roomId}`), (snapshot) => {
+            const roomData = snapshot.val();
+            if(!roomData) {
+                alert("房間已解散");
+                window.app.leaveRoom();
+                return;
+            }
+            updateRoomUI(roomData);
+        });
+
+        const messagesRef = ref(db, `whois_room/${roomId}/messages`);
+        onChildAdded(messagesRef, (data) => {
+            const msg = data.val();
+            renderChatMessage(msg);
+        });
+        
+        const chatInput = document.getElementById('chat-input');
+        chatInput.onkeypress = (e) => {
+            if(e.key === 'Enter') window.app.sendChat();
+        };
+    }
+
+    function renderChatMessage(msg) {
+        const container = document.getElementById('chat-messages');
+        const div = document.createElement('div');
+        div.className = 'chat-msg';
+        
+        const isMe = msg.sender === gameState.user.name;
+        if(isMe) {
+            div.classList.add('is-me');
+        }
+        
+        div.innerHTML = `<span class="chat-sender">${msg.sender}</span>${msg.text}`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function updateRoomUI(roomData) {
+        const players = roomData.players || {};
+        const myId = gameState.user.id;
+        let me = players[myId];
+        
+        // --- 房主繼承與權限恢復 ---
+        if (roomData.config && roomData.config.hostName && gameState.user.name === roomData.config.hostName) {
+            gameState.isHost = true;
+            if (me && !me.isHost) {
+                update(ref(db, `whois_room/${gameState.currentRoomId}/players/${myId}`), { isHost: true });
+                me.isHost = true;
+            }
+        }
+
+        // --- 自動結束投票 (Host only) ---
+        if (gameState.isHost && roomData.status === 'voting') {
+            let aliveCount = 0;
+            let votedCount = 0;
+            Object.values(players).forEach(p => {
+                if (p.status === 'alive') {
+                    aliveCount++;
+                    if (p.voteTarget) votedCount++;
+                }
+            });
+            if (aliveCount > 0 && aliveCount === votedCount) {
+                window.app.endVoting();
+            }
+        }
+
+        if (roomData.config && roomData.config.roomName) {
+            document.getElementById('room-name-display').innerText = roomData.config.roomName;
+        }
+
+        document.getElementById('player-count').innerText = Object.keys(players).length;
+        
+        document.getElementById('status-badge').innerText = 
+            roomData.status === 'voting' ? '投票中' : (roomData.status === 'waiting' ? '等待中' : '遊戲中');
+
+        if (roomData.status === 'processing' && gameState.isHost) {
+            assignRolesAndStart(roomData, Object.keys(players));
+            return;
+        }
+
+        if (roomData.status === 'revealing' && roomData.result) {
+            showResultOverlay(roomData.result);
+        } else {
+            document.getElementById('overlay-result').style.display = 'none';
+        }
+
+        const gameArea = document.getElementById('game-area');
+        const btnStart = document.getElementById('btn-start');
+        const btnRestart = document.getElementById('btn-restart');
+        const ingameControls = document.getElementById('ingame-controls');
+        const btnStartVote = document.getElementById('btn-start-vote');
+        const btnEndVote = document.getElementById('btn-end-vote');
+        const wordCard = document.getElementById('word-card');
+
+        if (roomData.status === 'waiting') {
+            gameArea.style.display = 'none';
+            btnStart.style.display = 'block';
+            ingameControls.style.display = 'none';
+            btnRestart.style.display = 'none';
+            gameState.wordVisible = false;
+        } else {
+            gameArea.style.display = 'block';
+            btnStart.style.display = 'none';
+            
+            // 恢復詞語顯示
+            if (me && me.word) {
+                const w = document.getElementById('my-word');
+                // 如果之前有看過，這裡可以考慮自動顯示，或者保持隱藏讓使用者再點一次
+                // 為了隱私，斷線重連回來預設是隱藏的，但資料已經在本地了
+                if (gameState.wordVisible) {
+                    w.innerText = me.word;
+                    wordCard.classList.remove('hidden');
+                    wordCard.classList.add('revealed');
+                } else {
+                    w.innerText = "???";
+                    wordCard.classList.add('hidden');
+                    wordCard.classList.remove('revealed');
+                }
+            }
+
+            if (gameState.isHost) {
+                if (roomData.status === 'voting') {
+                    ingameControls.style.display = 'block';
+                    btnStartVote.style.display = 'none';
+                    btnEndVote.style.display = 'block';
+                    btnRestart.style.display = 'none';
+                } else if (roomData.status === 'playing') {
+                    ingameControls.style.display = 'block';
+                    btnStartVote.style.display = 'block';
+                    btnEndVote.style.display = 'none';
+                    btnRestart.style.display = 'none'; 
+                } else {
+                     ingameControls.style.display = 'none';
+                     btnRestart.style.display = 'none';
+                }
+            } else {
+                 ingameControls.style.display = 'none';
+                 btnRestart.style.display = 'none';
+            }
+        }
+
+        renderPlayerList(players, roomData.status, myId);
+        document.getElementById('host-controls').style.display = gameState.isHost ? 'block' : 'none';
+    }
+
+    function renderPlayerList(players, status, myId) {
+        const list = document.getElementById('player-list');
+        list.innerHTML = "";
+        
+        const voteCounts = {};
+        Object.values(players).forEach(p => {
+            if(p.voteTarget) voteCounts[p.voteTarget] = (voteCounts[p.voteTarget] || 0) + 1;
+        });
+
+        const me = players[myId];
+        const amIDead = me && me.status === 'dead';
+        const myTarget = me ? me.voteTarget : null;
+
+        Object.keys(players).forEach(pid => {
+            const p = players[pid];
+            const isMe = pid === myId;
+            const votes = voteCounts[pid] || 0;
+            const score = p.score || 0; 
+            
+            let secretReveal = '';
+            
+            const hasData = p.word && p.role;
+            const isGameRunning = ['playing', 'voting', 'revealing'].includes(status);
+            const isGameWaiting = status === 'waiting';
+            
+            let showIdentity = false;
+            
+            if (gameState.isAdmin && isGameRunning && hasData) showIdentity = true;
+            if (isGameWaiting && hasData) showIdentity = true;
+
+            if (showIdentity) {
+                const isSpy = p.role === 'spy';
+                const color = isSpy ? 'var(--danger)' : 'var(--success)';
+                const roleName = isSpy ? '臥底' : '平民';
+                
+                secretReveal = `<div class="identity-reveal" style="color:${color}; border-color:${color};">
+                    [${roleName}] ${p.word}
+                </div>`;
+            }
+
+            const showHostBadge = p.isHost && status === 'waiting';
+            const isOffline = p.isOnline === false; // 檢查離線狀態
+            
+            let scoreHtml = '';
+            if (status === 'waiting') {
+                scoreHtml = `<span class="tag score">Score: ${score}</span>`;
+            }
+
+            const div = document.createElement('div');
+            div.className = `player-card ${isMe ? 'is-me' : ''} ${p.status === 'dead' ? 'dead' : ''}`;
+            
+            let actionHtml = '';
+
+            if (status === 'voting' && p.status === 'alive') {
+                if (!amIDead && !myTarget && !isMe) {
+                    actionHtml = `<button class="vote-btn" onclick="app.votePlayer('${pid}')">投票</button>`;
+                } else if (myTarget === pid) {
+                    actionHtml = `<span class="tag vote-count">已投</span>`;
+                }
+            }
+
+            if (status === 'voting' || status === 'revealing') {
+                if (votes > 0) {
+                    actionHtml += `<span class="tag vote-count">${votes}票</span>`;
+                }
+            }
+
+            div.innerHTML = `
+                <div style="display:flex; align-items:center;">
+                    <div style="display:flex; flex-direction:column;">
+                        <div style="color:${p.status==='dead'?'#94a3b8':'inherit'}">
+                            <strong style="font-weight:600;">${p.name}</strong>
+                            ${showHostBadge ? '<span class="tag host">房主</span>' : ''}
+                            ${isMe ? '<span class="tag">我</span>' : ''}
+                            ${isOffline ? '<span class="tag offline">斷線</span>' : ''}
+                            ${scoreHtml}
+                        </div>
+                        ${p.status === 'dead' ? '<span style="font-size:10px; color:var(--danger); font-weight:bold;">DEAD (已出局)</span>' : ''}
+                        ${secretReveal}
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center;">
+                    ${actionHtml}
+                </div>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    async function assignRolesAndStart(roomData, pIds) {
+        const spyCount = roomData.config.spyCount;
+        const total = pIds.length;
+        
+        let roles = Array(total).fill('civilian');
+        for(let i=0; i<spyCount; i++) roles[i] = 'spy';
+        
+        for (let i = total - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [roles[i], roles[j]] = [roles[j], roles[i]];
+        }
+
+        const updates = {};
+        pIds.forEach((pid, index) => {
+            const role = roles[index];
+            const word = role === 'spy' ? roomData.words.spy : roomData.words.civilian;
+            updates[`whois_room/${gameState.currentRoomId}/players/${pid}/word`] = word;
+            updates[`whois_room/${gameState.currentRoomId}/players/${pid}/role`] = role;
+            updates[`whois_room/${gameState.currentRoomId}/players/${pid}/voteTarget`] = null; 
+            updates[`whois_room/${gameState.currentRoomId}/players/${pid}/status`] = 'alive';
+        });
+        
+        updates[`whois_room/${gameState.currentRoomId}/status`] = 'playing';
+        await update(ref(db), updates);
+    }
+
+    function showResultOverlay(result) {
+        const overlay = document.getElementById('overlay-result');
+        const nameEl = document.getElementById('res-name');
+        const roleEl = document.getElementById('res-role');
+        const roleTextEl = document.getElementById('res-role-text');
+        const statusEl = document.getElementById('res-game-status');
+
+        nameEl.innerText = result.name;
+        
+        if (result.role === 'spy') {
+            roleTextEl.innerText = "臥底 😈";
+            roleEl.className = "result-role spy";
+        } else if (result.role === 'civilian') {
+            roleTextEl.innerText = "平民 😇";
+            roleEl.className = "result-role civilian";
+        } else {
+            roleTextEl.innerText = "";
+            roleEl.className = "result-role";
+        }
+
+        statusEl.innerText = result.statusText;
+        if(result.type === 'win') {
+            statusEl.style.borderColor = 'var(--warning)';
+            statusEl.style.color = 'var(--warning)';
+        } else {
+            statusEl.style.borderColor = '#475569';
+            statusEl.style.color = '#cbd5e1';
+        }
+
+        overlay.style.display = 'flex';
+    }
+
+    document.getElementById('word-card').addEventListener('click', () => {
+        gameState.wordVisible = !gameState.wordVisible;
+        const w = document.getElementById('my-word');
+        const card = document.getElementById('word-card');
+        
+        if(!gameState.wordVisible) {
+             w.innerText = "???";
+             card.classList.add('hidden');
+             card.classList.remove('revealed');
+        } else {
+             w.innerText = "..."; 
+             card.classList.remove('hidden');
+             card.classList.add('revealed');
+             
+             const roomId = gameState.currentRoomId;
+             if(roomId) {
+                 get(child(ref(db), `whois_room/${roomId}`)).then((snap) => {
+                     if(snap.exists()) updateRoomUI(snap.val());
+                 });
+             }
+        }
+    });
+
+    // --- 自動登入嘗試 ---
+    window.addEventListener('load', () => {
+        if(gameState.user.name) {
+             document.getElementById('username').value = gameState.user.name;
+        }
+        
+        // 如果有上次的房間 ID 且使用者已設定名字
+        const lastRoomId = localStorage.getItem('last_room_id');
+        if(lastRoomId && gameState.user.name) {
+            // 自動嘗試重連
+            gameState.user.id = initUser().id; // 確保 ID 正確
+            app.joinRoom(lastRoomId).catch(e => {
+                console.log("重連失敗或房間已不存在", e);
+                localStorage.removeItem('last_room_id');
+            });
+        }
+    });
+
+</script>
+</body>
+</html>
