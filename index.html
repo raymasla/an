@@ -17,6 +17,23 @@
             --uno-green: #10b981;
             --uno-yellow: #fbbf24;
             --accent: #8b5cf6;
+            --card-width: 80px;
+            --card-height: 120px;
+            --card-margin: -35px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --card-width: 70px;
+                --card-height: 105px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --card-width: 60px;
+                --card-height: 90px;
+            }
         }
 
         body {
@@ -104,8 +121,10 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 0 15px;
             z-index: 10;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
-        .room-info { font-size: 0.9rem; color: #cbd5e1; }
+        .room-info { font-size: 0.9rem; color: #cbd5e1; white-space: nowrap; }
         .game-status-text { font-weight: bold; color: var(--uno-yellow); margin-left: 10px; }
 
         /* 對手區域 */
@@ -136,7 +155,7 @@
 
         /* 牌堆樣式 */
         .card-pile {
-            width: 80px; height: 120px; border-radius: 10px;
+            width: var(--card-width); height: var(--card-height); border-radius: 10px;
             position: relative; cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             transition: transform 0.2s;
@@ -165,6 +184,7 @@
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
             padding-bottom: 20px;
             position: relative;
+            min-height: auto;
         }
 
         /* 獨立的操作按鈕區 (防止重疊) */
@@ -172,39 +192,80 @@
             display: flex; justify-content: center; gap: 15px;
             margin-bottom: 10px; pointer-events: none; /* 讓點擊穿透到牌，按鈕本身開啟pointer-events */
             height: 50px; /* 固定高度佔位 */
+            flex-wrap: wrap;
         }
-        .controls-container button { pointer-events: auto; min-width: 100px; }
+        .controls-container button { pointer-events: auto; min-width: 80px; font-size: 14px; padding: 8px 16px; }
 
+        /* ========================================= */
+        /* --- 手牌區域（關鍵修改） --- */
+        /* ========================================= */
         .hand-scroll-area {
-            display: flex; justify-content: center; align-items: flex-end;
-            overflow-x: auto; overflow-y: visible;
-            padding: 20px 40px; min-height: 130px;
-            gap: 0; /* 重疊效果 */
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-end;
+            overflow-x: auto; 
+            overflow-y: visible;
+            padding: 20px 10px; 
+            min-height: 140px;
+            gap: 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* iOS 平滑滾動 */
+        }
+
+        /* 手牌容器（內部用flex包裹） */
+        .hand-scroll-area > div {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+            min-width: fit-content;
         }
 
         /* ========================================= */
         /* --- 卡牌核心樣式 (CSS Only Art) --- */
         /* ========================================= */
         .uno-card {
-            width: 80px; height: 120px;
+            width: var(--card-width);
+            height: var(--card-height);
             border-radius: 10px;
             background-color: #eee;
             position: relative;
-            display: flex; justify-content: center; align-items: center;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
             box-shadow: -2px 0 10px rgba(0,0,0,0.3);
             border: 4px solid white;
             user-select: none;
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-left: -35px; /* 重疊 */
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), margin 0.15s ease-out;
             cursor: pointer;
             flex-shrink: 0;
+            /* 動態邊距 - 將由 JavaScript 計算 */
+            margin-left: -30px;
         }
-        .uno-card:first-child { margin-left: 0; }
+
+        .uno-card:first-child { 
+            margin-left: 0; 
+        }
         
         /* 懸停與選中 */
-        .uno-card:hover { transform: translateY(-20px) scale(1.05); z-index: 50; margin-right: 35px; }
-        .uno-card.selected { transform: translateY(-40px) scale(1.1); z-index: 100; box-shadow: 0 0 20px var(--uno-yellow); border-color: var(--uno-yellow); }
-        .uno-card.disabled { filter: grayscale(0.8) brightness(0.5); cursor: not-allowed; }
+        .uno-card:hover { 
+            transform: translateY(-20px) scale(1.05); 
+            z-index: 50; 
+            margin-right: 25px;
+        }
+
+        .uno-card.selected { 
+            transform: translateY(-40px) scale(1.1); 
+            z-index: 100; 
+            box-shadow: 0 0 20px var(--uno-yellow); 
+            border-color: var(--uno-yellow);
+            margin-right: 30px;
+        }
+
+        .uno-card.disabled { 
+            filter: grayscale(0.8) brightness(0.5); 
+            cursor: not-allowed; 
+            pointer-events: none;
+        }
 
         /* 顏色與內容 */
         .bg-red { background: var(--uno-red); color: var(--uno-red); }
@@ -286,6 +347,58 @@
         }
         @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 60% { transform: translate(-50%, -50%) scale(1.2); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
 
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            .hand-scroll-area {
+                padding: 15px 5px;
+                min-height: 130px;
+            }
+
+            .controls-container button {
+                min-width: 70px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .card-symbol {
+                font-size: 2em;
+            }
+
+            .corner {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hand-scroll-area {
+                padding: 10px 3px;
+                min-height: 110px;
+            }
+
+            .controls-container {
+                gap: 8px;
+                margin-bottom: 5px;
+                height: auto;
+            }
+
+            .controls-container button {
+                min-width: 60px;
+                font-size: 11px;
+                padding: 5px 10px;
+                flex: 1;
+                min-width: auto;
+            }
+
+            header {
+                font-size: 0.8rem;
+                padding: 0 10px;
+            }
+
+            .room-info {
+                font-size: 0.75rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -324,9 +437,9 @@
                 <span id="room-name-display">Room</span> | 
                 <span id="game-rules-display">Rules</span>
             </div>
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
                 <span id="turn-status">等待開始...</span>
-                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px; margin-left: 10px;" onclick="leaveRoom()">離開</button>
+                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="leaveRoom()">離開</button>
             </div>
         </header>
 
@@ -387,7 +500,7 @@
     import { getDatabase, ref, set, onValue, push, update, remove, onDisconnect, runTransaction, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyC7PZLTTNf17cfp9gCHudWiWX8SYPSCdDI", // 請確保這是有效的 Key，或使用您的配置
+        apiKey: "AIzaSyC7PZLTTNf17cfp9gCHudWiWX8SYPSCdDI",
         authDomain: "onlineeasyraygame.firebaseapp.com",
         databaseURL: "https://onlineeasyraygame-default-rtdb.asia-southeast1.firebasedatabase.app",
         projectId: "onlineeasyraygame"
@@ -605,8 +718,25 @@
         container.innerHTML = "";
         const myHand = (roomData.hands && roomData.hands[myKey]) || [];
         
+        // 計算動態邊距
+        const handCount = myHand.length;
+        const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
+        const containerWidth = container.offsetWidth;
+        
+        let dynamicMargin = -30;
+        if(handCount > 8) {
+            // 當牌數超過8張，自動壓縮間距
+            const availableWidth = containerWidth - 40; // 減去左右 padding
+            const totalWidth = (handCount * cardWidth) + (handCount - 1) * dynamicMargin;
+            if(totalWidth > availableWidth) {
+                dynamicMargin = Math.max(-15, Math.floor((availableWidth - handCount * cardWidth) / (handCount - 1)));
+            }
+        }
+        
         myHand.forEach((c, idx) => {
             const el = createCardDOM(c);
+            el.style.marginLeft = (idx === 0) ? '0' : `${dynamicMargin}px`;
+            
             // 綁定點擊
             if(roomData.gameState === 'playing' && roomData.playerOrder[roomData.turnIndex] === myKey) {
                 el.onclick = () => toggleSelect(idx, c);
@@ -844,7 +974,7 @@
 
         // 1. 從牌堆拿一張 (Transaction 避免衝突)
         const roomRef = ref(db, `ongame_room/${roomId}`);
-        // 為了流暢，先樂觀執行，假設牌堆夠
+        // 為了  暢，先樂觀執行，假設牌堆夠
         let deck = [...roomData.deck];
         let discard = [...roomData.discardPile];
         
