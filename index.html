@@ -17,23 +17,6 @@
             --uno-green: #10b981;
             --uno-yellow: #fbbf24;
             --accent: #8b5cf6;
-            --card-width: 80px;
-            --card-height: 120px;
-            --card-margin: -35px;
-        }
-
-        @media (max-width: 768px) {
-            :root {
-                --card-width: 70px;
-                --card-height: 105px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            :root {
-                --card-width: 60px;
-                --card-height: 90px;
-            }
         }
 
         body {
@@ -155,7 +138,7 @@
 
         /* 牌堆樣式 */
         .card-pile {
-            width: var(--card-width); height: var(--card-height); border-radius: 10px;
+            width: 80px; height: 120px; border-radius: 10px;
             position: relative; cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             transition: transform 0.2s;
@@ -181,38 +164,68 @@
         /* 底部手牌與操作區 */
         .bottom-section {
             display: flex; flex-direction: column;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            padding-bottom: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7));
+            padding-bottom: 10px;
             position: relative;
             min-height: auto;
+            gap: 5px;
         }
 
         /* 獨立的操作按鈕區 (防止重疊) */
         .controls-container {
-            display: flex; justify-content: center; gap: 15px;
-            margin-bottom: 10px; pointer-events: none; /* 讓點擊穿透到牌，按鈕本身開啟pointer-events */
-            height: 50px; /* 固定高度佔位 */
+            display: flex; justify-content: center; gap: 10px;
+            padding: 8px 10px;
+            pointer-events: none;
             flex-wrap: wrap;
         }
-        .controls-container button { pointer-events: auto; min-width: 80px; font-size: 14px; padding: 8px 16px; }
-
-        /* ========================================= */
-        /* --- 手牌區域（關鍵修改） --- */
-        /* ========================================= */
-        .hand-scroll-area {
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-end;
-            overflow-x: auto; 
-            overflow-y: visible;
-            padding: 20px 10px; 
-            min-height: 140px;
-            gap: 0;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch; /* iOS 平滑滾動 */
+        .controls-container button { 
+            pointer-events: auto; 
+            font-size: 12px; 
+            padding: 6px 12px;
+            flex-shrink: 0;
         }
 
-        /* 手牌容器（內部用flex包裹） */
+        /* ========================================= */
+        /* --- 手牌區域（全新設計） --- */
+        /* ========================================= */
+        .hand-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 160px;
+            position: relative;
+        }
+
+        /* 手牌計數器 */
+        .hand-count-badge {
+            position: absolute;
+            top: -22px;
+            left: 10px;
+            background: rgba(139, 92, 246, 0.8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 5;
+        }
+
+        .hand-scroll-area {
+            display: flex; 
+            justify-content: flex-start;
+            align-items: flex-end;
+            overflow-x: auto; 
+            overflow-y: hidden;
+            width: 100%;
+            padding: 8px 5px;
+            gap: 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+        /* 手牌容器 */
         .hand-scroll-area > div {
             display: flex;
             align-items: flex-end;
@@ -221,25 +234,27 @@
         }
 
         /* ========================================= */
-        /* --- 卡牌核心樣式 (CSS Only Art) --- */
+        /* --- 卡牌核心樣式 (動態大小) --- */
         /* ========================================= */
         .uno-card {
-            width: var(--card-width);
-            height: var(--card-height);
-            border-radius: 10px;
             background-color: #eee;
             position: relative;
             display: flex; 
             justify-content: center; 
             align-items: center;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.3);
-            border: 4px solid white;
+            border: 3px solid white;
             user-select: none;
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), margin 0.15s ease-out;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s, box-shadow 0.2s;
             cursor: pointer;
             flex-shrink: 0;
-            /* 動態邊距 - 將由 JavaScript 計算 */
-            margin-left: -30px;
+            border-radius: 8px;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.4);
+            
+            /* 默認尺寸 - 將由 JavaScript 動態設置 */
+            width: 70px;
+            height: 105px;
+            margin-left: -28px;
+            font-size: 1.6em;
         }
 
         .uno-card:first-child { 
@@ -247,18 +262,17 @@
         }
         
         /* 懸停與選中 */
-        .uno-card:hover { 
-            transform: translateY(-20px) scale(1.05); 
+        .uno-card:hover:not(.disabled) { 
+            transform: translateY(-18px) scale(1.08); 
             z-index: 50; 
-            margin-right: 25px;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
         }
 
         .uno-card.selected { 
-            transform: translateY(-40px) scale(1.1); 
+            transform: translateY(-35px) scale(1.12); 
             z-index: 100; 
             box-shadow: 0 0 20px var(--uno-yellow); 
             border-color: var(--uno-yellow);
-            margin-right: 30px;
         }
 
         .uno-card.disabled { 
@@ -285,26 +299,30 @@
             border-radius: 50% / 45%;
             transform: rotate(-30deg);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
         }
         .card-symbol {
             font-family: 'Arial Black', sans-serif;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
             z-index: 2;
         }
         
         /* 角落數字 */
-        .corner { position: absolute; font-family: 'Arial Black'; font-size: 1em; color: white; text-shadow: 1px 1px 2px black; }
-        .tl { top: 4px; left: 6px; }
-        .br { bottom: 4px; right: 6px; transform: rotate(180deg); }
+        .corner { 
+            position: absolute; 
+            font-family: 'Arial Black'; 
+            font-size: 0.7em;
+            color: white; 
+            text-shadow: 1px 1px 2px black;
+        }
+        .tl { top: 3px; left: 4px; }
+        .br { bottom: 3px; right: 4px; transform: rotate(180deg); }
 
         /* --- 視覺修正：當場上是變色牌且已選色時 --- */
         .tint-red { background: var(--uno-red) !important; color: var(--uno-red) !important; }
         .tint-blue { background: var(--uno-blue) !important; color: var(--uno-blue) !important; }
         .tint-green { background: var(--uno-green) !important; color: var(--uno-green) !important; }
         .tint-yellow { background: var(--uno-yellow) !important; color: var(--uno-yellow) !important; }
-        /* 讓被染色後的 wild 牌中間橢圓保持白色，文字變黑 */
         .tint-red .card-symbol, .tint-blue .card-symbol, .tint-green .card-symbol, .tint-yellow .card-symbol { color: black; }
 
 
@@ -349,49 +367,32 @@
 
         /* 響應式調整 */
         @media (max-width: 768px) {
-            .hand-scroll-area {
-                padding: 15px 5px;
-                min-height: 130px;
-            }
-
             .controls-container button {
-                min-width: 70px;
-                font-size: 12px;
-                padding: 6px 12px;
+                font-size: 11px;
+                padding: 5px 10px;
             }
 
             .card-symbol {
-                font-size: 2em;
-            }
-
-            .corner {
-                font-size: 0.8em;
+                font-size: 1.4em;
             }
         }
 
         @media (max-width: 480px) {
-            .hand-scroll-area {
-                padding: 10px 3px;
-                min-height: 110px;
-            }
-
             .controls-container {
-                gap: 8px;
-                margin-bottom: 5px;
-                height: auto;
+                gap: 6px;
+                padding: 6px 5px;
             }
 
             .controls-container button {
-                min-width: 60px;
-                font-size: 11px;
-                padding: 5px 10px;
+                font-size: 10px;
+                padding: 4px 8px;
                 flex: 1;
                 min-width: auto;
             }
 
             header {
                 font-size: 0.8rem;
-                padding: 0 10px;
+                padding: 0 8px;
             }
 
             .room-info {
@@ -419,8 +420,8 @@
             <h3>創建房間</h3>
             <input type="text" id="newRoomName" placeholder="房間名稱">
             <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin: 10px 0;">
-                <label><input type="checkbox" id="rule-chain" checked> 連出 (Chain)</label><br>
-                <label><input type="checkbox" id="rule-stack" checked> 疊加 (Stack +2/+4)</label>
+                <label><input type="checkbox" id="rule-chain"> 連出 (Chain)</label><br>
+                <label><input type="checkbox" id="rule-stack"> 疊加 (Stack +2/+4)</label>
             </div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-secondary" style="flex:1" onclick="backToLobby()">取消</button>
@@ -465,8 +466,10 @@
                 <button id="btn-pass" class="btn btn-secondary hidden" onclick="passTurn()">跳過</button>
             </div>
 
-            <div class="hand-scroll-area" id="my-hand">
-                </div>
+            <div class="hand-container">
+                <div class="hand-count-badge" id="hand-count">0 張</div>
+                <div class="hand-scroll-area" id="my-hand"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -518,10 +521,10 @@
     let isProcessing = false;
     
     // Draw State
-    let pendingDrawnCard = null; // 暫存抽到的牌
+    let pendingDrawnCard = null;
 
     // Wild State
-    let pendingPlayCards = null; // 暫存要出的牌 (等待選色)
+    let pendingPlayCards = null;
 
     // --- Init ---
     if(myName) {
@@ -596,7 +599,6 @@
         update(userRef, { name: myName, online: true });
         onDisconnect(userRef).remove();
 
-        // Room Listener
         onValue(ref(db, `ongame_room/${id}`), (snap) => {
             roomData = snap.val();
             if(!roomData) { alert("房間已關閉"); location.reload(); return; }
@@ -611,7 +613,6 @@
 
     // --- Game Logic: Rendering ---
     function renderGame() {
-        // Info Header
         document.getElementById('room-name-display').innerText = roomData.name;
         document.getElementById('game-rules-display').innerText = 
             `連出:${roomData.settings.chain?'ON':'OFF'} | 疊加:${roomData.settings.stack?'ON':'OFF'}`;
@@ -622,7 +623,6 @@
         const currentTurnUser = order[roomData.turnIndex];
         const isMyTurn = (currentTurnUser === myKey);
 
-        // Status Text
         const statusEl = document.getElementById('turn-status');
         if(roomData.gameState === 'waiting') {
             statusEl.innerText = `等待中 (${users.length}人)`;
@@ -640,16 +640,11 @@
                 statusEl.style.color = "#cbd5e1";
             }
             
-            // Buttons logic
-            const controls = document.getElementById('controls-area');
             const btnPlay = document.getElementById('btn-play');
             const btnPass = document.getElementById('btn-pass');
 
             if(isMyTurn) {
-                // 如果有選牌顯示出牌，否則隱藏
                 btnPlay.classList.toggle('hidden', selectedIndices.length === 0);
-                // 只有在還沒選牌 且 有懲罰抽牌時 或 一般回合? 
-                // UNO規則：如果輪到你，你必須出牌或抽牌。這裡簡化：如果不選牌，按Pass=抽牌/跳過
                 btnPass.classList.toggle('hidden', false);
                 btnPass.innerText = (roomData.accumulatedDraw > 0) ? `罰抽 (${roomData.accumulatedDraw})` : "跳過 / 抽牌";
             } else {
@@ -662,7 +657,6 @@
             setTimeout(()=> { if(confirm("重新開始?")) resetGame(); }, 1500);
         }
 
-        // Render Opponents
         const oppContainer = document.getElementById('opponents-container');
         oppContainer.innerHTML = "";
         order.forEach((uid, idx) => {
@@ -671,7 +665,7 @@
             const handCount = (roomData.hands && roomData.hands[uid]) ? roomData.hands[uid].length : 0;
             const isActive = (roomData.gameState === 'playing' && idx === roomData.turnIndex);
             
-            if(handCount === 1) showUnoAnim(); // 簡單觸發
+            if(handCount === 1) showUnoAnim();
 
             const div = document.createElement('div');
             div.className = `opponent-card ${isActive ? 'active' : ''}`;
@@ -683,14 +677,10 @@
             oppContainer.appendChild(div);
         });
 
-        // Render Table Center
         const discardEl = document.getElementById('discard-pile');
         discardEl.innerHTML = "";
         if(roomData.discardPile && roomData.discardPile.length > 0) {
             const top = roomData.discardPile[roomData.discardPile.length - 1];
-            
-            // 變色處理：如果上一張牌是黑色(Wild)，根據場上currentColor強制渲染顏色
-            let visualCard = { ...top };
             let extraClass = "";
             
             if(top.color === 'black') {
@@ -700,16 +690,14 @@
                 else if(roomData.currentColor === 'yellow') extraClass = "tint-yellow";
             }
 
-            const cardDom = createCardDOM(visualCard);
+            const cardDom = createCardDOM(top);
             if(extraClass) cardDom.classList.add(extraClass);
             discardEl.appendChild(cardDom);
         }
 
-        // Direction Animation
         const dirEl = document.getElementById('dir-indicator');
         dirEl.style.animationDirection = (roomData.direction === 1) ? 'normal' : 'reverse';
 
-        // Render My Hand
         renderHand();
     }
 
@@ -718,26 +706,50 @@
         container.innerHTML = "";
         const myHand = (roomData.hands && roomData.hands[myKey]) || [];
         
-        // 計算動態邊距
-        const handCount = myHand.length;
-        const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
-        const containerWidth = container.offsetWidth;
+        // 更新手牌計數
+        document.getElementById('hand-count').innerText = `${myHand.length} 張`;
+
+        // 計算最優牌寬和邊距
+        const containerWidth = container.parentElement.offsetWidth - 20; // 減去 padding
+        const maxCards = Math.max(1, Math.min(myHand.length, 20)); // 最多考慮 20 張
         
-        let dynamicMargin = -30;
-        if(handCount > 8) {
-            // 當牌數超過8張，自動壓縮間距
-            const availableWidth = containerWidth - 40; // 減去左右 padding
-            const totalWidth = (handCount * cardWidth) + (handCount - 1) * dynamicMargin;
-            if(totalWidth > availableWidth) {
-                dynamicMargin = Math.max(-15, Math.floor((availableWidth - handCount * cardWidth) / (handCount - 1)));
-            }
+        // 基礎卡牌寬度
+        let cardWidth = 70;
+        let cardHeight = 105;
+        let marginLeft = -28;
+        
+        // 根據手牌數量動態調整尺寸
+        if(myHand.length > 15) {
+            // 手牌很多時，大幅縮小
+            cardWidth = Math.max(45, Math.floor(containerWidth / (myHand.length * 0.5)));
+            cardHeight = Math.floor(cardWidth * 1.5);
+            marginLeft = -Math.floor(cardWidth * 0.4);
+        } else if(myHand.length > 10) {
+            // 手牌較多時，中等縮小
+            cardWidth = Math.max(55, Math.floor(containerWidth / (myHand.length * 0.6)));
+            cardHeight = Math.floor(cardWidth * 1.5);
+            marginLeft = -Math.floor(cardWidth * 0.4);
+        } else if(myHand.length > 8) {
+            // 手牌適度調整
+            cardWidth = Math.max(60, Math.floor(containerWidth / (myHand.length * 0.7)));
+            cardHeight = Math.floor(cardWidth * 1.5);
+            marginLeft = -Math.floor(cardWidth * 0.4);
         }
         
         myHand.forEach((c, idx) => {
             const el = createCardDOM(c);
-            el.style.marginLeft = (idx === 0) ? '0' : `${dynamicMargin}px`;
+            el.style.width = `${cardWidth}px`;
+            el.style.height = `${cardHeight}px`;
+            el.style.marginLeft = (idx === 0) ? '0' : `${marginLeft}px`;
+            el.style.borderWidth = (cardWidth < 60) ? '2px' : '3px';
             
-            // 綁定點擊
+            // 動態調整字體大小
+            if(cardWidth < 60) {
+                el.style.fontSize = '1.2em';
+                const symbol = el.querySelector('.card-symbol');
+                if(symbol) symbol.style.fontSize = '1.3em';
+            }
+            
             if(roomData.gameState === 'playing' && roomData.playerOrder[roomData.turnIndex] === myKey) {
                 el.onclick = () => toggleSelect(idx, c);
             } else {
@@ -751,15 +763,13 @@
 
     // --- Helper: Card DOM ---
     function createCardDOM(card, isSmall=false) {
-        // card: { type, color, value }
         let symbol = card.value;
         if(card.type === 'skip') symbol = '⊘';
         if(card.type === 'reverse') symbol = '⇄';
         if(card.type === 'draw2') symbol = '+2';
-        if(card.type === 'wild') symbol = '⊕'; // Wild icon
+        if(card.type === 'wild') symbol = '⊕';
         if(card.type === 'wild4') symbol = '+4';
         
-        // 確保顏色正確
         let bgClass = `bg-${card.color}`;
         if((card.type === 'wild' || card.type === 'wild4') && card.color === 'black') bgClass = 'bg-wild';
 
@@ -775,9 +785,6 @@
         return el;
     }
 
-    // --- Helper: Auto Sort ---
-    // 規則: 紅 > 藍 > 綠 > 黃 > 黑(Wild)
-    // 內部: 0-9 > Action
     function getSortWeight(card) {
         const colorWeight = { 'red': 1000, 'blue': 2000, 'green': 3000, 'yellow': 4000, 'black': 5000 };
         const typeWeight = {
@@ -792,47 +799,42 @@
         return hand.sort((a, b) => getSortWeight(a) - getSortWeight(b));
     }
 
-    // --- Logic: Selection ---
     window.toggleSelect = (idx, card) => {
         if(isProcessing) return;
         
-        // Chain Logic
-        if(selectedIndices.includes(idx)) {
-            selectedIndices = selectedIndices.filter(i => i !== idx);
+        if(!roomData.settings.chain) {
+            selectedIndices = [idx];
         } else {
-            if(!roomData.settings.chain) {
-                selectedIndices = [idx];
+            if(selectedIndices.includes(idx)) {
+                selectedIndices = selectedIndices.filter(i => i !== idx);
             } else {
-                // 檢查是否可連出 (數值必須相同)
                 if(selectedIndices.length > 0) {
                     const firstIdx = selectedIndices[0];
                     const firstCard = roomData.hands[myKey][firstIdx];
                     if(card.value === firstCard.value) {
                         selectedIndices.push(idx);
                     } else {
-                        selectedIndices = [idx]; // 換新的
+                        selectedIndices = [idx];
                     }
                 } else {
                     selectedIndices = [idx];
                 }
             }
         }
-        renderGame(); // Re-render to show selection
+        renderGame();
     };
 
-    // --- Game Actions: Start ---
     window.startGame = async () => {
         const users = Object.keys(roomData.users);
         const deck = generateDeck();
         const hands = {};
         
-        // 發牌
         users.forEach(u => {
-            hands[u] = sortHandArray(deck.splice(0, 7)); // 初始發牌也排序
+            hands[u] = sortHandArray(deck.splice(0, 7));
         });
 
         let first = deck.pop();
-        while(first.color === 'black') { deck.unshift(first); first = deck.pop(); } // 第一張不能是黑牌
+        while(first.color === 'black') { deck.unshift(first); first = deck.pop(); }
 
         await update(ref(db, `ongame_room/${roomId}`), {
             gameState: 'playing',
@@ -842,35 +844,26 @@
         });
     };
 
-    // --- Game Actions: Play ---
     window.playSelected = () => {
         if(selectedIndices.length === 0) return;
         const hand = roomData.hands[myKey];
-        // 依照 index 取得真實卡牌物件
         const cardsToPlay = selectedIndices.map(i => hand[i]);
         
-        // 驗證
         const top = roomData.discardPile[roomData.discardPile.length - 1];
         const lead = cardsToPlay[0];
         
-        // 1. 疊加罰牌檢查
         if(roomData.accumulatedDraw > 0) {
             let isValid = false;
-            // 必須出 +2 接 +2，或 +4 接 +4 (若 stack 開啟)
-            // 這裡簡化：只要是 +牌 且 等級大於等於上家即可？通常 UNO 是 +2接+2, +4接+4
             if(top.type === 'draw2' && lead.type === 'draw2') isValid = true;
             if(top.type === 'wild4' && lead.type === 'wild4') isValid = true;
             if(!isValid) return alert("必須出同樣的加牌(+2/+4)來防禦，否則請按罰抽！");
-        } 
-        // 2. 一般出牌檢查
-        else {
+        } else {
             const colorMatch = (lead.color === roomData.currentColor);
             const valueMatch = (lead.value === top.value);
             const isWild = (lead.color === 'black');
             if(!colorMatch && !valueMatch && !isWild) return alert("這張牌無法打出！");
         }
 
-        // 檢查是否需要選色 (最後一張是黑牌)
         if(cardsToPlay[cardsToPlay.length-1].color === 'black') {
             pendingPlayCards = { indices: selectedIndices, cards: cardsToPlay };
             document.getElementById('color-modal').classList.add('active');
@@ -891,38 +884,23 @@
     async function executeMove(indices, cards, nextColor) {
         isProcessing = true;
         
-        // 從手牌移除 (需注意 index 變化的問題，這裡簡單作法：過濾掉)
-        // 更安全的做法是根據卡牌特徵移除，因為排序後 index 會變
-        // 但因為我們 render 是同步的，暫且相信 indices 對應當下 hand
-        // 為了安全，我們 clone hand 並移除
         let newHand = [...roomData.hands[myKey]];
-        // 為了正確移除多張，我們先把要移除的設為 null，再 filter
         indices.forEach(i => newHand[i] = null);
         newHand = newHand.filter(c => c !== null);
-        
-        // 自動排序剩下的手牌
         newHand = sortHandArray(newHand);
 
         const updates = {};
         updates[`ongame_room/${roomId}/hands/${myKey}`] = newHand;
         updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, ...cards];
 
-        // 計算下一家與效果
         let dir = roomData.direction;
         let acc = roomData.accumulatedDraw;
         let steps = 1;
 
-        // 處理功能牌
         cards.forEach(c => {
             if(c.type === 'reverse') {
-                // 兩人規則：Reverse = Skip (當前玩家再玩一次，等於 steps = 2 或不換人?)
-                // 一般 UNO 兩人規則：Reverse 視為 Skip。 -> 下一家是自己。
-                // 這裡邏輯：TurnIndex 改變。如果 Skip，Index + 2。如果 Reverse 2人，Index + 0? 
-                // 不，Skip 是 Index + 2 (跳過下家)。Reverse 2人是跳過對方，回到自己。
-                // 也就是說，Reverse 2人效果 等同 Skip。
                 if(roomData.playerOrder.length === 2) {
-                    // Treat as Skip
-                    steps += 1; // 總共跳過1人，也就是下家被跳過
+                    steps += 1;
                 } else {
                     dir *= -1;
                 }
@@ -932,20 +910,15 @@
             if(c.type === 'wild4') acc += 4;
         });
 
-        // 確保顏色
         let nc = nextColor || cards[cards.length-1].color;
-        if(nc === 'black') nc = 'red'; // Fallback
+        if(nc === 'black') nc = 'red';
 
-        // 計算 Turn Index
         let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
         if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
 
         updates[`ongame_room/${roomId}/turnIndex`] = nextIdx;
         updates[`ongame_room/${roomId}/direction`] = dir;
-        updates[`ongame_room/${roomId}/accumulatedDraw`] = (roomData.settings.stack) ? acc : (acc>0?acc:0); 
-        // 註：若 Stack 關閉，這裡 acc 還是會傳遞，但在下家回合開始時若發現 stack off，則強制抽並清零。
-        // 為簡化，這裡假設 Stack ON，或者 Stack OFF 時只有最後一張生效。
-        
+        updates[`ongame_room/${roomId}/accumulatedDraw`] = (roomData.settings.stack) ? acc : (acc>0?acc:0);
         updates[`ongame_room/${roomId}/currentColor`] = nc;
 
         if(newHand.length === 0) {
@@ -958,55 +931,38 @@
         isProcessing = false;
     }
 
-    // --- Game Actions: Draw (Enhanced) ---
-    // 點擊牌堆 -> 抽一張 -> 顯示 Modal
     window.drawCardClick = async () => {
         if(isProcessing || !roomData) return;
         const isMyTurn = (roomData.playerOrder[roomData.turnIndex] === myKey);
         
-        // 如果是罰抽狀態，點擊牌堆等於「接受罰抽」
         if(isMyTurn && roomData.accumulatedDraw > 0) {
-            passTurn(); // 執行罰抽邏輯
+            passTurn();
             return;
         }
 
-        if(!isMyTurn) return; // 不是回合不能抽
+        if(!isMyTurn) return;
 
-        // 1. 從牌堆拿一張 (Transaction 避免衝突)
         const roomRef = ref(db, `ongame_room/${roomId}`);
-        // 為了  暢，先樂觀執行，假設牌堆夠
         let deck = [...roomData.deck];
         let discard = [...roomData.discardPile];
         
         if(deck.length === 0) {
-            // 洗牌
             if(discard.length <= 1) return alert("沒牌了！");
             const top = discard.pop();
             deck = discard.sort(() => Math.random() - 0.5);
             discard = [top];
             await update(roomRef, { discardPile: discard, deck: deck });
-            // 重新讀取 (Firebase 會觸發 onValue，但這裡為了連續性直接操作 local 變數不太安全，
-            // 建議等待 onValue 更新。但為了 UX，我們這裡假設 update 成功)
         }
 
-        // 執行抽牌 Transaction (確保只抽一張)
         runTransaction(ref(db, `ongame_room/${roomId}/deck`), (currentDeck) => {
-            if(!currentDeck || currentDeck.length === 0) return currentDeck; // 等待洗牌
-            const card = currentDeck[0];
-            currentDeck.shift(); // 移除第一張
-            // 儲存到暫存變數，這裡 transaction 只負責扣除
-            // 不行，transaction 不能回傳 side effect。
-            // 簡單作法：直接 update
+            if(!currentDeck || currentDeck.length === 0) return currentDeck;
+            currentDeck.shift();
             return currentDeck;
         }).then((result) => {
              if(result.committed) {
-                 // 這裡有個小缺陷：我們需要知道抽到哪張。Transaction 只回傳 committed。
-                 // 修正：我們手動取出第一張，然後 set 回去。
                  const card = deck[0]; 
                  const newDeck = deck.slice(1);
                  update(roomRef, { deck: newDeck });
-                 
-                 // 顯示 Modal
                  showDrawModal(card);
              }
         });
@@ -1022,7 +978,6 @@
         content.innerHTML = "";
         content.appendChild(createCardDOM(card));
         
-        // 判斷是否可出
         const top = roomData.discardPile[roomData.discardPile.length - 1];
         const isWild = (card.color === 'black');
         const colorMatch = (card.color === roomData.currentColor);
@@ -1063,21 +1018,15 @@
         pendingDrawnCard = null;
 
         if(playIt) {
-            // 出牌邏輯
-             if(card.color === 'black') {
-                // 需要選色
-                // 這裡有點 trick，因為 executeMove 預期是從手牌出，但這張牌還沒進手牌。
-                // 我們可以直接呼叫類似 executeMove 的邏輯，但不扣手牌，而是直接推 discard
+            if(card.color === 'black') {
                 pendingPlayCards = { indices: [], cards: [card], fromDraw: true };
                 document.getElementById('color-modal').classList.add('active');
             } else {
                 finishPlayDrawn(card, null);
             }
         } else {
-            // 收入手牌
             const newHand = sortHandArray([...roomData.hands[myKey], card]);
             
-            // 換下一位
             let nextIdx = (roomData.turnIndex + roomData.direction) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
             
@@ -1088,7 +1037,6 @@
         }
     };
 
-    // 處理剛抽到的牌被打出
     async function finishPlayDrawn(card, wildColor) {
         const updates = {};
         updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, card];
@@ -1118,7 +1066,6 @@
         await update(ref(db), updates);
     }
 
-    // 這裡修改 selectWildColor 支援剛抽到的牌
     const originalSelectWild = window.selectWildColor;
     window.selectWildColor = (c) => {
         if(pendingPlayCards && pendingPlayCards.fromDraw) {
@@ -1130,20 +1077,10 @@
         }
     };
 
-    // --- Game Actions: Pass / Penalty ---
     window.passTurn = async () => {
-        // 這按鈕現在通常是「罰抽」或「抽牌」(如果沒觸發 drawCardClick)
-        // 但我們的 UI 設計是點牌堆抽牌，按鈕主要是「跳過」(當抽了牌選擇不出時? 不，那個在 Modal 處理了)
-        // 這裡主要處理：罰抽 (Accumulated > 0)
-        
         const acc = roomData.accumulatedDraw;
         if(acc > 0) {
-            // 罰抽邏輯
             let deck = [...roomData.deck];
-            // 檢查牌量... (略，假設夠，或自動洗牌)
-            // 簡單處理
-            if(deck.length < acc) { /* 需洗牌 logic */ }
-            
             const drawn = deck.splice(0, acc);
             const newHand = sortHandArray([...roomData.hands[myKey], ...drawn]);
             
@@ -1157,8 +1094,6 @@
                 turnIndex: nextIdx
             });
         } else {
-            // 沒有罰抽，純粹跳過？ (UNO 規則通常不可直接跳過，必須抽牌)
-            // 這裡視為「點擊牌堆」
             drawCardClick();
         }
     };
@@ -1169,7 +1104,6 @@
         });
     };
 
-    // --- Utils ---
     function generateDeck() {
         const colors = ['red','blue','green','yellow'];
         let d = [];
@@ -1194,7 +1128,7 @@
     function showUnoAnim() {
         const el = document.getElementById('uno-shout');
         el.style.animation = 'none';
-        el.offsetHeight; /* trigger reflow */
+        el.offsetHeight;
         el.style.animation = 'popIn 1.5s forwards';
     }
 
