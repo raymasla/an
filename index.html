@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>UNO test</title>
+    <title>UNO test - Pro Edition</title>
     <style>
         /* ========================================= */
         /* --- 全局樣式 (Global Styles) --- */
         /* ========================================= */
         
-        /* 確保所有元素的 padding 與 border 不會額外撐大寬高 */
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -24,14 +23,12 @@
             --uno-yellow: #fbbf24;
             --accent: #8b5cf6;
             
-            /* 加入縮放因子與基礎卡牌尺寸變數 */
             --scale-factor: 1;
             --base-card-width: 80px;
             --base-card-height: 120px;
             
             --card-width: calc(var(--base-card-width) * var(--scale-factor));
             --card-height: calc(var(--base-card-height) * var(--scale-factor));
-            /* 預設重疊距離 */
             --card-margin: -35px;
         }
 
@@ -56,7 +53,7 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            height: 100dvh; /* 修正：動態視口高度，防止手機瀏覽器導覽列遮擋底部 */
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -64,7 +61,6 @@
             touch-action: manipulation;
         }
 
-        /* 滾動條美化 */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
@@ -72,15 +68,12 @@
         .hidden { display: none !important; }
         .flex-center { display: flex; justify-content: center; align-items: center; }
 
-        /* ========================================= */
-        /* --- 容器與通用組件 --- */
-        /* ========================================= */
         .screen-container {
             position: absolute; top:0; left:0; width:100%; height:100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: rgba(0,0,0,0.8); z-index: 100;
             backdrop-filter: blur(5px);
-            padding: 20px; /* 修正：確保面板不會緊貼螢幕邊緣 */
+            padding: 20px;
         }
 
         .panel {
@@ -91,8 +84,8 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             max-width: 400px; 
             width: 100%; 
-            max-height: 95vh; /* 修正：限制最大高度 */
-            overflow-y: auto; /* 修正：如果畫面太小，允許面板內部滑動 */
+            max-height: 95vh;
+            overflow-y: auto;
             text-align: center;
             animation: fadeIn 0.3s ease-out;
         }
@@ -109,7 +102,6 @@
         }
         input[type="text"]:focus { border-color: var(--accent); background: rgba(0,0,0,0.5); }
 
-        /* 放大按鈕基礎設定 */
         .btn {
             border: none; border-radius: 12px; padding: 14px 28px;
             font-size: 16px; font-weight: bold; color: white; cursor: pointer;
@@ -123,17 +115,13 @@
         .btn-secondary { background: #475569; }
         .btn-full { width: 100%; margin-top: 10px; }
 
-        /* ========================================= */
-        /* --- 遊戲主畫面佈局 --- */
-        /* ========================================= */
         #game-layout {
             width: 100%; height: 100%;
             display: grid;
-            grid-template-rows: 60px 1fr auto; /* Header, Table, Hand */
+            grid-template-rows: 60px 1fr auto;
             position: relative;
         }
 
-        /* 頂部資訊列 */
         header {
             background: rgba(15, 23, 42, 0.9);
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -150,7 +138,6 @@
             display: flex; align-items: center; gap: 10px;
         }
 
-        /* 對手區域 */
         .opponents-bar {
             display: flex; gap: 10px; justify-content: center; padding: 10px;
             overflow-x: auto;
@@ -168,7 +155,6 @@
         .opp-name { font-size: 0.75rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px;}
         .opp-count { font-size: 1.2rem; font-weight: bold; color: #fff; }
 
-        /* 中央牌桌 */
         .table-area {
             position: relative;
             display: flex; justify-content: center; align-items: center;
@@ -176,7 +162,6 @@
             perspective: 1000px;
         }
 
-        /* 牌堆樣式 */
         .card-pile {
             width: var(--card-width); height: var(--card-height); border-radius: 10px;
             position: relative; cursor: pointer;
@@ -192,7 +177,6 @@
         .deck:active { transform: scale(0.95); }
         .discard { border: 2px dashed rgba(255,255,255,0.1); }
         
-        /* 提示動畫 */
         .direction-indicator {
             position: absolute; width: 300px; height: 300px;
             border: 2px dashed rgba(255,255,255,0.1); border-radius: 50%;
@@ -201,7 +185,6 @@
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* 底部手牌與操作區 */
         .bottom-section {
             display: flex; flex-direction: column;
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
@@ -211,26 +194,22 @@
             width: 100%;
         }
 
-        /* 獨立的操作按鈕區 */
         .controls-container {
             display: flex; justify-content: center; gap: 15px;
             margin-bottom: 10px; pointer-events: none;
             height: auto; 
             flex-wrap: wrap;
-            z-index: 200; /* 確保按鈕在手牌上方 */
+            z-index: 200;
         }
         .controls-container button { 
             pointer-events: auto; min-width: 100px; font-size: 16px; padding: 12px 20px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            min-height: 44px; /* 增加點擊區域 */
+            min-height: 44px;
         }
 
-        /* ========================================= */
-        /* --- 手牌區域（優化滾動防遮擋） --- */
-        /* ========================================= */
         .hand-scroll-area {
             display: flex; 
-            justify-content: center; /* 預設置中，超出時由 JS 修改為 flex-start */
+            justify-content: center; 
             align-items: flex-end;
             width: 100%;
             overflow-x: auto; 
@@ -242,9 +221,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* ========================================= */
-        /* --- 卡牌核心樣式 --- */
-        /* ========================================= */
         .uno-card {
             width: var(--card-width);
             height: var(--card-height);
@@ -264,41 +240,18 @@
             transform-origin: center bottom;
         }
 
-        .uno-card:first-child { 
-            margin-left: 0 !important; 
-        }
-        
-        .uno-card:hover { 
-            transform: translateY(-25px) scale(1.1); 
-            z-index: 50 !important; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
-        }
+        .uno-card:first-child { margin-left: 0 !important; }
+        .uno-card:hover { transform: translateY(-25px) scale(1.1); z-index: 50 !important; box-shadow: 0 5px 20px rgba(0,0,0,0.6); }
+        .uno-card.selected { transform: translateY(-45px) scale(1.15); z-index: 49 !important; box-shadow: 0 0 25px var(--uno-yellow); border-color: var(--uno-yellow); }
+        .uno-card.disabled { filter: grayscale(0.8) brightness(0.5); cursor: not-allowed; pointer-events: none; }
 
-        .uno-card.selected { 
-            transform: translateY(-45px) scale(1.15); 
-            z-index: 49 !important; 
-            box-shadow: 0 0 25px var(--uno-yellow); 
-            border-color: var(--uno-yellow);
-        }
-
-        .uno-card.disabled { 
-            filter: grayscale(0.8) brightness(0.5); 
-            cursor: not-allowed; 
-            pointer-events: none;
-        }
-
-        /* 顏色與內容 */
         .bg-red { background: var(--uno-red); color: var(--uno-red); }
         .bg-blue { background: var(--uno-blue); color: var(--uno-blue); }
         .bg-green { background: var(--uno-green); color: var(--uno-green); }
         .bg-yellow { background: var(--uno-yellow); color: var(--uno-yellow); }
         .bg-black { background: #1e293b; color: white; border-color: #94a3b8; }
-        .bg-wild { 
-            background: conic-gradient(from 180deg, var(--uno-red) 0% 25%, var(--uno-blue) 25% 50%, var(--uno-green) 50% 75%, var(--uno-yellow) 75% 100%); 
-            color: black;
-        }
+        .bg-wild { background: conic-gradient(from 180deg, var(--uno-red) 0% 25%, var(--uno-blue) 25% 50%, var(--uno-green) 50% 75%, var(--uno-yellow) 75% 100%); color: black; }
 
-        /* 中間橢圓 */
         .card-oval {
             width: 85%; height: 60%;
             background: white;
@@ -307,42 +260,31 @@
             display: flex; align-items: center; justify-content: center;
             box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
         }
-        .card-symbol {
-            font-family: 'Arial Black', sans-serif;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-            z-index: 2;
-        }
-        
-        /* 角落數字 */
+        .card-symbol { font-family: 'Arial Black', sans-serif; font-size: 2.5em; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); z-index: 2; }
         .corner { position: absolute; font-family: 'Arial Black'; font-size: 1em; color: white; text-shadow: 1px 1px 2px black; }
         .tl { top: 4px; left: 6px; }
         .br { bottom: 4px; right: 6px; transform: rotate(180deg); }
 
-        /* --- 視覺修正：當場上是變色牌且已選色 --- */
         .tint-red { background: var(--uno-red) !important; color: var(--uno-red) !important; }
         .tint-blue { background: var(--uno-blue) !important; color: var(--uno-blue) !important; }
         .tint-green { background: var(--uno-green) !important; color: var(--uno-green) !important; }
         .tint-yellow { background: var(--uno-yellow) !important; color: var(--uno-yellow) !important; }
         .tint-red .card-symbol, .tint-blue .card-symbol, .tint-green .card-symbol, .tint-yellow .card-symbol { color: black; }
 
-        /* ========================================= */
-        /* --- 模態視窗 --- */
-        /* ========================================= */
         .modal-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.85); z-index: 2000;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s;
-            padding: 20px; /* 修正 */
+            padding: 20px;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal-content {
             background: var(--bg-panel); padding: 30px; border-radius: 20px;
             text-align: center; max-width: 90%; width: 340px;
-            max-height: 95vh; /* 修正：模態視窗高度限制 */
-            overflow-y: auto; /* 修正：內容太多時可滑動 */
+            max-height: 95vh;
+            overflow-y: auto;
             border: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -350,16 +292,9 @@
         .modal-overlay.active .modal-content { transform: scale(1); }
 
         .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .color-btn { 
-            height: 80px; border-radius: 12px; border: 4px solid white; 
-            cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
+        .color-btn { height: 80px; border-radius: 12px; border: 4px solid white; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .color-btn:hover { transform: scale(1.05); }
 
-        /* 抽牌展示區 */
-        #drawn-card-display { margin: 20px auto; transform: scale(1.2); }
-
-        /* UNO 動畫 */
         #uno-shout {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
             font-size: 8em; font-weight: 900; color: var(--uno-yellow); 
@@ -368,53 +303,41 @@
         }
         @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 60% { transform: translate(-50%, -50%) scale(1.2); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
 
-        /* 響應式調整 */
+        /* 新增提示文字樣式 */
+        #center-message {
+            position: absolute; 
+            bottom: 10px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            text-align: center;
+            font-weight: bold; 
+            color: #facc15; 
+            text-shadow: 0 2px 4px black;
+            pointer-events: none;
+            transition: font-size 0.2s;
+        }
+        #center-message span.color-text {
+            padding: 0 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
         @media (max-width: 768px) {
-            .hand-scroll-area {
-                padding: 10px 0;
-                min-height: 120px;
-            }
-            .controls-container button {
-                min-width: 90px;
-                font-size: 14px;
-                padding: 10px 16px;
-            }
+            .hand-scroll-area { padding: 10px 0; min-height: 120px; }
+            .controls-container button { min-width: 90px; font-size: 14px; padding: 10px 16px; }
             .card-symbol { font-size: 2em; }
             .corner { font-size: 0.8em; }
         }
 
         @media (max-width: 480px) {
-            .hand-scroll-area {
-                padding: 10px 0;
-                min-height: 100px;
-            }
-            .controls-container {
-                gap: 8px;
-                margin-bottom: 5px;
-            }
-            /* 針對手機玩家大幅優化按鈕 */
-            .controls-container button {
-                font-size: 15px !important;
-                padding: 12px 10px !important;
-                flex: 1;
-                min-width: auto;
-                min-height: 50px; /* 增加點擊高度 */
-                border-radius: 10px;
-            }
-            header {
-                font-size: 0.8rem;
-                padding: 0 10px;
-            }
-            .header-btns {
-                gap: 5px;
-            }
-            .header-btns button {
-                padding: 8px 10px !important;
-                font-size: 13px !important;
-            }
+            .hand-scroll-area { padding: 10px 0; min-height: 100px; }
+            .controls-container { gap: 8px; margin-bottom: 5px; }
+            .controls-container button { font-size: 15px !important; padding: 12px 10px !important; flex: 1; min-width: auto; min-height: 50px; border-radius: 10px; }
+            header { font-size: 0.8rem; padding: 0 10px; }
+            .header-btns { gap: 5px; }
+            .header-btns button { padding: 8px 10px !important; font-size: 13px !important; }
             .room-info { font-size: 0.75rem; }
         }
-
     </style>
 </head>
 <body>
@@ -427,8 +350,7 @@
             <button class="btn btn-primary btn-full" onclick="login()">進入大廳</button>
         </div>
         <div id="room-list-section" class="hidden">
-            <div id="room-container" style="max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px;">
-                </div>
+            <div id="room-container" style="max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px;"></div>
             <button class="btn btn-success btn-full" onclick="showCreateRoom()">＋ 創建房間</button>
         </div>
         <div id="create-room-section" class="hidden">
@@ -462,17 +384,13 @@
 
         <div class="table-area">
             <div class="opponents-bar" id="opponents-container" style="position: absolute; top: 10px; width: 100%;"></div>
-
             <div class="direction-indicator" id="dir-indicator"></div>
-
             <div class="card-pile deck" onclick="drawCardClick()">
                 <div>UNO<br><small>Draw</small></div>
             </div>
-
-            <div class="card-pile discard" id="discard-pile">
-                </div>
-
-            <div id="center-message" style="position: absolute; bottom: 20px; font-weight: bold; color: #facc15; text-shadow: 0 2px 4px black;"></div>
+            <div class="card-pile discard" id="discard-pile"></div>
+            
+            <div id="center-message"></div>
         </div>
 
         <div class="bottom-section">
@@ -481,9 +399,7 @@
                 <button id="btn-play" class="btn btn-primary hidden" onclick="playSelected()">出牌</button>
                 <button id="btn-pass" class="btn btn-secondary hidden" onclick="passTurn()">跳過 / 抽牌</button>
             </div>
-
-            <div class="hand-scroll-area" id="my-hand">
-                </div>
+            <div class="hand-scroll-area" id="my-hand"></div>
         </div>
     </div>
 </div>
@@ -503,6 +419,15 @@
         <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
             <label style="color:#cbd5e1; font-size:14px; font-weight:bold; display:block; margin-bottom:8px;">畫面縮放比例 (調整卡牌大小)</label>
             <input type="range" id="setting-scale" min="0.6" max="1.5" step="0.1" value="1" style="width:100%; cursor:pointer; accent-color: var(--accent);" oninput="updateScale(this.value)">
+        </div>
+
+        <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <label style="color:#cbd5e1; font-size:14px; font-weight:bold;">顯示遊戲提示</label>
+                <input type="checkbox" id="setting-tips-toggle" checked onchange="toggleTips(this.checked)" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <label style="color:#cbd5e1; font-size:14px; font-weight:bold; display:block; margin-bottom:8px;">提示字大小</label>
+            <input type="range" id="setting-tips-size" min="12" max="24" step="1" value="16" style="width:100%; cursor:pointer; accent-color: #facc15;" oninput="updateTipsSize(this.value)">
             <div style="display:flex; justify-content:space-between; font-size:12px; color:#94a3b8; margin-top:5px;">
                 <span>小</span><span>預設</span><span>大</span>
             </div>
@@ -517,8 +442,7 @@
         <h3>你抽到了</h3>
         <div id="drawn-card-placeholder" style="display:flex; justify-content:center;"></div>
         <p id="draw-msg" style="color:#cbd5e1; font-size: 0.9em; margin: 15px 0;">...</p>
-        <div id="draw-actions" style="display:flex; gap:10px; justify-content:center;">
-            </div>
+        <div id="draw-actions" style="display:flex; gap:10px; justify-content:center;"></div>
     </div>
 </div>
 
@@ -559,6 +483,10 @@
     let isProcessing = false;
     let pendingDrawnCard = null; 
     let pendingPlayCards = null; 
+    
+    // 客戶端本地設定
+    let tipsEnabled = true;
+    let tipsFontSize = 16;
 
     // --- Init ---
     window.login = () => {
@@ -594,6 +522,8 @@
     // --- 設定功能 (Settings) ---
     window.openSettings = () => {
         document.getElementById('setting-nickname').value = myName;
+        document.getElementById('setting-tips-toggle').checked = tipsEnabled;
+        document.getElementById('setting-tips-size').value = tipsFontSize;
         document.getElementById('settings-modal').classList.add('active');
     };
 
@@ -606,8 +536,6 @@
         if(!newName) return alert("暱稱不能為空！");
         myName = newName;
         alert("暱稱已成功更改為: " + myName);
-        
-        // 若在房間內，同步更新到資料庫
         if (roomId && myKey && roomData && roomData.users && roomData.users[myKey]) {
             await update(ref(db, `ongame_room/${roomId}/users/${myKey}`), { name: myName });
         }
@@ -615,9 +543,17 @@
 
     window.updateScale = (val) => {
         document.documentElement.style.setProperty('--scale-factor', val);
-        if (roomId && roomData) {
-            renderHand(); // 縮放後重新計算手牌排列間距
-        }
+        if (roomId && roomData) renderHand();
+    };
+
+    window.toggleTips = (val) => {
+        tipsEnabled = val;
+        renderGame();
+    };
+
+    window.updateTipsSize = (val) => {
+        tipsFontSize = val;
+        renderGame();
     };
 
     // --- Room Actions ---
@@ -640,7 +576,7 @@
             type: 'uno', name, gameState: 'waiting',
             settings: { chain, stack },
             users: {}, turnIndex: 0, direction: 1, accumulatedDraw: 0,
-            currentColor: 'red', deck: [], discardPile: []
+            currentColor: 'red', deck: [], discardPile: [], lastTip: ""
         }).then(() => join(newRef.key));
     };
 
@@ -754,6 +690,15 @@
             setTimeout(()=> { if(confirm("重新開始?")) resetGame(); }, 1500);
         }
 
+        // 提示文字處理
+        const centerMsg = document.getElementById('center-message');
+        if (tipsEnabled && roomData.lastTip) {
+            centerMsg.innerHTML = roomData.lastTip;
+            centerMsg.style.fontSize = tipsFontSize + "px";
+        } else {
+            centerMsg.innerHTML = "";
+        }
+
         const oppContainer = document.getElementById('opponents-container');
         oppContainer.innerHTML = "";
         order.forEach((uid, idx) => {
@@ -803,14 +748,12 @@
         const container = document.getElementById('my-hand');
         container.innerHTML = "";
         const myHand = (roomData.hands && roomData.hands[myKey]) || [];
-        
         const handCount = myHand.length;
         if(handCount === 0) return;
 
         const screenWidth = window.innerWidth;
         const maxContainerWidth = Math.min(screenWidth - 20, 900); 
 
-        // 確保精確計算卡牌尺寸（支援動態比例縮放）
         const dummyCard = document.createElement('div');
         dummyCard.className = 'uno-card';
         dummyCard.style.visibility = 'hidden';
@@ -827,19 +770,15 @@
             const availableSpaceForOverlaps = maxContainerWidth - cardWidth;
             const newStep = availableSpaceForOverlaps / (handCount - 1);
             overlapMargin = newStep - cardWidth;
-            const minClickableWidth = 20; // 稍微增加手機版的最小可見點擊範圍
-            if (overlapMargin < -(cardWidth - minClickableWidth)) {
-                overlapMargin = -(cardWidth - minClickableWidth);
-            }
+            const minClickableWidth = 20;
+            if (overlapMargin < -(cardWidth - minClickableWidth)) overlapMargin = -(cardWidth - minClickableWidth);
         }
 
-        // --- 防遮擋優化 ---
-        // 當卡牌真的太多導致需要滾動時，解除居中對齊改為靠左，並加上右側預留空間
         const finalRequiredWidth = cardWidth + (handCount - 1) * (cardWidth + overlapMargin);
         if (finalRequiredWidth >= maxContainerWidth) {
             container.style.justifyContent = 'flex-start';
             container.style.paddingLeft = '10px';
-            container.style.paddingRight = '30px'; // 讓最後一張牌有空間顯示
+            container.style.paddingRight = '30px';
         } else {
             container.style.justifyContent = 'center';
             container.style.paddingLeft = '0';
@@ -850,13 +789,11 @@
             const el = createCardDOM(c);
             el.style.marginLeft = (idx === 0) ? '0' : `${overlapMargin}px`;
             el.style.zIndex = idx;
-
             if(roomData.gameState === 'playing' && roomData.playerOrder[roomData.turnIndex] === myKey) {
                 el.onclick = () => toggleSelect(idx, c);
             } else {
                 el.classList.add('disabled');
             }
-
             if(selectedIndices.includes(idx)) el.classList.add('selected');
             container.appendChild(el);
         });
@@ -876,27 +813,14 @@
         const el = document.createElement('div');
         el.className = `uno-card ${bgClass}`;
         if(isSmall) el.style.transform = "scale(0.8)";
-        
-        el.innerHTML = `
-            <div class="corner tl">${symbol}</div>
-            <div class="card-oval"><span class="card-symbol">${symbol}</span></div>
-            <div class="corner br">${symbol}</div>
-        `;
+        el.innerHTML = `<div class="corner tl">${symbol}</div><div class="card-oval"><span class="card-symbol">${symbol}</span></div><div class="corner br">${symbol}</div>`;
         return el;
     }
 
-    function getSortWeight(card) {
-        const colorWeight = { 'red': 1000, 'blue': 2000, 'green': 3000, 'yellow': 4000, 'black': 5000 };
-        const typeWeight = {
-            '0':0, '1':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9,
-            'skip': 20, 'reverse': 21, 'draw2': 22,
-            'wild': 50, 'wild4': 51
-        };
-        return (colorWeight[card.color] || 0) + (typeWeight[card.value] || 0);
-    }
-
     function sortHandArray(hand) {
-        return hand.sort((a, b) => getSortWeight(a) - getSortWeight(b));
+        const colorWeight = { 'red': 1000, 'blue': 2000, 'green': 3000, 'yellow': 4000, 'black': 5000 };
+        const typeWeight = { '0':0, '1':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'skip': 20, 'reverse': 21, 'draw2': 22, 'wild': 50, 'wild4': 51 };
+        return hand.sort((a, b) => ((colorWeight[a.color] || 0) + (typeWeight[a.value] || 0)) - ((colorWeight[b.color] || 0) + (typeWeight[b.value] || 0)));
     }
 
     window.toggleSelect = (idx, card) => {
@@ -908,13 +832,9 @@
                 selectedIndices = selectedIndices.filter(i => i !== idx);
             } else {
                 if(selectedIndices.length > 0) {
-                    const firstIdx = selectedIndices[0];
-                    const firstCard = roomData.hands[myKey][firstIdx];
-                    if(card.value === firstCard.value) {
-                        selectedIndices.push(idx);
-                    } else {
-                        selectedIndices = [idx];
-                    }
+                    const firstCard = roomData.hands[myKey][selectedIndices[0]];
+                    if(card.value === firstCard.value) selectedIndices.push(idx);
+                    else selectedIndices = [idx];
                 } else {
                     selectedIndices = [idx];
                 }
@@ -927,20 +847,42 @@
         const users = Object.keys(roomData.users);
         const deck = generateDeck();
         const hands = {};
-        users.forEach(u => {
-            hands[u] = sortHandArray(deck.splice(0, 7));
-        });
-
+        users.forEach(u => hands[u] = sortHandArray(deck.splice(0, 7)));
         let first = deck.pop();
         while(first.type !== 'n') { deck.unshift(first); first = deck.pop(); }
-
         await update(ref(db, `ongame_room/${roomId}`), {
-            gameState: 'playing',
-            deck, hands, discardPile: [first],
+            gameState: 'playing', deck, hands, discardPile: [first],
             playerOrder: users.sort(()=>Math.random()-0.5),
-            turnIndex: 0, direction: 1, currentColor: first.color, accumulatedDraw: 0
+            turnIndex: 0, direction: 1, currentColor: first.color, accumulatedDraw: 0, lastTip: ""
         });
     };
+
+    // 核心工具：獲取下一位玩家名稱
+    function getNextPlayerName(steps = 1) {
+        let idx = (roomData.turnIndex + (roomData.direction * steps)) % roomData.playerOrder.length;
+        if(idx < 0) idx += roomData.playerOrder.length;
+        const uid = roomData.playerOrder[idx];
+        return roomData.users[uid]?.name || "對手";
+    }
+
+    // 核心工具：生成提示文字
+    function generateTip(cards, nextColor) {
+        const lead = cards[0];
+        const nextName = getNextPlayerName(1);
+        const myNameStr = myName;
+        
+        if (lead.type === 'reverse') return `${myNameStr} 進行了迴轉！`;
+        if (lead.type === 'skip') return `${myNameStr} 禁止了 ${nextName}！`;
+        if (lead.type === 'draw2') return `${myNameStr} 讓 ${nextName} 多了 2 張牌`;
+        if (lead.type === 'wild4') {
+            const colorMap = { red: '紅色', blue: '藍色', green: '綠色', yellow: '黃色' };
+            const colorHex = { red: '#ef4444', blue: '#3b82f6', green: '#10b981', yellow: '#fbbf24' };
+            const colorName = colorMap[nextColor] || '未知色';
+            const colorDisplay = `<span class="color-text" style="color:${colorHex[nextColor]}">${colorName}</span>`;
+            return `${myNameStr} 讓 ${nextName} 多了 4 張牌 並選取了 ${colorDisplay}`;
+        }
+        return "";
+    }
 
     window.playSelected = () => {
         if(selectedIndices.length === 0) return;
@@ -953,7 +895,7 @@
             let isValid = false;
             if(top.type === 'draw2' && lead.type === 'draw2') isValid = true;
             if(top.type === 'wild4' && lead.type === 'wild4') isValid = true;
-            if(!isValid) return alert("必須出同樣的加牌(+2/+4)來防禦，否則請按罰抽！");
+            if(!isValid) return alert("必須出同樣的加牌來疊加！");
         } else {
             const colorMatch = (lead.color === roomData.currentColor);
             const valueMatch = (lead.value === top.value);
@@ -966,7 +908,6 @@
             document.getElementById('color-modal').classList.add('active');
             return;
         }
-
         executeMove(selectedIndices, cardsToPlay, null);
     };
 
@@ -985,11 +926,11 @@
         isProcessing = true;
         let newHand = [...roomData.hands[myKey]];
         indices.forEach(i => newHand[i] = null);
-        newHand = newHand.filter(c => c !== null);
-        newHand = sortHandArray(newHand);
+        newHand = sortHandArray(newHand.filter(c => c !== null));
 
         const updates = {};
         updates[`ongame_room/${roomId}/hands/${myKey}`] = newHand;
+        updates[`ongame_room/${roomId}/lastTip`] = generateTip(cards, nextColor);
 
         let dir = roomData.direction;
         let acc = roomData.accumulatedDraw;
@@ -997,10 +938,7 @@
         let newlyAddedAcc = 0;
 
         cards.forEach(c => {
-            if(c.type === 'reverse') {
-                if(roomData.playerOrder.length === 2) steps += 1;
-                else dir *= -1;
-            }
+            if(c.type === 'reverse') { if(roomData.playerOrder.length === 2) steps += 1; else dir *= -1; }
             if(c.type === 'skip') steps += 1;
             if(c.type === 'draw2') newlyAddedAcc += 2;
             if(c.type === 'wild4') newlyAddedAcc += 4;
@@ -1013,26 +951,21 @@
             let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
             const targetUserKey = roomData.playerOrder[nextIdx];
-
             let currentDeck = roomData.deck || [];
             let currentDiscard = [...roomData.discardPile, ...cards];
             let drawn = [];
-
             for(let k=0; k<newlyAddedAcc; k++){
                 if(currentDeck.length === 0) {
                     if(currentDiscard.length <= 1) break;
-                    const top = currentDiscard.pop();
+                    const t = currentDiscard.pop();
                     currentDeck = currentDiscard.sort(()=>Math.random()-0.5);
-                    currentDiscard = [top];
+                    currentDiscard = [t];
                 }
                 drawn.push(currentDeck.shift());
             }
-
-            let targetHand = roomData.hands[targetUserKey] || [];
-            updates[`ongame_room/${roomId}/hands/${targetUserKey}`] = sortHandArray([...targetHand, ...drawn]);
+            updates[`ongame_room/${roomId}/hands/${targetUserKey}`] = sortHandArray([...(roomData.hands[targetUserKey]||[]), ...drawn]);
             updates[`ongame_room/${roomId}/deck`] = currentDeck;
             updates[`ongame_room/${roomId}/discardPile`] = currentDiscard;
-
             steps += 1; 
             updates[`ongame_room/${roomId}/accumulatedDraw`] = 0; 
         } else {
@@ -1043,16 +976,11 @@
 
         let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
         if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
-
         updates[`ongame_room/${roomId}/turnIndex`] = nextIdx;
         updates[`ongame_room/${roomId}/direction`] = dir;
         updates[`ongame_room/${roomId}/currentColor`] = nc;
 
-        if(newHand.length === 0) {
-            updates[`ongame_room/${roomId}/gameState`] = 'ended';
-            updates[`ongame_room/${roomId}/winner`] = myKey;
-        }
-
+        if(newHand.length === 0) { updates[`ongame_room/${roomId}/gameState`] = 'ended'; updates[`ongame_room/${roomId}/winner`] = myKey; }
         await update(ref(db), updates);
         selectedIndices = [];
         isProcessing = false;
@@ -1061,17 +989,11 @@
     window.drawCardClick = async () => {
         if(isProcessing || !roomData) return;
         const isMyTurn = (roomData.playerOrder[roomData.turnIndex] === myKey);
-        
-        if(isMyTurn && roomData.accumulatedDraw > 0) {
-            passTurn();
-            return;
-        }
-
+        if(isMyTurn && roomData.accumulatedDraw > 0) { passTurn(); return; }
         if(!isMyTurn) return;
 
         let deck = [...roomData.deck];
         let discard = [...roomData.discardPile];
-        
         if(deck.length === 0) {
             if(discard.length <= 1) return alert("沒牌了！");
             const top = discard.pop();
@@ -1088,7 +1010,7 @@
              if(result.committed) {
                  const card = deck[0]; 
                  const newDeck = deck.slice(1);
-                 update(ref(db, `ongame_room/${roomId}`), { deck: newDeck });
+                 update(ref(db, `ongame_room/${roomId}`), { deck: newDeck, lastTip: "" });
                  showDrawModal(card);
              }
         });
@@ -1100,39 +1022,26 @@
         const content = document.getElementById('drawn-card-placeholder');
         const msg = document.getElementById('draw-msg');
         const actions = document.getElementById('draw-actions');
-        
         content.innerHTML = "";
         content.appendChild(createCardDOM(card));
-        
-        const top = roomData.discardPile[roomData.discardPile.length - 1];
-        const isWild = (card.color === 'black');
-        const colorMatch = (card.color === roomData.currentColor);
-        const valMatch = (card.value === top.value);
-        const playable = (isWild || colorMatch || valMatch);
-
+        const playable = (card.color === 'black' || card.color === roomData.currentColor || card.value === roomData.discardPile[roomData.discardPile.length-1].value);
         actions.innerHTML = "";
-        
         if(playable) {
             msg.innerText = "這張牌可以打出！";
             const btnPlay = document.createElement('button');
-            btnPlay.className = "btn btn-primary";
-            btnPlay.innerText = "丟出";
+            btnPlay.className = "btn btn-primary"; btnPlay.innerText = "丟出";
             btnPlay.onclick = () => playDrawnCard(true);
             const btnKeep = document.createElement('button');
-            btnKeep.className = "btn btn-secondary";
-            btnKeep.innerText = "收下";
+            btnKeep.className = "btn btn-secondary"; btnKeep.innerText = "收下";
             btnKeep.onclick = () => playDrawnCard(false);
-            actions.appendChild(btnPlay);
-            actions.appendChild(btnKeep);
+            actions.appendChild(btnPlay); actions.appendChild(btnKeep);
         } else {
             msg.innerText = " ";
             const btnKeep = document.createElement('button');
-            btnKeep.className = "btn btn-secondary";
-            btnKeep.innerText = "收下";
+            btnKeep.className = "btn btn-secondary"; btnKeep.innerText = "收下";
             btnKeep.onclick = () => playDrawnCard(false);
             actions.appendChild(btnKeep);
         }
-        
         modal.classList.add('active');
     }
 
@@ -1140,37 +1049,24 @@
         document.getElementById('draw-modal').classList.remove('active');
         const card = pendingDrawnCard;
         pendingDrawnCard = null;
-
         if(playIt) {
              if(card.color === 'black') {
                 pendingPlayCards = { indices: [], cards: [card], fromDraw: true };
                 document.getElementById('color-modal').classList.add('active');
-            } else {
-                finishPlayDrawn(card, null);
-            }
+            } else finishPlayDrawn(card, null);
         } else {
             const newHand = sortHandArray([...roomData.hands[myKey], card]);
             let nextIdx = (roomData.turnIndex + roomData.direction) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
-            update(ref(db, `ongame_room/${roomId}`), {
-                [`hands/${myKey}`]: newHand,
-                turnIndex: nextIdx
-            });
+            update(ref(db, `ongame_room/${roomId}`), { [`hands/${myKey}`]: newHand, turnIndex: nextIdx, lastTip: "" });
         }
     };
 
     async function finishPlayDrawn(card, wildColor) {
         const updates = {};
-        
-        let dir = roomData.direction;
-        let steps = 1;
-        let acc = roomData.accumulatedDraw;
-        let newlyAddedAcc = 0;
-
-        if(card.type === 'reverse') {
-             if(roomData.playerOrder.length === 2) steps += 1;
-             else dir *= -1;
-        }
+        updates[`ongame_room/${roomId}/lastTip`] = generateTip([card], wildColor);
+        let dir = roomData.direction, steps = 1, acc = roomData.accumulatedDraw, newlyAddedAcc = 0;
+        if(card.type === 'reverse') { if(roomData.playerOrder.length === 2) steps += 1; else dir *= -1; }
         if(card.type === 'skip') steps += 1;
         if(card.type === 'draw2') newlyAddedAcc += 2;
         if(card.type === 'wild4') newlyAddedAcc += 4;
@@ -1179,11 +1075,7 @@
             let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
             const targetUserKey = roomData.playerOrder[nextIdx];
-
-            let currentDeck = roomData.deck || [];
-            let currentDiscard = [...roomData.discardPile, card];
-            let drawn = [];
-
+            let currentDeck = roomData.deck || [], currentDiscard = [...roomData.discardPile, card], drawn = [];
             for(let k=0; k<newlyAddedAcc; k++){
                 if(currentDeck.length === 0) {
                     if(currentDiscard.length <= 1) break;
@@ -1193,12 +1085,9 @@
                 }
                 drawn.push(currentDeck.shift());
             }
-
-            let targetHand = roomData.hands[targetUserKey] || [];
-            updates[`ongame_room/${roomId}/hands/${targetUserKey}`] = sortHandArray([...targetHand, ...drawn]);
+            updates[`ongame_room/${roomId}/hands/${targetUserKey}`] = sortHandArray([...(roomData.hands[targetUserKey]||[]), ...drawn]);
             updates[`ongame_room/${roomId}/deck`] = currentDeck;
             updates[`ongame_room/${roomId}/discardPile`] = currentDiscard;
-
             steps += 1; 
             updates[`ongame_room/${roomId}/accumulatedDraw`] = 0;
         } else {
@@ -1206,56 +1095,34 @@
             updates[`ongame_room/${roomId}/accumulatedDraw`] = acc;
             updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, card];
         }
-
         let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
         if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
-        
-        let nc = wildColor || card.color;
-        
         updates[`ongame_room/${roomId}/turnIndex`] = nextIdx;
         updates[`ongame_room/${roomId}/direction`] = dir;
-        updates[`ongame_room/${roomId}/currentColor`] = nc;
-        
+        updates[`ongame_room/${roomId}/currentColor`] = wildColor || card.color;
         await update(ref(db), updates);
     }
 
     window.passTurn = async () => {
         const acc = roomData.accumulatedDraw;
         if(acc > 0) {
-            let deck = [...roomData.deck];
-            let discard = [...roomData.discardPile];
-            let drawn = [];
-
+            let deck = [...roomData.deck], discard = [...roomData.discardPile], drawn = [];
             for(let i=0; i<acc; i++){
                 if(deck.length === 0) {
                     if(discard.length <= 1) break;
-                    const top = discard.pop();
-                    deck = discard.sort(()=>Math.random()-0.5);
-                    discard = [top];
+                    const t = discard.pop(); deck = discard.sort(()=>Math.random()-0.5); discard = [t];
                 }
                 drawn.push(deck.shift());
             }
-
             const newHand = sortHandArray([...roomData.hands[myKey], ...drawn]);
             let nextIdx = (roomData.turnIndex + roomData.direction) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
-
-            update(ref(db, `ongame_room/${roomId}`), {
-                [`hands/${myKey}`]: newHand,
-                deck: deck,
-                discardPile: discard,
-                accumulatedDraw: 0,
-                turnIndex: nextIdx
-            });
-        } else {
-            drawCardClick();
-        }
+            update(ref(db, `ongame_room/${roomId}`), { [`hands/${myKey}`]: newHand, deck, discardPile: discard, accumulatedDraw: 0, turnIndex: nextIdx, lastTip: `${myName} 罰抽了 ${acc} 張牌` });
+        } else drawCardClick();
     };
 
     window.resetGame = () => {
-        update(ref(db, `ongame_room/${roomId}`), {
-            gameState: 'waiting', hands: {}, discardPile: [], accumulatedDraw: 0
-        });
+        update(ref(db, `ongame_room/${roomId}`), { gameState: 'waiting', hands: {}, discardPile: [], accumulatedDraw: 0, lastTip: "" });
     };
 
     function generateDeck() {
@@ -1263,29 +1130,17 @@
         let d = [];
         colors.forEach(c => {
             d.push({type:'n', color:c, value:'0'});
-            for(let i=1;i<=9;i++) { 
-                d.push({type:'n',color:c,value:String(i)}); 
-                d.push({type:'n',color:c,value:String(i)}); 
-            }
-            ['skip','reverse','draw2'].forEach(t => {
-                d.push({type:t,color:c,value:t}); 
-                d.push({type:t,color:c,value:t});
-            });
+            for(let i=1;i<=9;i++) { d.push({type:'n',color:c,value:String(i)}); d.push({type:'n',color:c,value:String(i)}); }
+            ['skip','reverse','draw2'].forEach(t => { d.push({type:t,color:c,value:t}); d.push({type:t,color:c,value:t}); });
         });
-        for(let i=0;i<4;i++){
-            d.push({type:'wild',color:'black',value:'wild'});
-            d.push({type:'wild4',color:'black',value:'wild4'});
-        }
+        for(let i=0;i<4;i++){ d.push({type:'wild',color:'black',value:'wild'}); d.push({type:'wild4',color:'black',value:'wild4'}); }
         return d.sort(()=>Math.random()-0.5);
     }
     
     function showUnoAnim() {
         const el = document.getElementById('uno-shout');
-        el.style.animation = 'none';
-        el.offsetHeight; 
-        el.style.animation = 'popIn 1.5s forwards';
+        el.style.animation = 'none'; el.offsetHeight; el.style.animation = 'popIn 1.5s forwards';
     }
-
 </script>
 </body>
 </html>
