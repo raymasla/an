@@ -2,12 +2,18 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>UNO test</title>
     <style>
         /* ========================================= */
         /* --- 全局樣式 (Global Styles) --- */
         /* ========================================= */
+        
+        /* 確保所有元素的 padding 與 border 不會額外撐大寬高 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         :root {
             --bg-dark: #0f172a;
             --bg-panel: rgba(30, 41, 59, 0.9);
@@ -50,6 +56,7 @@
             margin: 0;
             padding: 0;
             height: 100vh;
+            height: 100dvh; /* 修正：動態視口高度，防止手機瀏覽器導覽列遮擋底部 */
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -73,6 +80,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: rgba(0,0,0,0.8); z-index: 100;
             backdrop-filter: blur(5px);
+            padding: 20px; /* 修正：確保面板不會緊貼螢幕邊緣 */
         }
 
         .panel {
@@ -81,7 +89,10 @@
             border-radius: 20px;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-width: 400px; width: 90%;
+            max-width: 400px; 
+            width: 100%; 
+            max-height: 95vh; /* 修正：限制最大高度 */
+            overflow-y: auto; /* 修正：如果畫面太小，允許面板內部滑動 */
             text-align: center;
             animation: fadeIn 0.3s ease-out;
         }
@@ -91,7 +102,7 @@
         h1, h2, h3 { margin: 0 0 15px 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         
         input[type="text"] {
-            width: 100%; box-sizing: border-box; padding: 12px; margin: 10px 0;
+            width: 100%; padding: 12px; margin: 10px 0;
             background: rgba(0,0,0,0.3); border: 1px solid #475569;
             color: white; border-radius: 8px; font-size: 16px; outline: none;
             transition: 0.2s;
@@ -198,7 +209,6 @@
             position: relative;
             min-height: auto;
             width: 100%;
-            box-sizing: border-box;
         }
 
         /* 獨立的操作按鈕區 */
@@ -230,7 +240,6 @@
             gap: 0;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            box-sizing: border-box;
         }
 
         /* ========================================= */
@@ -325,12 +334,15 @@
             background: rgba(0,0,0,0.85); z-index: 2000;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            padding: 20px; /* 修正 */
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal-content {
             background: var(--bg-panel); padding: 30px; border-radius: 20px;
             text-align: center; max-width: 90%; width: 340px;
+            max-height: 95vh; /* 修正：模態視窗高度限制 */
+            overflow-y: auto; /* 修正：內容太多時可滑動 */
             border: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
