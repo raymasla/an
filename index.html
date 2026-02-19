@@ -17,23 +17,29 @@
             --uno-green: #10b981;
             --uno-yellow: #fbbf24;
             --accent: #8b5cf6;
-            --card-width: 80px;
-            --card-height: 120px;
+            
+            /* 加入縮放因子與基礎卡牌尺寸變數 */
+            --scale-factor: 1;
+            --base-card-width: 80px;
+            --base-card-height: 120px;
+            
+            --card-width: calc(var(--base-card-width) * var(--scale-factor));
+            --card-height: calc(var(--base-card-height) * var(--scale-factor));
             /* 預設重疊距離 */
             --card-margin: -35px;
         }
 
         @media (max-width: 768px) {
             :root {
-                --card-width: 70px;
-                --card-height: 105px;
+                --base-card-width: 70px;
+                --base-card-height: 105px;
             }
         }
 
         @media (max-width: 480px) {
             :root {
-                --card-width: 60px;
-                --card-height: 90px;
+                --base-card-width: 60px;
+                --base-card-height: 90px;
             }
         }
 
@@ -92,8 +98,9 @@
         }
         input[type="text"]:focus { border-color: var(--accent); background: rgba(0,0,0,0.5); }
 
+        /* 放大按鈕基礎設定 */
         .btn {
-            border: none; border-radius: 12px; padding: 12px 24px;
+            border: none; border-radius: 12px; padding: 14px 28px;
             font-size: 16px; font-weight: bold; color: white; cursor: pointer;
             transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             display: inline-flex; align-items: center; justify-content: center; gap: 5px;
@@ -127,6 +134,10 @@
         }
         .room-info { font-size: 0.9rem; color: #cbd5e1; white-space: nowrap; }
         .game-status-text { font-weight: bold; color: var(--uno-yellow); margin-left: 10px; }
+        
+        .header-btns {
+            display: flex; align-items: center; gap: 10px;
+        }
 
         /* 對手區域 */
         .opponents-bar {
@@ -194,26 +205,27 @@
         .controls-container {
             display: flex; justify-content: center; gap: 15px;
             margin-bottom: 10px; pointer-events: none;
-            height: 40px; 
+            height: auto; 
             flex-wrap: wrap;
             z-index: 200; /* 確保按鈕在手牌上方 */
         }
         .controls-container button { 
-            pointer-events: auto; min-width: 80px; font-size: 14px; padding: 8px 16px; 
+            pointer-events: auto; min-width: 100px; font-size: 16px; padding: 12px 20px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            min-height: 44px; /* 增加點擊區域 */
         }
 
         /* ========================================= */
-        /* --- 手牌區域（壓縮優化） --- */
+        /* --- 手牌區域（優化滾動防遮擋） --- */
         /* ========================================= */
         .hand-scroll-area {
             display: flex; 
-            justify-content: center; /* 默認置中，視覺更集中 */
+            justify-content: center; /* 預設置中，超出時由 JS 修改為 flex-start */
             align-items: flex-end;
             width: 100%;
             overflow-x: auto; 
             overflow-y: visible;
-            padding: 20px 0; /* 減少左右 padding 讓 JS 控制 */
+            padding: 20px 0; 
             min-height: 140px;
             gap: 0;
             scroll-behavior: smooth;
@@ -233,13 +245,12 @@
             display: flex; 
             justify-content: center; 
             align-items: center;
-            box-shadow: -3px 0 8px rgba(0,0,0,0.4); /* 加深陰影以區分疊牌 */
+            box-shadow: -3px 0 8px rgba(0,0,0,0.4); 
             border: 3px solid white;
             user-select: none;
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), margin 0.2s ease-out;
             cursor: pointer;
             flex-shrink: 0;
-            /* 初始 margin 由 JS 計算覆蓋 */
             margin-left: -30px; 
             transform-origin: center bottom;
         }
@@ -248,17 +259,15 @@
             margin-left: 0 !important; 
         }
         
-        /* 懸停與選中優化：避免被遮擋 */
         .uno-card:hover { 
             transform: translateY(-25px) scale(1.1); 
-            z-index: 50 !important; /* 確保浮起時在最上層 */
+            z-index: 50 !important; 
             box-shadow: 0 5px 20px rgba(0,0,0,0.6);
-            /* hover時不改變 margin，避免整排跳動 */
         }
 
         .uno-card.selected { 
             transform: translateY(-45px) scale(1.15); 
-            z-index: 49 !important; /* 選中比 Hover 略低一點，但比普通高 */
+            z-index: 49 !important; 
             box-shadow: 0 0 25px var(--uno-yellow); 
             border-color: var(--uno-yellow);
         }
@@ -321,7 +330,7 @@
 
         .modal-content {
             background: var(--bg-panel); padding: 30px; border-radius: 20px;
-            text-align: center; max-width: 90%; width: 320px;
+            text-align: center; max-width: 90%; width: 340px;
             border: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -354,9 +363,9 @@
                 min-height: 120px;
             }
             .controls-container button {
-                min-width: 70px;
-                font-size: 12px;
-                padding: 6px 12px;
+                min-width: 90px;
+                font-size: 14px;
+                padding: 10px 16px;
             }
             .card-symbol { font-size: 2em; }
             .corner { font-size: 0.8em; }
@@ -370,17 +379,26 @@
             .controls-container {
                 gap: 8px;
                 margin-bottom: 5px;
-                height: auto;
             }
+            /* 針對手機玩家大幅優化按鈕 */
             .controls-container button {
-                font-size: 11px;
-                padding: 5px 10px;
+                font-size: 15px !important;
+                padding: 12px 10px !important;
                 flex: 1;
                 min-width: auto;
+                min-height: 50px; /* 增加點擊高度 */
+                border-radius: 10px;
             }
             header {
                 font-size: 0.8rem;
                 padding: 0 10px;
+            }
+            .header-btns {
+                gap: 5px;
+            }
+            .header-btns button {
+                padding: 8px 10px !important;
+                font-size: 13px !important;
             }
             .room-info { font-size: 0.75rem; }
         }
@@ -423,9 +441,10 @@
                 <span id="room-name-display">Room</span> | 
                 <span id="game-rules-display">Rules</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="header-btns">
                 <span id="turn-status">等待開始...</span>
-                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="leaveRoom()">離開</button>
+                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 13px;" onclick="openSettings()">⚙️ 設定</button>
+                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;" onclick="leaveRoom()">離開</button>
             </div>
         </header>
 
@@ -454,6 +473,30 @@
             <div class="hand-scroll-area" id="my-hand">
                 </div>
         </div>
+    </div>
+</div>
+
+<div id="settings-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 20px;">⚙️ 遊戲設定</h3>
+        
+        <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+            <label style="color:#cbd5e1; font-size:14px; font-weight:bold; display:block; margin-bottom:8px;">更改暱稱</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="setting-nickname" maxlength="10" style="margin:0; flex:1;">
+                <button class="btn btn-primary" style="padding: 10px 15px; font-size: 14px;" onclick="updateNickname()">儲存</button>
+            </div>
+        </div>
+
+        <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+            <label style="color:#cbd5e1; font-size:14px; font-weight:bold; display:block; margin-bottom:8px;">畫面縮放比例 (調整卡牌大小)</label>
+            <input type="range" id="setting-scale" min="0.6" max="1.5" step="0.1" value="1" style="width:100%; cursor:pointer; accent-color: var(--accent);" oninput="updateScale(this.value)">
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:#94a3b8; margin-top:5px;">
+                <span>小</span><span>預設</span><span>大</span>
+            </div>
+        </div>
+
+        <button class="btn btn-secondary btn-full" onclick="closeSettings()">關閉</button>
     </div>
 </div>
 
@@ -496,7 +539,7 @@
     const db = getDatabase(app);
 
     // --- State ---
-    let myName = ""; // 不再使用 localStorage 記錄
+    let myName = ""; 
     let roomId = null;
     let myKey = null;
     let roomData = null;
@@ -536,6 +579,35 @@
         });
     }
 
+    // --- 設定功能 (Settings) ---
+    window.openSettings = () => {
+        document.getElementById('setting-nickname').value = myName;
+        document.getElementById('settings-modal').classList.add('active');
+    };
+
+    window.closeSettings = () => {
+        document.getElementById('settings-modal').classList.remove('active');
+    };
+
+    window.updateNickname = async () => {
+        const newName = document.getElementById('setting-nickname').value.trim();
+        if(!newName) return alert("暱稱不能為空！");
+        myName = newName;
+        alert("暱稱已成功更改為: " + myName);
+        
+        // 若在房間內，同步更新到資料庫
+        if (roomId && myKey && roomData && roomData.users && roomData.users[myKey]) {
+            await update(ref(db, `ongame_room/${roomId}/users/${myKey}`), { name: myName });
+        }
+    };
+
+    window.updateScale = (val) => {
+        document.documentElement.style.setProperty('--scale-factor', val);
+        if (roomId && roomData) {
+            renderHand(); // 縮放後重新計算手牌排列間距
+        }
+    };
+
     // --- Room Actions ---
     window.showCreateRoom = () => {
         document.getElementById('room-list-section').classList.add('hidden');
@@ -561,7 +633,6 @@
     };
 
     window.join = (id) => {
-        // 先獲取當前房間資料以檢查重複暱稱
         get(ref(db, `ongame_room/${id}`)).then((snap) => {
             const room = snap.val();
             if(!room) { alert("房間不存在或已關閉"); location.reload(); return; }
@@ -582,19 +653,16 @@
             if(existingUserKey) {
                 if(isOnline) {
                     alert("該暱稱已在房間內，請換一個名字再加入！");
-                    // 讓玩家重新輸入暱稱
                     myName = "";
                     document.getElementById('playerName').value = "";
                     document.getElementById('login-section').classList.remove('hidden');
                     document.getElementById('room-list-section').classList.add('hidden');
                     return;
                 } else {
-                    // 該玩家已斷線，直接繼承位子
                     myKey = existingUserKey;
                     update(ref(db, `ongame_room/${id}/users/${myKey}`), { online: true });
                 }
             } else {
-                // 新玩家
                 if(room.gameState !== 'waiting') {
                     alert("遊戲已經開始，無法以新玩家身分加入！");
                     return;
@@ -608,7 +676,6 @@
             document.getElementById('lobby-layer').classList.add('hidden');
             document.getElementById('game-layer').classList.remove('hidden');
             
-            // 綁定中途離線的狀態改變
             onDisconnect(ref(db, `ongame_room/${id}/users/${myKey}/online`)).set(false);
 
             onValue(ref(db, `ongame_room/${id}`), (roomSnap) => {
@@ -622,10 +689,8 @@
     window.leaveRoom = () => {
         if(roomId && myKey) {
             if(roomData && roomData.gameState === 'waiting') {
-                // 若遊戲還沒開始，直接移除使用者資料
                 remove(ref(db, `ongame_room/${roomId}/users/${myKey}`));
             } else {
-                // 若遊戲中，僅將狀態設為離線，讓手牌保留
                 update(ref(db, `ongame_room/${roomId}/users/${myKey}`), { online: false });
             }
         }
@@ -733,8 +798,14 @@
         const screenWidth = window.innerWidth;
         const maxContainerWidth = Math.min(screenWidth - 20, 900); 
 
-        const rootStyle = getComputedStyle(document.documentElement);
-        const cardWidth = parseInt(rootStyle.getPropertyValue('--card-width')) || 60; 
+        // 確保精確計算卡牌尺寸（支援動態比例縮放）
+        const dummyCard = document.createElement('div');
+        dummyCard.className = 'uno-card';
+        dummyCard.style.visibility = 'hidden';
+        dummyCard.style.position = 'absolute';
+        document.body.appendChild(dummyCard);
+        const cardWidth = dummyCard.offsetWidth || 60;
+        document.body.removeChild(dummyCard);
 
         let overlapMargin = -35; 
         const step = cardWidth + overlapMargin;
@@ -744,10 +815,23 @@
             const availableSpaceForOverlaps = maxContainerWidth - cardWidth;
             const newStep = availableSpaceForOverlaps / (handCount - 1);
             overlapMargin = newStep - cardWidth;
-            const minClickableWidth = 15;
+            const minClickableWidth = 20; // 稍微增加手機版的最小可見點擊範圍
             if (overlapMargin < -(cardWidth - minClickableWidth)) {
                 overlapMargin = -(cardWidth - minClickableWidth);
             }
+        }
+
+        // --- 防遮擋優化 ---
+        // 當卡牌真的太多導致需要滾動時，解除居中對齊改為靠左，並加上右側預留空間
+        const finalRequiredWidth = cardWidth + (handCount - 1) * (cardWidth + overlapMargin);
+        if (finalRequiredWidth >= maxContainerWidth) {
+            container.style.justifyContent = 'flex-start';
+            container.style.paddingLeft = '10px';
+            container.style.paddingRight = '30px'; // 讓最後一張牌有空間顯示
+        } else {
+            container.style.justifyContent = 'center';
+            container.style.paddingLeft = '0';
+            container.style.paddingRight = '0';
         }
 
         myHand.forEach((c, idx) => {
@@ -835,7 +919,6 @@
             hands[u] = sortHandArray(deck.splice(0, 7));
         });
 
-        // 確保第一張牌是普通數字牌，避免初始狀態混亂
         let first = deck.pop();
         while(first.type !== 'n') { deck.unshift(first); first = deck.pop(); }
 
@@ -914,7 +997,6 @@
         let nc = nextColor || cards[cards.length-1].color;
         if(nc === 'black') nc = 'red';
 
-        // === 判斷如果「沒有開啟疊加」且「有人打出加牌」 => 直接發牌給下一家並跳過 ===
         if (newlyAddedAcc > 0 && !roomData.settings.stack) {
             let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
@@ -939,10 +1021,9 @@
             updates[`ongame_room/${roomId}/deck`] = currentDeck;
             updates[`ongame_room/${roomId}/discardPile`] = currentDiscard;
 
-            steps += 1; // 跳過被罰牌的人
-            updates[`ongame_room/${roomId}/accumulatedDraw`] = 0; // 不再累積
+            steps += 1; 
+            updates[`ongame_room/${roomId}/accumulatedDraw`] = 0; 
         } else {
-            // 原本的累積與牌堆處理
             acc += newlyAddedAcc;
             updates[`ongame_room/${roomId}/accumulatedDraw`] = acc;
             updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, ...cards];
@@ -1106,7 +1187,7 @@
             updates[`ongame_room/${roomId}/deck`] = currentDeck;
             updates[`ongame_room/${roomId}/discardPile`] = currentDiscard;
 
-            steps += 1; // 跳過被罰牌的人
+            steps += 1; 
             updates[`ongame_room/${roomId}/accumulatedDraw`] = 0;
         } else {
             acc += newlyAddedAcc;
