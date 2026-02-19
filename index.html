@@ -301,7 +301,7 @@
         .tl { top: 4px; left: 6px; }
         .br { bottom: 4px; right: 6px; transform: rotate(180deg); }
 
-        /* --- 視覺修正：當場上是變色牌且已選色時 --- */
+        /* --- 視覺修正：當場上是變色牌且已選色 --- */
         .tint-red { background: var(--uno-red) !important; color: var(--uno-red) !important; }
         .tint-blue { background: var(--uno-blue) !important; color: var(--uno-blue) !important; }
         .tint-green { background: var(--uno-green) !important; color: var(--uno-green) !important; }
@@ -353,13 +353,11 @@
                 padding: 10px 0;
                 min-height: 120px;
             }
-
             .controls-container button {
                 min-width: 70px;
                 font-size: 12px;
                 padding: 6px 12px;
             }
-
             .card-symbol { font-size: 2em; }
             .corner { font-size: 0.8em; }
         }
@@ -369,26 +367,21 @@
                 padding: 10px 0;
                 min-height: 100px;
             }
-
             .controls-container {
                 gap: 8px;
                 margin-bottom: 5px;
                 height: auto;
             }
-
             .controls-container button {
-                min-width: 60px;
                 font-size: 11px;
                 padding: 5px 10px;
                 flex: 1;
                 min-width: auto;
             }
-
             header {
                 font-size: 0.8rem;
                 padding: 0 10px;
             }
-
             .room-info { font-size: 0.75rem; }
         }
 
@@ -400,7 +393,7 @@
     <div class="panel">
         <h1 style="background: linear-gradient(to right, #fbbf24, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🎴 UNO PRO</h1>
         <div id="login-section">
-            <input type="text" id="playerName" placeholder="請輸入暱稱" maxlength="10">
+            <input type="text" id="playerName" placeholder="請輸入您的暱稱" maxlength="10">
             <button class="btn btn-primary btn-full" onclick="login()">進入大廳</button>
         </div>
         <div id="room-list-section" class="hidden">
@@ -455,7 +448,7 @@
             <div class="controls-container" id="controls-area">
                 <button id="btn-start" class="btn btn-success hidden" onclick="startGame()">開始遊戲</button>
                 <button id="btn-play" class="btn btn-primary hidden" onclick="playSelected()">出牌</button>
-                <button id="btn-pass" class="btn btn-secondary hidden" onclick="passTurn()">跳過</button>
+                <button id="btn-pass" class="btn btn-secondary hidden" onclick="passTurn()">跳過 / 抽牌</button>
             </div>
 
             <div class="hand-scroll-area" id="my-hand">
@@ -503,7 +496,7 @@
     const db = getDatabase(app);
 
     // --- State ---
-    let myName = localStorage.getItem('uno_name') || "";
+    let myName = ""; // 不再使用 localStorage 記錄
     let roomId = null;
     let myKey = null;
     let roomData = null;
@@ -513,18 +506,10 @@
     let pendingPlayCards = null; 
 
     // --- Init ---
-    if(myName) {
-        document.getElementById('playerName').value = myName;
-        document.getElementById('login-section').classList.add('hidden');
-        document.getElementById('room-list-section').classList.remove('hidden');
-        initLobby();
-    }
-
     window.login = () => {
         const name = document.getElementById('playerName').value.trim();
         if(!name) return alert("請輸入名字");
         myName = name;
-        localStorage.setItem('uno_name', myName);
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('room-list-section').classList.remove('hidden');
         initLobby();
@@ -563,7 +548,6 @@
     
     window.createRoom = () => {
         const name = document.getElementById('newRoomName').value || "UNO Room";
-        // 讀取 Checkbox 狀態 (HTML 中預設無 checked，所以這裡預設會是 false)
         const chain = document.getElementById('rule-chain').checked;
         const stack = document.getElementById('rule-stack').checked;
         
@@ -577,24 +561,74 @@
     };
 
     window.join = (id) => {
-        roomId = id;
-        document.getElementById('lobby-layer').classList.add('hidden');
-        document.getElementById('game-layer').classList.remove('hidden');
-        
-        const userRef = push(ref(db, `ongame_room/${id}/users`));
-        myKey = userRef.key;
-        update(userRef, { name: myName, online: true });
-        onDisconnect(userRef).remove();
+        // 先獲取當前房間資料以檢查重複暱稱
+        get(ref(db, `ongame_room/${id}`)).then((snap) => {
+            const room = snap.val();
+            if(!room) { alert("房間不存在或已關閉"); location.reload(); return; }
 
-        onValue(ref(db, `ongame_room/${id}`), (snap) => {
-            roomData = snap.val();
-            if(!roomData) { alert("房間已關閉"); location.reload(); return; }
-            renderGame();
+            let existingUserKey = null;
+            let isOnline = false;
+
+            if(room.users) {
+                for(const [k, v] of Object.entries(room.users)) {
+                    if(v.name === myName) {
+                        existingUserKey = k;
+                        isOnline = v.online;
+                        break;
+                    }
+                }
+            }
+
+            if(existingUserKey) {
+                if(isOnline) {
+                    alert("該暱稱已在房間內，請換一個名字再加入！");
+                    // 讓玩家重新輸入暱稱
+                    myName = "";
+                    document.getElementById('playerName').value = "";
+                    document.getElementById('login-section').classList.remove('hidden');
+                    document.getElementById('room-list-section').classList.add('hidden');
+                    return;
+                } else {
+                    // 該玩家已斷線，直接繼承位子
+                    myKey = existingUserKey;
+                    update(ref(db, `ongame_room/${id}/users/${myKey}`), { online: true });
+                }
+            } else {
+                // 新玩家
+                if(room.gameState !== 'waiting') {
+                    alert("遊戲已經開始，無法以新玩家身分加入！");
+                    return;
+                }
+                const userRef = push(ref(db, `ongame_room/${id}/users`));
+                myKey = userRef.key;
+                set(userRef, { name: myName, online: true });
+            }
+
+            roomId = id;
+            document.getElementById('lobby-layer').classList.add('hidden');
+            document.getElementById('game-layer').classList.remove('hidden');
+            
+            // 綁定中途離線的狀態改變
+            onDisconnect(ref(db, `ongame_room/${id}/users/${myKey}/online`)).set(false);
+
+            onValue(ref(db, `ongame_room/${id}`), (roomSnap) => {
+                roomData = roomSnap.val();
+                if(!roomData) { alert("房間已關閉"); location.reload(); return; }
+                renderGame();
+            });
         });
     };
 
     window.leaveRoom = () => {
-        if(roomId && myKey) remove(ref(db, `ongame_room/${roomId}/users/${myKey}`));
+        if(roomId && myKey) {
+            if(roomData && roomData.gameState === 'waiting') {
+                // 若遊戲還沒開始，直接移除使用者資料
+                remove(ref(db, `ongame_room/${roomId}/users/${myKey}`));
+            } else {
+                // 若遊戲中，僅將狀態設為離線，讓手牌保留
+                update(ref(db, `ongame_room/${roomId}/users/${myKey}`), { online: false });
+            }
+        }
         location.reload();
     };
 
@@ -650,13 +684,15 @@
             const u = roomData.users[uid];
             const handCount = (roomData.hands && roomData.hands[uid]) ? roomData.hands[uid].length : 0;
             const isActive = (roomData.gameState === 'playing' && idx === roomData.turnIndex);
+            const isOffline = !u.online;
             
             if(handCount === 1) showUnoAnim();
 
             const div = document.createElement('div');
             div.className = `opponent-card ${isActive ? 'active' : ''}`;
+            const oppNameDisplay = isOffline ? `${u.name} (離線)` : u.name;
             div.innerHTML = `
-                <div class="opp-name">${u.name}</div>
+                <div class="opp-name" style="${isOffline ? 'color:#94a3b8' : ''}">${oppNameDisplay}</div>
                 <div class="opp-count" style="color:${handCount<3?'#ef4444':'white'}">${handCount}</div>
                 <small style="font-size:0.6rem; color:#94a3b8">cards</small>
             `;
@@ -686,7 +722,6 @@
         renderHand();
     }
 
-    // --- 改進版：手牌渲染 (自動壓縮) ---
     function renderHand() {
         const container = document.getElementById('my-hand');
         container.innerHTML = "";
@@ -695,54 +730,31 @@
         const handCount = myHand.length;
         if(handCount === 0) return;
 
-        // --- 1. 計算可用空間 ---
-        // 獲取螢幕寬度，並扣除左右邊距 (padding)
         const screenWidth = window.innerWidth;
-        // 限制最大容器寬度 (手機通常 < 500, 電腦版限制在 800 以內以免太散)
         const maxContainerWidth = Math.min(screenWidth - 20, 900); 
 
-        // --- 2. 獲取卡片寬度 ---
         const rootStyle = getComputedStyle(document.documentElement);
-        const cardWidth = parseInt(rootStyle.getPropertyValue('--card-width')) || 60; // fallback 60
+        const cardWidth = parseInt(rootStyle.getPropertyValue('--card-width')) || 60; 
 
-        // --- 3. 計算動態 Margin ---
-        // 公式：TotalWidth = CardWidth + (N-1) * (CardWidth + Margin)
-        // 目標：TotalWidth <= maxContainerWidth
-        // 預設重疊 (例如 -35px)
         let overlapMargin = -35; 
-
-        // 計算如果用預設重疊，總寬度會是多少
         const step = cardWidth + overlapMargin;
         const requiredWidth = cardWidth + (handCount - 1) * step;
 
-        // 如果需要的寬度大於可用寬度，開始壓縮
         if (requiredWidth > maxContainerWidth && handCount > 1) {
-            // 計算每個間隔允許的最大寬度
-            // (Available - SingleCard) / (N-1)
             const availableSpaceForOverlaps = maxContainerWidth - cardWidth;
             const newStep = availableSpaceForOverlaps / (handCount - 1);
-            
-            // 新的 Margin = Step - CardWidth
             overlapMargin = newStep - cardWidth;
-
-            // 設定極限：不要讓牌完全消失，至少保留 15px 可點擊區域
-            // 如果還是放不下，CSS 的 overflow-x: auto 會接手處理滾動
             const minClickableWidth = 15;
             if (overlapMargin < -(cardWidth - minClickableWidth)) {
                 overlapMargin = -(cardWidth - minClickableWidth);
             }
         }
 
-        // --- 4. 渲染卡片 ---
         myHand.forEach((c, idx) => {
             const el = createCardDOM(c);
-            // 第一張不需要 margin
             el.style.marginLeft = (idx === 0) ? '0' : `${overlapMargin}px`;
-            
-            // 讓 z-index 依序增加，確保後面的牌蓋在前面上面
             el.style.zIndex = idx;
 
-            // 綁定點擊
             if(roomData.gameState === 'playing' && roomData.playerOrder[roomData.turnIndex] === myKey) {
                 el.onclick = () => toggleSelect(idx, c);
             } else {
@@ -754,7 +766,6 @@
         });
     }
 
-    // --- Helper: Card DOM ---
     function createCardDOM(card, isSmall=false) {
         let symbol = card.value;
         if(card.type === 'skip') symbol = '⊘';
@@ -824,14 +835,15 @@
             hands[u] = sortHandArray(deck.splice(0, 7));
         });
 
+        // 確保第一張牌是普通數字牌，避免初始狀態混亂
         let first = deck.pop();
-        while(first.color === 'black') { deck.unshift(first); first = deck.pop(); }
+        while(first.type !== 'n') { deck.unshift(first); first = deck.pop(); }
 
         await update(ref(db, `ongame_room/${roomId}`), {
             gameState: 'playing',
             deck, hands, discardPile: [first],
             playerOrder: users.sort(()=>Math.random()-0.5),
-            turnIndex: 0, direction: 1, currentColor: first.color, accumulatedDraw: (first.type==='draw2'?2:0)
+            turnIndex: 0, direction: 1, currentColor: first.color, accumulatedDraw: 0
         });
     };
 
@@ -844,7 +856,6 @@
         
         if(roomData.accumulatedDraw > 0) {
             let isValid = false;
-            // 簡單防禦邏輯：+2接+2, +4接+4
             if(top.type === 'draw2' && lead.type === 'draw2') isValid = true;
             if(top.type === 'wild4' && lead.type === 'wild4') isValid = true;
             if(!isValid) return alert("必須出同樣的加牌(+2/+4)來防禦，否則請按罰抽！");
@@ -884,11 +895,11 @@
 
         const updates = {};
         updates[`ongame_room/${roomId}/hands/${myKey}`] = newHand;
-        updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, ...cards];
 
         let dir = roomData.direction;
         let acc = roomData.accumulatedDraw;
         let steps = 1;
+        let newlyAddedAcc = 0;
 
         cards.forEach(c => {
             if(c.type === 'reverse') {
@@ -896,19 +907,52 @@
                 else dir *= -1;
             }
             if(c.type === 'skip') steps += 1;
-            if(c.type === 'draw2') acc += 2;
-            if(c.type === 'wild4') acc += 4;
+            if(c.type === 'draw2') newlyAddedAcc += 2;
+            if(c.type === 'wild4') newlyAddedAcc += 4;
         });
 
         let nc = nextColor || cards[cards.length-1].color;
         if(nc === 'black') nc = 'red';
+
+        // === 判斷如果「沒有開啟疊加」且「有人打出加牌」 => 直接發牌給下一家並跳過 ===
+        if (newlyAddedAcc > 0 && !roomData.settings.stack) {
+            let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
+            if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
+            const targetUserKey = roomData.playerOrder[nextIdx];
+
+            let currentDeck = roomData.deck || [];
+            let currentDiscard = [...roomData.discardPile, ...cards];
+            let drawn = [];
+
+            for(let k=0; k<newlyAddedAcc; k++){
+                if(currentDeck.length === 0) {
+                    if(currentDiscard.length <= 1) break;
+                    const top = currentDiscard.pop();
+                    currentDeck = currentDiscard.sort(()=>Math.random()-0.5);
+                    currentDiscard = [top];
+                }
+                drawn.push(currentDeck.shift());
+            }
+
+            let targetHand = roomData.hands[targetUserKey] || [];
+            updates[`ongame_room/${roomId}/hands/${targetUserKey}`] = sortHandArray([...targetHand, ...drawn]);
+            updates[`ongame_room/${roomId}/deck`] = currentDeck;
+            updates[`ongame_room/${roomId}/discardPile`] = currentDiscard;
+
+            steps += 1; // 跳過被罰牌的人
+            updates[`ongame_room/${roomId}/accumulatedDraw`] = 0; // 不再累積
+        } else {
+            // 原本的累積與牌堆處理
+            acc += newlyAddedAcc;
+            updates[`ongame_room/${roomId}/accumulatedDraw`] = acc;
+            updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, ...cards];
+        }
 
         let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
         if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
 
         updates[`ongame_room/${roomId}/turnIndex`] = nextIdx;
         updates[`ongame_room/${roomId}/direction`] = dir;
-        updates[`ongame_room/${roomId}/accumulatedDraw`] = (roomData.settings.stack) ? acc : (acc>0?acc:0); 
         updates[`ongame_room/${roomId}/currentColor`] = nc;
 
         if(newHand.length === 0) {
@@ -1024,19 +1068,51 @@
 
     async function finishPlayDrawn(card, wildColor) {
         const updates = {};
-        updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, card];
         
         let dir = roomData.direction;
         let steps = 1;
         let acc = roomData.accumulatedDraw;
+        let newlyAddedAcc = 0;
 
         if(card.type === 'reverse') {
              if(roomData.playerOrder.length === 2) steps += 1;
              else dir *= -1;
         }
         if(card.type === 'skip') steps += 1;
-        if(card.type === 'draw2') acc += 2;
-        if(card.type === 'wild4') acc += 4;
+        if(card.type === 'draw2') newlyAddedAcc += 2;
+        if(card.type === 'wild4') newlyAddedAcc += 4;
+
+        if (newlyAddedAcc > 0 && !roomData.settings.stack) {
+            let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
+            if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
+            const targetUserKey = roomData.playerOrder[nextIdx];
+
+            let currentDeck = roomData.deck || [];
+            let currentDiscard = [...roomData.discardPile, card];
+            let drawn = [];
+
+            for(let k=0; k<newlyAddedAcc; k++){
+                if(currentDeck.length === 0) {
+                    if(currentDiscard.length <= 1) break;
+                    const top = currentDiscard.pop();
+                    currentDeck = currentDiscard.sort(()=>Math.random()-0.5);
+                    currentDiscard = [top];
+                }
+                drawn.push(currentDeck.shift());
+            }
+
+            let targetHand = roomData.hands[targetUserKey] || [];
+            updates[`ongame_room/${roomId}/hands/${targetUserKey}`] = sortHandArray([...targetHand, ...drawn]);
+            updates[`ongame_room/${roomId}/deck`] = currentDeck;
+            updates[`ongame_room/${roomId}/discardPile`] = currentDiscard;
+
+            steps += 1; // 跳過被罰牌的人
+            updates[`ongame_room/${roomId}/accumulatedDraw`] = 0;
+        } else {
+            acc += newlyAddedAcc;
+            updates[`ongame_room/${roomId}/accumulatedDraw`] = acc;
+            updates[`ongame_room/${roomId}/discardPile`] = [...roomData.discardPile, card];
+        }
 
         let nextIdx = (roomData.turnIndex + (dir * steps)) % roomData.playerOrder.length;
         if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
@@ -1045,7 +1121,6 @@
         
         updates[`ongame_room/${roomId}/turnIndex`] = nextIdx;
         updates[`ongame_room/${roomId}/direction`] = dir;
-        updates[`ongame_room/${roomId}/accumulatedDraw`] = acc;
         updates[`ongame_room/${roomId}/currentColor`] = nc;
         
         await update(ref(db), updates);
@@ -1055,16 +1130,27 @@
         const acc = roomData.accumulatedDraw;
         if(acc > 0) {
             let deck = [...roomData.deck];
-            // 若牌不夠需洗牌，這裡簡化
-            const drawn = deck.splice(0, acc);
+            let discard = [...roomData.discardPile];
+            let drawn = [];
+
+            for(let i=0; i<acc; i++){
+                if(deck.length === 0) {
+                    if(discard.length <= 1) break;
+                    const top = discard.pop();
+                    deck = discard.sort(()=>Math.random()-0.5);
+                    discard = [top];
+                }
+                drawn.push(deck.shift());
+            }
+
             const newHand = sortHandArray([...roomData.hands[myKey], ...drawn]);
-            
             let nextIdx = (roomData.turnIndex + roomData.direction) % roomData.playerOrder.length;
             if(nextIdx < 0) nextIdx += roomData.playerOrder.length;
 
             update(ref(db, `ongame_room/${roomId}`), {
                 [`hands/${myKey}`]: newHand,
                 deck: deck,
+                discardPile: discard,
                 accumulatedDraw: 0,
                 turnIndex: nextIdx
             });
