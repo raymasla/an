@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>有趣小遊戲</title>
+
+    <meta name="description" content="免下載！多人玩家連線匿名遊玩！圈圈叉叉⭕❌四連棋UNO♠️♣️誰是臥底🕵️Yahtzee Yahtzee，甚至還有 21 點等多款經典遊戲！ ">
+    <meta name="keywords" content="UNO網頁版, Yahtzee online, 快艇骰子遊戲, 免費網頁遊戲, raymasla, 阿叡的遊戲,阿叡網頁,線上圈圈叉叉,免下載多人遊戲,免下載UNO,多人好友UNO">
+    <meta name="author" content="阿叡game">
+
+    <link rel="icon" href="icon.png" type="image/png">
+
     <style>
         /* ========================================= */
         /* --- 全局暗色系主題與動畫 (Dark Theme) --- */
@@ -60,7 +67,7 @@
             position: relative;
             z-index: 10;
             transition: all 0.3s ease;
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeIn Up 0.5s ease-out;
         }
 
         @keyframes fadeInUp {
@@ -674,165 +681,128 @@
 
 
         /* ========================================= */
-        /* --- 大老二 Big2 遊戲樣式 --- */
+        /* --- 大老二 (Big Two) 樣式 --- */
         /* ========================================= */
-        #big2Settings {
-            background: rgba(6,95,70,0.25) !important;
-            border: 1px solid rgba(16,185,129,0.35);
-            border-left: 5px solid #10b981 !important;
-            color: #a7f3d0;
-        }
-        #big2Settings h4 { color: #34d399 !important; }
-
         #big2-wrapper {
-            background: radial-gradient(ellipse at 50% 100%, #0a2a1a 0%, #051510 100%);
-            border: 8px solid #1a4a2a;
+            background: radial-gradient(circle, #14532d 0%, #052e16 100%);
+            border: 8px solid #166534;
             border-radius: 20px;
-            box-shadow: inset 0 0 80px rgba(0,0,0,0.7), 0 12px 30px rgba(0,0,0,0.5);
-            padding: 10px;
-            min-height: 520px;
-            display: flex;
-            flex-direction: column;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.7), 0 12px 30px rgba(0,0,0,0.5);
+            padding: 12px;
+            min-height: 560px;
+            display: flex; flex-direction: column;
+            color: #e2e8f0;
             position: relative;
-            overflow: hidden;
         }
-        .big2-layout { display: flex; flex-direction: column; min-height: 480px; gap: 6px; }
+        .big2-layout { display: flex; flex-direction: column; min-height: 520px; }
         .big2-header {
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.55); padding: 8px 15px; border-radius: 20px;
-            border: 1px solid rgba(212,175,55,0.2); margin-bottom: 4px;
+            background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px;
         }
-        .big2-room-info { font-size: 0.85rem; color: #d4af37; }
-        .big2-turn-status { font-size: 0.9rem; font-weight: bold; }
-
-        .big2-opponents-bar {
-            display: flex; gap: 6px; justify-content: center; flex-wrap: nowrap;
-            overflow-x: auto; padding: 2px 4px; min-height: 72px; align-items: center;
-        }
-        .big2-opponents-bar::-webkit-scrollbar { height: 4px; }
-        .big2-opponents-bar::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 2px; }
-
-        .big2-opponent-box {
-            background: rgba(10,42,26,0.9);
-            border: 1.5px solid rgba(212,175,55,0.2);
-            border-radius: 10px;
-            padding: 6px 10px;
-            min-width: 88px; max-width: 110px;
-            text-align: center; flex-shrink: 0;
-            transition: border-color .3s, box-shadow .3s, transform .2s;
-        }
-        .big2-opponent-box.active-turn {
-            border-color: #d4af37;
-            box-shadow: 0 0 14px rgba(212,175,55,0.4);
-            transform: scale(1.05);
-        }
-        .big2-opponent-box.out { opacity: 0.45; }
-        .big2-opp-name { font-size: 0.75rem; color: #d4af37; font-weight: bold; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .big2-opp-backs { display: flex; gap: 2px; justify-content: center; flex-wrap: wrap; margin-bottom: 2px; min-height: 24px; }
-        .big2-card-back-mini {
-            width: 14px; height: 22px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 50%, #1e3a5f 100%);
-            border-radius: 2px; border: 1px solid rgba(100,150,220,0.4);
-        }
-        .big2-opp-count { font-size: 0.68rem; color: #8a7e60; }
-
+        .big2-room-info { font-size: 0.9rem; color: #cbd5e1; }
+        .big2-header-btns { display: flex; align-items: center; gap: 8px; }
         .big2-table-area {
-            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 120px; padding: 8px; position: relative;
+            flex: 1; position: relative; display: flex; justify-content: center; align-items: center;
+            flex-direction: column; min-height: 200px; padding: 55px 10px 20px 10px;
         }
-        .big2-table-label { font-size: 0.7rem; color: #8a7e60; letter-spacing: 0.1em; margin-bottom: 5px; }
-        .big2-played-cards { display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; min-height: 72px; }
-        .big2-play-info { margin-top: 5px; font-size: 0.78rem; color: #8a7e60; text-align: center; }
-
-        .big2-turn-banner {
-            text-align: center; padding: 5px;
-            font-size: 1rem; font-weight: bold; letter-spacing: 0.06em;
+        .big2-opponents-bar {
+            position: absolute; top: 8px; left: 0; right: 0;
+            display: flex; gap: 8px; justify-content: flex-start;
+            overflow-x: auto; flex-wrap: nowrap;
+            padding: 0 8px 8px 8px; z-index: 10;
+            scroll-behavior: smooth;
         }
-        .big2-turn-banner.my-turn { color: #d4af37; animation: big2pulse .8s ease-in-out infinite alternate; }
-        .big2-turn-banner.other-turn { color: #64748b; }
-        @keyframes big2pulse { from { opacity: 0.7; } to { opacity: 1; text-shadow: 0 0 10px rgba(212,175,55,0.5); } }
-
-        .big2-hand-area {
+        .big2-opponents-bar::-webkit-scrollbar { height: 5px; }
+        .big2-opponents-bar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .big2-opponents-bar::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 4px; }
+        .big2-opp-card {
+            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px; padding: 5px 10px; min-width: 65px;
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
             flex-shrink: 0;
-            background: rgba(0,0,0,0.4);
-            border-top: 1px solid rgba(212,175,55,0.15);
-            padding: 8px 6px 12px;
         }
-        .big2-hand-label { text-align: center; font-size: 0.7rem; color: #8a7e60; letter-spacing: 0.08em; margin-bottom: 4px; }
-        .big2-hand-scroll { display: flex; gap: 3px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; min-height: 72px; }
+        .big2-opp-card.active { border-color: #facc15; background: rgba(250,204,21,0.2); transform: scale(1.05); box-shadow: 0 0 10px rgba(250,204,21,0.4); }
+        .big2-opp-card.passed { border-color: #64748b; opacity: 0.6; }
+        .big2-opp-card.out { border-color: #10b981; background: rgba(16,185,129,0.1); }
+        .big2-opp-card .opp-name { font-size: 0.7rem; color: #e2e8f0; max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align:center; }
+        .big2-opp-card .opp-count { font-size: 1.1rem; font-weight: bold; color: #fff; }
+        .big2-center-pile {
+            display: flex; gap: 4px; justify-content: center; align-items: flex-end;
+            min-height: 95px; flex-wrap: wrap;
+        }
+        #big2-last-play-info {
+            color: #facc15; font-weight: bold; font-size: 0.9em; margin-bottom: 6px;
+            background: rgba(0,0,0,0.6); padding: 4px 14px; border-radius: 14px; text-align: center;
+        }
+        #big2-center-message {
+            font-weight: bold; color: #facc15; margin-top: 8px;
+            background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 20px;
+            font-size: 14px;
+        }
+        .big2-bottom-section {
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 10px 0 15px 0; border-radius: 0 0 12px 12px;
+        }
+        .big2-controls { display: flex; gap: 10px; justify-content: center; margin-bottom: 5px; flex-wrap: wrap; }
+        .big2-controls .btn-game { min-width: 90px; padding: 10px 20px; font-size: 1em; }
+        .big2-hand-scroll {
+            display: flex; align-items: flex-end;
+            overflow-x: auto; padding: 45px 15px 20px 15px; min-height: 130px;
+            -webkit-overflow-scrolling: touch;
+        }
+        :root { --b2-card-w: 52px; --b2-card-h: 80px; }
+        .b2-card {
+            width: var(--b2-card-w); height: var(--b2-card-h); border-radius: 8px;
+            background: white; border: 2px solid #ccc;
+            position: relative; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            box-shadow: -2px 0 6px rgba(0,0,0,0.4);
+            user-select: none; transition: transform 0.2s; cursor: pointer;
+            flex-shrink: 0; margin-left: -18px; transform-origin: center bottom;
+            font-weight: bold; text-shadow: none;
+        }
+        .b2-card:first-child { margin-left: 0 !important; }
+        .b2-card.red { color: #dc2626; }
+        .b2-card.black { color: #1e293b; }
+        .b2-card:hover:not(.disabled) { transform: translateY(-20px) scale(1.08); z-index: 50; box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+        .b2-card.selected { transform: translateY(-35px) scale(1.12); z-index: 49; border-color: #facc15; box-shadow: 0 0 20px #facc15; }
+        .b2-card.disabled { filter: grayscale(0.7) brightness(0.5); cursor: not-allowed; pointer-events: none; }
+        .b2-card .b2-rank-corner {
+            position: absolute; font-size: 0.72em; font-weight: 800; line-height: 1.05;
+        }
+        .b2-card .b2-rank-tl { top: 4px; left: 5px; text-align: left; }
+        .b2-card .b2-rank-br { bottom: 4px; right: 5px; transform: rotate(180deg); text-align: left; }
+        .b2-card .b2-center-suit { font-size: 1.45em; line-height: 1; }
+        .b2-card-pile {
+            width: var(--b2-card-w); height: var(--b2-card-h); border-radius: 8px;
+            background: white; border: 2px solid #ccc;
+            position: relative; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+            font-weight: bold; flex-shrink: 0; text-shadow: none;
+        }
+        .b2-card-pile .b2-rank-corner { position: absolute; font-size: 0.72em; font-weight: 800; line-height: 1.05; }
+        .b2-card-pile .b2-rank-tl { top: 4px; left: 5px; text-align: left; }
+        .b2-card-pile .b2-rank-br { bottom: 4px; right: 5px; transform: rotate(180deg); text-align: left; }
+        .b2-card-pile .b2-center-suit { font-size: 1.45em; line-height: 1; }
+        .b2-card-pile.red { color: #dc2626; }
+        .b2-card-pile.black { color: #1e293b; }
+        #big2Settings {
+            background: rgba(5, 46, 22, 0.5) !important;
+            border: 1px solid rgba(22, 163, 74, 0.4);
+            border-left: 5px solid #16a34a !important;
+            color: #bbf7d0;
+        }
+        #big2Settings h4 { color: #4ade80 !important; }
+        #big2-shout {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            font-size: 5em; font-weight: 900; color: #4ade80;
+            text-shadow: 4px 4px 0 #065f46; z-index: 3000; pointer-events: none; opacity: 0;
+        }
+        .btn-big2-pass { background: linear-gradient(to bottom, #475569, #334155); }
+        .btn-big2-play { background: linear-gradient(to bottom, #16a34a, #065f46); }
 
-        .b2card {
-            width: 48px; height: 70px;
-            border-radius: 6px; background: #fdfaf0;
-            border: 1px solid #d0c8b0;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            padding: 3px; cursor: pointer; user-select: none;
-            transition: transform .15s, box-shadow .15s;
-            position: relative; flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-        }
-        .b2card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .b2card.selected { transform: translateY(-14px); box-shadow: 0 14px 28px rgba(212,175,55,0.6); border: 2px solid #d4af37; }
-        .b2card.red { color: #cc2222; }
-        .b2card.black { color: #222; }
-        .b2card-top { font-size: 0.72rem; font-weight: 700; line-height: 1; align-self: flex-start; }
-        .b2card-suit { font-size: 1.15rem; line-height: 1; }
-        .b2card-bot { font-size: 0.72rem; font-weight: 700; line-height: 1; align-self: flex-end; transform: rotate(180deg); }
-
-        .b2played-card {
-            width: 42px; height: 62px; border-radius: 5px; background: #fdfaf0;
-            border: 1px solid #d0c8b0; display: flex; flex-direction: column;
-            align-items: center; justify-content: space-between;
-            padding: 3px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0;
-        }
-        .b2played-card.red { color: #cc2222; }
-        .b2played-card.black { color: #222; }
-        .b2played-card .b2card-top { font-size: 0.66rem; }
-        .b2played-card .b2card-suit { font-size: 0.95rem; }
-        .b2played-card .b2card-bot { font-size: 0.66rem; }
-
-        .big2-action-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-        .big2-act-btn {
-            padding: 9px 20px; border: none; border-radius: 8px; cursor: pointer;
-            font-family: inherit; font-size: 0.92rem; font-weight: bold;
-            letter-spacing: 0.04em; transition: all .18s;
-        }
-        .big2-act-btn:disabled { opacity: 0.35; cursor: default; }
-        .big2-act-play { background: linear-gradient(135deg, #1a8a2e, #2daf44); color: #fff; }
-        .big2-act-play:not(:disabled):hover { filter: brightness(1.15); transform: translateY(-2px); }
-        .big2-act-pass { background: linear-gradient(135deg, #7a2020, #c03030); color: #fff; }
-        .big2-act-pass:not(:disabled):hover { filter: brightness(1.15); transform: translateY(-2px); }
-
-        #big2-winner-overlay {
-            position: absolute; inset: 0;
-            background: rgba(0,0,0,0.88); z-index: 500;
-            display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-            border-radius: 16px; backdrop-filter: blur(8px);
-        }
-        #big2-winner-overlay h2 {
-            font-size: 1.9rem;
-            background: linear-gradient(135deg, #d4af37, #f0d060);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        /* 等待室玩家列表（遊戲內） */
-        .big2-waiting-list { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
-        .big2-waiting-slot {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 12px; background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(212,175,55,0.12); border-radius: 8px;
-        }
-        .big2-slot-avatar { font-size: 1.1rem; }
-        .big2-slot-name { flex: 1; font-size: 0.88rem; color: #e2e8f0; }
-        .big2-slot-badge { font-size: 0.65rem; padding: 2px 7px; border-radius: 10px; }
-        .big2-badge-host { background: rgba(212,175,55,0.2); color: #d4af37; border: 1px solid rgba(212,175,55,0.3); }
-        .big2-badge-ready { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
-
-        @media (max-width: 480px) {
-            .b2card { width: 40px; height: 60px; }
-            .b2played-card { width: 34px; height: 52px; }
-            .big2-opponent-box { min-width: 72px; }
-        }
 
     </style>
 </head>
@@ -846,13 +816,12 @@
     </div>
 
     <div id="allRoomsContainer">搜尋中...</div>
-    <div id="big2RoomsContainer" style="margin-top:0;"></div>
     <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
     <button class="menu-btn" onclick="showCreateRoom('ttt')">創立 圈圈叉叉 ⭕❌</button>
     <button class="menu-btn btn-c4" onclick="showCreateRoom('c4')">創立 四連棋 🔴🔵</button>
     <button class="menu-btn btn-liar" onclick="showCreateRoom('liar')">創立 騙子桌遊 🔫🃏</button>
     <button class="menu-btn" style="background: linear-gradient(135deg, #f59e0b, #ef4444);" onclick="showCreateRoom('uno')">創立 UNO 🔄🃏</button>
-    <button class="menu-btn" style="background: linear-gradient(135deg, #065f46, #10b981);" onclick="showCreateRoom('big2')">創立 大老二 ♠️♥️</button>
+    <button class="menu-btn" style="background: linear-gradient(135deg, #16a34a, #065f46);" onclick="showCreateRoom('big2')">創立 大老二 ♠️♣️♥️♦️</button>
     <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.2); margin: 15px 0;">
     <button class="menu-btn" style="background: linear-gradient(135deg, #7A0000 0%, #4D0000 100%);" onclick="window.open('https://raymasla.github.io/chs/', '_blank')">
     前往 西洋♖♘⚫</button>
@@ -863,7 +832,7 @@
     前往 Yahtzee🎲</button>
     <button class="menu-btn" style="background: linear-gradient(135deg, #0E452F 0%, #1F7D5C 100%);" onclick="window.open('https://raymasla.github.io/Html-21point-blackjack/', '_blank')">
     前往 21點♠️♣️</button>
-    <button class="menu-btn" style="background: linear-gradient(to right, #0000FF 0%, #FF0000 100%); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onclick="window.open('https://reurl.cc/vkmlg1', '_blank')">
+    <button class="menu-btn" style="background: linear-gradient(to right, #0000FF 0%, #FF0000 100%); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onclick="window.open('https://youtube.com/@game-aray?sub_confirmation=1', '_blank')">
     😁訂閱阿叡Game😎
 </button>
 </div>
@@ -904,6 +873,19 @@
         <div class="input-group" style="margin-top:10px;"><label>初始手牌張數:</label><input type="number" id="uno-initialHandSize" min="1" max="20" value="7" style="width:80px;"></div>
     </div>
 
+    <div id="big2Settings" class="hidden" style="text-align: left; font-size: 0.9em; padding:15px; border-radius:8px; margin:15px 0;">
+        <h4 style="margin:0 0 8px 0;">🃏♠️ 台灣大老二規則</h4>
+        1. 標準52張牌，梅花3最小，黑桃2最大（2 > A > K...3）。<br>
+        2. 花色大小：♠ > ♥ > ♦ > ♣ (黑桃 > 紅心 > 方塊 > 梅花)。<br>
+        3. 有梅花3的玩家先出，且第一輪<b>必須出含梅花3的牌</b>。<br>
+        4. 出牌型：單張、對子、順子(5張)、同花(5張)、葫蘆、鐵支、同花順。<b><br>
+        5. 必須出比上家更大的<b>相同牌型</b>，或選擇PASS。<br>
+        6. 所有人PASS後，最後出牌者可以任意出任何牌型。<br>
+        7. <b style="color:#4ade80">炸彈規則</b>：鐵支(四條)、同花順可蓋過任何牌型。<br>
+        8. 第一個出完手牌者獲勝 🏆，最後一名為「大老二」輸家。<br>
+        9. <b style="color:#facc15">斷線保護</b>：離線後暱稱保留，重新輸入同名可回到座位。
+    </div>
+
     <div id="liarSettings" class="hidden" style="text-align: left; font-size: 0.9em; padding:15px; border-radius:8px; margin:15px 0;">
         <h4 style="margin:0 0 5px 0;">🔫 騙子酒館規則：</h4>
         1. 牌庫含 A, Q, K (各6張) + Joker (2張)。<br>
@@ -919,18 +901,6 @@
             <input type="checkbox" id="checkAnytimeLiar" style="width:auto; vertical-align:middle; margin-right:5px;">
             🔓 開啟「隨時抓謊」模式 (所有人皆可抓謊)
         </label>
-    </div>
-
-    <div id="big2Settings" class="hidden" style="text-align: left; font-size: 0.9em; padding:15px; border-radius:8px; margin:15px 0;">
-        <h4 style="margin:0 0 8px 0;">♠️ 大老二 規則說明：</h4>
-        1. 標準52張牌，牌值 3 最小，2 最大；花色 ♣&lt;♦&lt;♥&lt;♠。<br>
-        2. 持有 <b>♣3</b> 的玩家先出牌，且首手必須包含 ♣3。<br>
-        3. 合法牌型：<b>單張、對子、三條、順子、同花、葫蘆、四炸、同花順</b>（5張牌型）。<br>
-        4. 每次出牌必須<b>比桌面大且牌型相同</b>（5張牌型可按階級壓制）。<br>
-        5. 階級：順子 &lt; 同花 &lt; 葫蘆 &lt; 四炸 &lt; 同花順。<br>
-        6. 所有其他玩家都不出時，上手玩家重新自由出牌。<br>
-        7. 率先出完手牌者第1名，最後剩牌者末位。<br>
-        8. <b style="color:#34d399">房主可隨時開始遊戲，無人數限制（2人以上）。</b>
     </div>
 
     <button id="btn-confirm" class="menu-btn" onclick="createRoom()">確認創立</button>
@@ -1034,6 +1004,13 @@
         <div id="uno-settings-modal" class="modal-overlay hidden">
             <div class="modal-box">
                 <h3>⚙️ UNO 設定</h3>
+                
+                <div id="uno-host-settings" class="hidden" style="text-align:left; margin-bottom:15px; padding-top:10px; border-top:1px solid #475569;">
+                    <label style="color:#facc15; font-weight:bold; display:block; margin-bottom:5px;">👑 房主設定</label>
+                    <label style="display:block; margin:8px 0; color:#cbd5e1;"><input type="checkbox" id="uno-setting-chain" onchange="updateUnoRules()"> 連出 (Chain)</label>
+                    <label style="display:block; margin:8px 0; color:#cbd5e1;"><input type="checkbox" id="uno-setting-stack" onchange="updateUnoRules()"> 疊加 (Stack +2/+4)</label>
+                </div>
+
                 <div style="text-align:left; margin-bottom:15px;">
                     <label style="color:#cbd5e1;">更改暱稱</label>
                     <div style="display:flex; gap:10px; margin-top:5px;">
@@ -1045,7 +1022,17 @@
                     <label style="color:#cbd5e1;">畫面縮放 (卡牌大小)</label>
                     <input type="range" id="uno-setting-scale" min="0.6" max="1.5" step="0.1" value="0.8" style="width:100%; accent-color:#8b5cf6;" oninput="updateUnoScale(this.value)">
                 </div>
-                <button class="btn-sm" style="background:#475569; color:white;" onclick="closeUnoSettings()">關閉</button>
+                <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+                    <button class="btn-sm" style="background:#475569; color:white;" onclick="closeUnoSettings()">關閉</button>
+                    <button id="uno-btn-open-kick" class="btn-sm btn-red hidden" onclick="openUnoKickModal()">踢出玩家</button>
+                </div>
+            </div>
+        </div>
+        <div id="uno-kick-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <h3 style="color:#ef4444;">👞 踢出玩家</h3>
+                <div id="uno-kick-list" style="max-height:200px; overflow-y:auto; margin-bottom:15px; text-align:left; color:white;"></div>
+                <button class="btn-sm" style="background:#475569; color:white;" onclick="closeUnoKickModal()">關閉回到遊戲</button>
             </div>
         </div>
         <div id="uno-draw-modal" class="modal-overlay hidden">
@@ -1070,48 +1057,34 @@
         <div id="uno-shout" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:6em; font-weight:900; color:#fbbf24; text-shadow:4px 4px 0 #ef4444; z-index:3000; pointer-events:none; opacity:0;">UNO!</div>
     </div>
 
-    <!-- ====== 大老二遊戲區 ====== -->
-    <div id="big2-wrapper" class="hidden" style="position:relative;">
+    <!-- 大老二遊戲區 -->
+    <div id="big2-wrapper" class="hidden">
         <div class="big2-layout">
             <div class="big2-header">
-                <div class="big2-room-info">♠️ 大老二 | <span id="big2-room-name-display">---</span></div>
-                <div id="big2-header-status" class="big2-turn-status" style="color:#94a3b8;">等待開始...</div>
-            </div>
-            <!-- 等待室（遊戲未開始時顯示） -->
-            <div id="big2-waiting-panel" style="padding:10px;">
-                <div style="text-align:center; color:#94a3b8; font-size:0.85em; margin-bottom:8px;">等待玩家加入中… 房主可隨時開始遊戲</div>
-                <div class="big2-waiting-list" id="big2-waiting-list"></div>
-                <button id="big2-btn-start-game" class="menu-btn" style="background:linear-gradient(135deg,#065f46,#10b981);display:none;margin-top:10px;" onclick="big2HostStartGame()">🃏 開始遊戲</button>
-            </div>
-            <!-- 對手列（遊戲進行時顯示） -->
-            <div class="big2-opponents-bar" id="big2-opponents-area" style="display:none;"></div>
-            <!-- 桌面 -->
-            <div class="big2-table-area" id="big2-table-area" style="display:none;">
-                <div class="big2-table-label">▸ 桌面牌型</div>
-                <div class="big2-played-cards" id="big2-played-cards">
-                    <span style="color:#8a7e60;font-size:.85rem">（尚未出牌）</span>
+                <div class="big2-room-info">
+                    <span id="big2-room-name">Room</span>
                 </div>
-                <div class="big2-play-info" id="big2-play-info"></div>
-            </div>
-            <div class="big2-turn-banner other-turn" id="big2-turn-banner" style="display:none;">等待遊戲開始…</div>
-            <!-- 手牌 -->
-            <div class="big2-hand-area" id="big2-hand-area" style="display:none;">
-                <div class="big2-hand-label">你的手牌 · 點選選取，再按出牌</div>
-                <div class="big2-hand-scroll" id="big2-hand-cards"></div>
-                <div class="big2-action-btns">
-                    <button class="big2-act-btn big2-act-play" id="big2-btn-play" onclick="big2PlayCards()" disabled>出牌</button>
-                    <button class="big2-act-btn big2-act-pass" id="big2-btn-pass" onclick="big2PassRound()" disabled>不出</button>
+                <div class="big2-header-btns">
+                    <span id="big2-turn-status">等待開始...</span>
                 </div>
             </div>
-        </div>
-        <!-- 勝負 overlay -->
-        <div id="big2-winner-overlay">
-            <h2 id="big2-winner-title">遊戲結束！</h2>
-            <div id="big2-rank-list" style="text-align:center;color:#e2e8f0;font-size:0.9rem;line-height:2;"></div>
-            <button class="menu-btn btn-green" style="width:200px;margin-top:8px;" onclick="big2ResetToWaiting()">🔄 再玩一局</button>
-            <button class="menu-btn" style="width:200px;background:#475569;" onclick="big2LeaveGame()">返回大廳</button>
+            <div class="big2-table-area">
+                <div class="big2-opponents-bar" id="big2-opponents-container"></div>
+                <div id="big2-last-play-info">等待遊戲開始</div>
+                <div class="big2-center-pile" id="big2-center-pile"></div>
+                <div id="big2-center-message"></div>
+            </div>
+            <div class="big2-bottom-section">
+                <div class="big2-controls" id="big2-controls-area">
+                    <button id="big2-btn-start" class="btn-game btn-green hidden" onclick="big2StartGame()">開始遊戲</button>
+                    <button id="big2-btn-pass" class="btn-game btn-big2-pass hidden" onclick="big2Pass()">PASS</button>
+                    <button id="big2-btn-play" class="btn-game btn-big2-play hidden" onclick="big2PlaySelected()">出牌</button>
+                </div>
+                <div class="big2-hand-scroll" id="big2-my-hand"></div>
+            </div>
         </div>
     </div>
+    <div id="big2-shout">出完了！</div>
 
     <button id="btn-undo" class="btn-undo" onclick="undoStep()">⬅ 悔棋 (Undo)</button>
 
@@ -1150,6 +1123,16 @@
     </div>
 </div>
 
+<div id="big2MessageModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <h3 id="big2MessageModalTitle">提示</h3>
+        <p id="big2MessageModalBody" style="margin:12px 0 18px; color:#cbd5e1; font-size:0.95rem; line-height:1.5; text-align:center; white-space:pre-wrap;"></p>
+        <div class="modal-btns" style="justify-content:center;">
+            <button type="button" class="modal-btn modal-btn-confirm" onclick="closeBig2MessageModal()">好的</button>
+        </div>
+    </div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, remove, onDisconnect, serverTimestamp, get, runTransaction, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
@@ -1171,6 +1154,12 @@
     let isAnimating = false;
     let processingAction = false; 
     let chatInitTimestamp = Date.now();
+
+    let deviceId = localStorage.getItem('deviceId');
+    if (!deviceId) {
+        deviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('deviceId', deviceId);
+    }
 
     // UNO 遊戲狀態
     let unoSelectedIndices = [];
@@ -1263,7 +1252,7 @@
             Object.entries(ongameRooms).reverse().forEach(([id, r]) => {
                 let userCount = 0;
                 if (r.users) {
-                    if (r.type === 'uno') userCount = Object.values(r.users).filter(u => u.online).length;
+                    if (r.type === 'uno' || r.type === 'big2') userCount = Object.values(r.users).filter(u => u.online).length;
                     else userCount = Object.values(r.users).filter(u => u.status !== 'offline').length;
                 }
                 totalInGameCount += userCount;
@@ -1273,13 +1262,14 @@
                 if (r.type === 'ttt-infinite') typeName = '♾️無限圈叉';
                 if (r.type === 'liar') typeName = '🔫騙子桌遊';
                 if (r.type === 'uno') typeName = '🃏 UNO';
+                if (r.type === 'big2') typeName = '♠️ 大老二';
 
                 const hasPass = r.password && r.password !== "";
                 const lockIcon = hasPass ? '<span class="lock-icon">🔒</span>' : '';
                 const passwordArg = hasPass ? r.password : ""; 
                 
                 let statusBadge = '<span class="status-badge status-wait">等待中</span>';
-                if (r.status === 'playing' || (r.turn > 0 && r.type !== 'liar') || (r.type === 'uno' && r.gameState === 'playing')) {
+                if (r.status === 'playing' || (r.turn > 0 && r.type !== 'liar') || (r.type === 'uno' && r.gameState === 'playing') || (r.type === 'big2' && r.gameState === 'playing')) {
                     statusBadge = '<span class="status-badge status-play">遊戲中</span>';
                 }
 
@@ -1290,6 +1280,8 @@
                 } else if (r.type === 'uno') {
                     metaInfo = `人數: ${userCount}`;
                     if (r.settings) metaInfo += ` | 連出:${r.settings.chain?'ON':'OFF'} 疊加:${r.settings.stack?'ON':'OFF'}`;
+                } else if (r.type === 'big2') {
+                    metaInfo = `人數: ${userCount}`;
                 } else {
                     const rows = r.rows || 3;
                     const cols = r.cols || 3;
@@ -1383,6 +1375,8 @@
             handleLiarJoin(id, roomData);
         } else if (roomData && roomData.type === 'uno') {
             handleUnoJoin(id, roomData);
+        } else if (roomData && roomData.type === 'big2') {
+            handleBig2Join(id, roomData);
         } else {
             enterRoom(id);
         }
@@ -1390,6 +1384,7 @@
 
     let pendingRoomId = null;
     let pendingRoomData = null;
+    let isCreatingUnoRoom = false;
 
     window.handleLiarJoin = (id, roomData) => {
         pendingRoomId = id;
@@ -1413,6 +1408,7 @@
         document.getElementById('customNameModal').classList.add('hidden');
         pendingRoomId = null;
         pendingRoomData = null;
+        if (typeof big2IsCreating !== 'undefined') big2IsCreating = false; // 【新增】避免取消後篡位
     };
 
     window.submitNameModal = () => {
@@ -1429,6 +1425,9 @@
                 existingKey = key;
                 if (pendingRoomData.type === 'uno') {
                     if (user.online) isOnline = true;
+                } else if (pendingRoomData.type === 'big2') {
+                    // 大老二只用 online；勿用 status，否則離線(undefined)會被當成「非 offline」而誤判為在線
+                    if (user.online === true) isOnline = true;
                 } else {
                     if (user.status !== 'offline') isOnline = true;
                 }
@@ -1447,8 +1446,17 @@
         }
 
         const targetRoomId = pendingRoomId;
+        // 【修正】必須在 closeNameModal() 之前保存，否則 pendingRoomData 被清空後永遠無法進入 enterBig2Room，房主 hostUid 不會寫入 → 無法開始遊戲
+        const savedRoomData = pendingRoomData;
+        const wasCreatingBig2Room = (typeof big2IsCreating !== 'undefined' && big2IsCreating);
         closeNameModal();
 
+        if (savedRoomData && savedRoomData.type === 'big2') {
+            myName = inputName;
+            localStorage.setItem('playerName', myName);
+            enterBig2Room(targetRoomId, existingKey || null, wasCreatingBig2Room);
+            return;
+        }
         if (existingKey) {
             myName = inputName;
             localStorage.setItem('playerName', myName);
@@ -1467,14 +1475,17 @@
         const normalSettings = document.getElementById('normalSettings');
         const liarSettings = document.getElementById('liarSettings');
         const unoSettings = document.getElementById('unoSettings');
-        const big2Settings = document.getElementById('big2Settings');
+        
+        let title = "創立房間";
+        document.getElementById('createTitle').innerText = title;
 
         btnInfinite.classList.add('hidden');
         normalSettings.classList.remove('hidden');
         liarSettings.classList.add('hidden');
         if (unoSettings) unoSettings.classList.add('hidden');
-        if (big2Settings) big2Settings.classList.add('hidden');
-
+        const big2SettingsEl = document.getElementById('big2Settings');
+        if (big2SettingsEl) big2SettingsEl.classList.add('hidden');
+        
         if (type === 'liar') {
             document.getElementById('createTitle').innerText = "創立 騙子桌遊 (Liar's Deck)";
             normalSettings.classList.add('hidden');
@@ -1487,13 +1498,6 @@
             if (unoSettings) unoSettings.classList.remove('hidden');
             btnConfirm.innerText = "創立 UNO 房間";
             btnConfirm.onclick = createRoom;
-        } else if (type === 'big2') {
-            document.getElementById('createTitle').innerText = "創立 大老二 ♠️♥️";
-            normalSettings.classList.add('hidden');
-            if (big2Settings) big2Settings.classList.remove('hidden');
-            btnInfinite.classList.add('hidden');
-            btnConfirm.innerText = "創立 大老二房間";
-            btnConfirm.onclick = big2CreateRoomFromSection;
         } else if (type === 'c4') {
             document.getElementById('createTitle').innerText = '創立 四連棋';
             document.getElementById('inputRows').value = 6;
@@ -1537,6 +1541,7 @@
             const chain = document.getElementById('uno-rule-chain') && document.getElementById('uno-rule-chain').checked;
             const stack = document.getElementById('uno-rule-stack') && document.getElementById('uno-rule-stack').checked;
             const initialHandSize = parseInt((document.getElementById('uno-initialHandSize') && document.getElementById('uno-initialHandSize').value) || 7) || 7;
+            isCreatingUnoRoom = true;
             roomData = {
                 ...roomData,
                 type: 'uno',
@@ -1600,9 +1605,18 @@
             isLiarGame = (type === 'liar');
             const isUnoGame = (type === 'uno');
             
-            if (isUnoGame) {
+            const isBig2Game = (type === 'big2');
+            if (isBig2Game) {
                 update(userRef, { name: myName, online: true });
                 onDisconnect(userRef).update({ online: false });
+            } else if (isUnoGame) {
+                update(userRef, { name: myName, online: true });
+                onDisconnect(userRef).update({ online: false });
+                
+                if (isCreatingUnoRoom) {
+                    isCreatingUnoRoom = false;
+                    update(ref(db, `ongame_room/${id}`), { hostUid: currentUserKey, hostName: myName });
+                }
             } else if (isLiarGame) {
                 update(userRef, { name: myName, status: 'online' });
                 onDisconnect(userRef).update({ status: 'offline' });
@@ -1629,6 +1643,8 @@
                 renderLiarGame(data);
             } else if (data.type === 'uno') {
                 renderUnoGame(data);
+            } else if (data.type === 'big2') {
+                renderBig2Game(data);
             } else {
                 renderBoardGame(data);
             }
@@ -1680,6 +1696,7 @@
         document.getElementById('uno-room-name').innerText = data.name;
         document.getElementById('uno-rules-display').innerText = `連出:${(data.settings&&data.settings.chain)?'ON':'OFF'} | 疊加:${(data.settings&&data.settings.stack)?'ON':'OFF'}`;
 
+        const isHost = (data.hostUid === currentUserKey);
         const users = Object.keys(data.users || {});
         const order = data.playerOrder || users;
         const currentTurnUser = order[data.turnIndex];
@@ -1703,9 +1720,18 @@
         }
 
         const statusEl = document.getElementById('uno-turn-status');
-        if (data.gameState === 'waiting') {
+        const myUserData = data.users ? data.users[currentUserKey] : null;
+
+        if (!myUserData && data.gameState === 'playing') {
+            statusEl.innerText = "你已被踢出，目前為旁觀者 👀";
+            statusEl.style.color = "#ef4444";
+            document.getElementById('uno-btn-play').classList.add('hidden');
+            document.getElementById('uno-btn-pass').classList.add('hidden');
+            document.getElementById('uno-btn-start').classList.add('hidden');
+        } else if (data.gameState === 'waiting') {
             statusEl.innerText = `等待中 (${users.length}人)`;
-            document.getElementById('uno-btn-start').classList.toggle('hidden', users.length < 2);
+            statusEl.style.color = "#cbd5e1";
+            document.getElementById('uno-btn-start').classList.toggle('hidden', !(isHost && users.length >= 2));
             document.getElementById('uno-btn-play').classList.add('hidden');
             document.getElementById('uno-btn-pass').classList.add('hidden');
         } else if (data.gameState === 'playing') {
@@ -1760,11 +1786,17 @@
         oppContainer.innerHTML = "";
         order.forEach((uid, idx) => {
             if (uid === currentUserKey) return;
-            const u = data.users[uid];
+            const u = data.users ? data.users[uid] : null;
+            if (!u) return;
             const handCount = (data.hands && data.hands[uid]) ? data.hands[uid].length : 0;
             const isActive = (data.gameState === 'playing' && idx === data.turnIndex);
             const isOffline = !u.online;
             const isFinished = (data.finishedPlayers || []).includes(uid);
+            
+            let kickBtnHtml = '';
+            if (isHost && data.gameState === 'waiting') {
+                kickBtnHtml = `<br><button class="btn-sm btn-red" style="margin-top:4px; padding:2px 6px; font-size:0.7rem;" onclick="kickUnoPlayer('${uid}')">踢出</button>`;
+            }
             
             const div = document.createElement('div');
             div.className = `uno-opponent-card ${isActive ? 'active' : ''}`;
@@ -1772,10 +1804,10 @@
             if (isFinished) {
                 let rankIdx = data.finishedPlayers.indexOf(uid);
                 let badge = rankIdx === 0 ? '🥇' : rankIdx === 1 ? '🥈' : rankIdx === 2 ? '🥉' : `${rankIdx + 1}.`;
-                div.innerHTML = `<div class="opp-name">${isOffline ? u.name + ' (離線)' : u.name}</div><div class="opp-count">${badge}</div><small style="font-size:0.6rem; color:#facc15;">完成</small>`;
+                div.innerHTML = `<div class="opp-name">${isOffline ? u.name + ' (離線)' : u.name}${kickBtnHtml}</div><div class="opp-count">${badge}</div><small style="font-size:0.6rem; color:#facc15;">完成</small>`;
                 div.style.opacity = '0.6';
             } else {
-                div.innerHTML = `<div class="opp-name">${isOffline ? u.name + ' (離線)' : u.name}</div><div class="opp-count">${handCount}</div><small style="font-size:0.6rem; color:#94a3b8;">cards</small>`;
+                div.innerHTML = `<div class="opp-name">${isOffline ? u.name + ' (離線)' : u.name}${kickBtnHtml}</div><div class="opp-count">${handCount}</div><small style="font-size:0.6rem; color:#94a3b8;">cards</small>`;
             }
             oppContainer.appendChild(div);
         });
@@ -2223,9 +2255,105 @@
 
     window.openUnoSettings = () => {
         document.getElementById('uno-setting-nickname').value = myName;
+        
+        const data = roomDataCache;
+        const isHost = (data.hostUid === currentUserKey);
+        
+        if (isHost) {
+            document.getElementById('uno-host-settings').classList.remove('hidden');
+            document.getElementById('uno-btn-open-kick').classList.remove('hidden');
+            if (data.settings) {
+                document.getElementById('uno-setting-chain').checked = !!data.settings.chain;
+                document.getElementById('uno-setting-stack').checked = !!data.settings.stack;
+            }
+        } else {
+            document.getElementById('uno-host-settings').classList.add('hidden');
+            document.getElementById('uno-btn-open-kick').classList.add('hidden');
+        }
+        
         document.getElementById('uno-settings-modal').classList.remove('hidden');
     };
+    
     window.closeUnoSettings = () => document.getElementById('uno-settings-modal').classList.add('hidden');
+    
+    window.updateUnoRules = async () => {
+        if (!roomDataCache) return;
+        const chain = document.getElementById('uno-setting-chain').checked;
+        const stack = document.getElementById('uno-setting-stack').checked;
+        await update(ref(db, `ongame_room/${currentRoomId}/settings`), { chain, stack });
+    };
+
+    window.openUnoKickModal = () => {
+        document.getElementById('uno-settings-modal').classList.add('hidden');
+        const list = document.getElementById('uno-kick-list');
+        list.innerHTML = "";
+        const data = roomDataCache;
+        const order = data.playerOrder || Object.keys(data.users || {});
+        
+        let count = 0;
+        order.forEach(uid => {
+            if (uid === currentUserKey) return;
+            const u = data.users ? data.users[uid] : null;
+            if (!u) return;
+            count++;
+            const div = document.createElement('div');
+            div.style.display = 'flex';
+            div.style.justifyContent = 'space-between';
+            div.style.alignItems = 'center';
+            div.style.margin = '5px 0';
+            div.style.padding = '8px';
+            div.style.background = 'rgba(255,255,255,0.05)';
+            div.style.borderRadius = '8px';
+            div.innerHTML = `<span>${u.name}</span> <button class="btn-sm btn-red" onclick="kickUnoPlayer('${uid}')">踢出</button>`;
+            list.appendChild(div);
+        });
+        if (count === 0) list.innerHTML = "<div style='text-align:center; color:#94a3b8;'>沒有其他玩家</div>";
+        
+        document.getElementById('uno-kick-modal').classList.remove('hidden');
+    };
+
+    window.closeUnoKickModal = () => {
+        document.getElementById('uno-kick-modal').classList.add('hidden');
+    };
+
+    window.kickUnoPlayer = async (uid) => {
+        if(!confirm("確定要踢出此玩家？")) return;
+        const data = roomDataCache;
+        const updates = {};
+        
+        updates[`users/${uid}`] = null;
+        updates[`hands/${uid}`] = null;
+        
+        if (data.playerOrder) {
+            let newOrder = [...data.playerOrder];
+            const targetIdx = newOrder.indexOf(uid);
+            if (targetIdx > -1) {
+                newOrder.splice(targetIdx, 1);
+                updates[`playerOrder`] = newOrder;
+                
+                if (data.gameState === 'playing') {
+                    let newTurnIndex = data.turnIndex;
+                    if (targetIdx < data.turnIndex) {
+                        newTurnIndex--;
+                    } else if (targetIdx === data.turnIndex) {
+                        if (newTurnIndex >= newOrder.length) newTurnIndex = 0;
+                    }
+                    if (newTurnIndex >= newOrder.length) newTurnIndex = 0;
+                    updates[`turnIndex`] = newTurnIndex;
+                    
+                    if (data.finishedPlayers) {
+                        updates[`finishedPlayers`] = data.finishedPlayers.filter(id => id !== uid);
+                    }
+                }
+            }
+        }
+        await update(ref(db, `ongame_room/${currentRoomId}`), updates);
+        
+        if (document.getElementById('uno-kick-modal') && !document.getElementById('uno-kick-modal').classList.contains('hidden')) {
+            openUnoKickModal();
+        }
+    };
+
     window.updateUnoNickname = async () => {
         const newName = (document.getElementById('uno-setting-nickname').value || '').trim();
         if (!newName) return alert("暱稱不能為空！");
@@ -3129,6 +3257,8 @@
             startLiarGame(); 
         } else if (roomDataCache.type === 'uno') {
             unoResetGame();
+        } else if (roomDataCache.type === 'big2') {
+            big2ResetGame(); return;
         } else {
             const rows = roomDataCache.rows || 3;
             const cols = roomDataCache.cols || 3;
@@ -3148,12 +3278,12 @@
     };
     
     window.leaveRoom = () => {
-        if (window._b2InGame && window.big2LeaveGame) { window.big2LeaveGame(); return; }
+        if (typeof big2HostClaimedRooms !== 'undefined' && currentRoomId) big2HostClaimedRooms.delete(currentRoomId);
         if (currentRoomId && currentUserKey) {
             if (isLiarGame) {
                 update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { status: 'offline' })
                     .then(() => location.reload());
-            } else if (roomDataCache && roomDataCache.type === 'uno') {
+            } else if (roomDataCache && (roomDataCache.type === 'uno' || roomDataCache.type === 'big2')) {
                 update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { online: false })
                     .then(() => location.reload());
             } else {
@@ -3231,644 +3361,796 @@
         setupAutoScroll('.opponents-row');
     });
 
-</script>
 
-<!-- =====================================================
-     大老二 Big Two — 獨立 Firebase module
-===================================================== -->
-<script type="module">
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import {
-    getDatabase, ref, set, onValue, push, update, remove,
-    onDisconnect, serverTimestamp, get
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+    // ============================================================
+    // === 大老二 (Big Two / 鋤大弟) 完整遊戲邏輯 ===
+    // ============================================================
 
-const _cfg = {
-    apiKey: "AIzaSyC7PZLTTNf17cfp9gCHudWiWX8SYPSCdDI",
-    authDomain: "onlineeasyraygame.firebaseapp.com",
-    databaseURL: "https://onlineeasyraygame-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "onlineeasyraygame"
-};
-const b2app = getApps().length ? getApps()[0] : initializeApp(_cfg);
-const b2db  = getDatabase(b2app);
+    let big2SelectedIndices = [];
+    let big2IsProcessing = false;
+    let big2IsCreating = false;
+    let big2HostClaimedRooms = new Set(); // 避免在等待 hostUid 回寫前重複 update
+    let big2LastRenderedAction = "";
+    let big2CenterMsgTimeout = null;
 
-/* ────────────────────────────────
-   常數
-──────────────────────────────── */
-const SUIT_SYM  = ['♣','♦','♥','♠'];
-const SUIT_CLS  = ['black','red','red','black'];
-const VAL_NAME  = {3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',10:'10',11:'J',12:'Q',13:'K',14:'A',15:'2'};
-const COMBO_RANK = {straight:1, flush:2, full_house:3, four_of_a_kind:4, straight_flush:5};
-const AVATARS    = ['🦁','🐯','🦊','🐺','🐻','🐼','🦅','🐉','🐸','🦋'];
+    window.closeBig2MessageModal = () => {
+        document.getElementById('big2MessageModal').classList.add('hidden');
+    };
+    window.showBig2MessageModal = (message, title = '提示') => {
+        document.getElementById('big2MessageModalTitle').textContent = title;
+        document.getElementById('big2MessageModalBody').textContent = message;
+        document.getElementById('big2MessageModal').classList.remove('hidden');
+    };
 
-/* ────────────────────────────────
-   遊戲狀態
-──────────────────────────────── */
-let b2Name        = '';
-let b2MyId        = '';
-let b2RoomId      = '';      // Firebase push key for big2_room
-let b2IsHost      = false;
-let b2MyHand      = [];
-let b2Selected    = new Set();
-let b2TableCards  = [];
-let b2TableOwnerId= '';
-let b2CurrentTurn = '';
-let b2PlayerOrder = [];
-let b2PlayerNames = {};
-let b2FirstTurn   = true;
-let b2PassCount   = 0;
-let b2UnsubGame   = null;    // unsubscribe fn for game listener
-let b2Big2Rooms   = {};      // live snapshot of big2_room/
+    // --- 牌值與花色排序常數 (台灣版) ---
+    // 大小：3<4<5<6<7<8<9<10<J<Q<K<A<2
+    // 花色：♣<♦<♥<♠
+    const B2_RANK_ORDER  = ['3','4','5','6','7','8','9','10','J','Q','K','A','2'];
+    const B2_SUIT_ORDER  = ['♣','♦','♥','♠'];
 
-// 暴露到 window 供 leaveRoom 偵測
-window._b2InGame  = false;
-
-/* ────────────────────────────────
-   Toast
-──────────────────────────────── */
-function b2Toast(msg, ms=2500) {
-    let el = document.getElementById('b2-toast-el');
-    if (!el) {
-        el = document.createElement('div');
-        el.id = 'b2-toast-el';
-        Object.assign(el.style, {
-            position:'fixed', top:'24px', left:'50%', transform:'translateX(-50%)',
-            background:'rgba(6,78,56,0.96)', border:'1px solid #10b981', color:'#a7f3d0',
-            padding:'10px 28px', borderRadius:'12px', fontWeight:'bold',
-            fontSize:'1rem', zIndex:'9999', display:'none',
-            boxShadow:'0 4px 20px rgba(0,0,0,0.4)'
-        });
-        document.body.appendChild(el);
+    function b2CardValue(card) {
+        return B2_RANK_ORDER.indexOf(card.rank) * 4 + B2_SUIT_ORDER.indexOf(card.suit);
     }
-    el.textContent = msg;
-    el.style.display = 'block';
-    clearTimeout(el._t);
-    el._t = setTimeout(() => el.style.display = 'none', ms);
-}
 
-/* ────────────────────────────────
-   牌組工具
-──────────────────────────────── */
-function b2MakeCard(val, suit) { return {val, suit}; }
-function b2MakeDeck() {
-    const d = [];
-    for (let s = 0; s < 4; s++)
-        for (let v = 3; v <= 15; v++)
-            d.push(b2MakeCard(v, s));
-    return d;
-}
-function b2Shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length-1; i > 0; i--) {
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]] = [a[j],a[i]];
+    function b2CompareCards(a, b) { return b2CardValue(a) - b2CardValue(b); }
+
+    function b2SortHand(hand) {
+        return [...hand].sort(b2CompareCards);
     }
-    return a;
-}
-function b2CardGT(a, b) { return a.val !== b.val ? a.val > b.val : a.suit > b.suit; }
-function b2SortHand(h) { return [...h].sort((a,b) => a.val !== b.val ? a.val-b.val : a.suit-b.suit); }
-function b2Enc(c)  { return `${c.val}-${c.suit}`; }
-function b2Dec(s)  { const [v,su]=s.split('-').map(Number); return b2MakeCard(v,su); }
-function b2EncH(h) { return h.map(b2Enc); }
-function b2DecH(a) { return (a||[]).map(b2Dec); }
 
-/* ────────────────────────────────
-   牌型判斷
-──────────────────────────────── */
-function b2ComboType(cards) {
-    const n = cards.length;
-    if (!n) return null;
-    const s = b2SortHand(cards);
-    const vals  = s.map(c=>c.val);
-    const suits = s.map(c=>c.suit);
-    if (n===1) return {type:'single', key:s[0]};
-    if (n===2) { if (vals[0]===vals[1]) return {type:'pair', key:s[1]}; return null; }
-    if (n===3) { if (vals[0]===vals[1] && vals[1]===vals[2]) return {type:'triple', key:s[2]}; return null; }
-    if (n!==5) return null;
-    const isFlush = suits.every(x=>x===suits[0]);
-    const isStraight = (() => {
-        const sv = [...vals].sort((a,b)=>a-b);
-        for (let i=1;i<sv.length;i++) if (sv[i]-sv[i-1]!==1) return false;
-        return true;
-    })();
-    if (isFlush && isStraight) return {type:'straight_flush', key:s[4]};
-    const vc = {};
-    vals.forEach(v=>vc[v]=(vc[v]||0)+1);
-    const fours = Object.keys(vc).filter(v=>vc[v]===4);
-    if (fours.length) { const fv=+fours[0]; return {type:'four_of_a_kind', key:s.filter(c=>c.val===fv)[3]}; }
-    const threes = Object.keys(vc).filter(v=>vc[v]===3);
-    const twos   = Object.keys(vc).filter(v=>vc[v]===2);
-    if (threes.length && twos.length) { const tv=+threes[0]; return {type:'full_house', key:s.filter(c=>c.val===tv)[2]}; }
-    if (isFlush)    return {type:'flush',    key:s[4]};
-    if (isStraight) return {type:'straight', key:s[4]};
-    return null;
-}
-function b2Beats(play, table) {
-    if (!table||!table.length) return true;
-    const pt = b2ComboType(play);
-    const tt = b2ComboType(table);
-    if (!pt||!tt) return false;
-    if (pt.type !== tt.type) {
-        if (play.length===5 && table.length===5) {
-            const pr=COMBO_RANK[pt.type]||0, tr=COMBO_RANK[tt.type]||0;
-            if (pr!==tr) return pr>tr;
+    // 生成一副牌
+    function b2GenerateDeck() {
+        const suits = ['♣','♦','♥','♠'];
+        const ranks = ['3','4','5','6','7','8','9','10','J','Q','K','A','2'];
+        let d = [];
+        suits.forEach(s => ranks.forEach(r => d.push({ suit: s, rank: r })));
+        return d.sort(() => Math.random() - 0.5);
+    }
+
+    // 判斷牌型（台灣規則）
+    // 回傳: { type, value } 或 null
+    function b2GetHandType(cards) {
+        if (!cards || cards.length === 0) return null;
+        const n = cards.length;
+        const sorted = b2SortHand(cards);
+        const rankCounts = {};
+        sorted.forEach(c => { rankCounts[c.rank] = (rankCounts[c.rank]||0) + 1; });
+        const counts = Object.values(rankCounts).sort((a,b) => b-a);
+
+        if (n === 1) {
+            return { type: 'single', value: b2CardValue(sorted[0]), lead: sorted[0] };
         }
-        return false;
-    }
-    return b2CardGT(pt.key, tt.key);
-}
-
-/* ────────────────────────────────
-   首頁房間列表
-──────────────────────────────── */
-function b2RenderLobbyRooms() {
-    const container = document.getElementById('big2RoomsContainer');
-    if (!container) return;
-    container.innerHTML = '';
-    const rooms = b2Big2Rooms;
-    if (!rooms || !Object.keys(rooms).length) return;
-
-    // 標題隔線
-    const hr = document.createElement('hr');
-    hr.style.cssText = 'border-color:rgba(16,185,129,0.2);margin:4px 0 8px 0;';
-    container.appendChild(hr);
-
-    Object.entries(rooms).reverse().forEach(([id, r]) => {
-        if (!r) return;
-        const players = r.players ? Object.values(r.players) : [];
-        const playerCount = players.length;
-        const hasPass = r.password && r.password !== '';
-        const lockIcon = hasPass ? '<span class="lock-icon">🔒</span>' : '';
-        const isPlaying = r.status === 'playing';
-        const statusBadge = isPlaying
-            ? '<span class="status-badge status-play">遊戲中</span>'
-            : '<span class="status-badge status-wait">等待中</span>';
-        const passArg = hasPass ? r.password.replace(/'/g,"\\'") : '';
-
-        const div = document.createElement('div');
-        div.className = 'room-item';
-        div.innerHTML = `
-            <div class="room-info">
-                <span class="room-name">♠️大老二 | ${r.name||'大老二房間'} ${lockIcon} ${statusBadge}</span>
-                <div class="room-meta">人數: ${playerCount}</div>
-            </div>
-            <div>
-                <button class="btn-sm btn-green" onclick="b2AttemptJoin('${id}','${passArg}')">加入</button>
-                <button class="btn-sm btn-red"   onclick="b2DeleteRoom('${id}')">刪除</button>
-            </div>`;
-        container.appendChild(div);
-    });
-}
-
-// 訂閱 big2_room/ 即時更新首頁列表
-onValue(ref(b2db, 'big2_room'), snap => {
-    b2Big2Rooms = snap.val() || {};
-    b2RenderLobbyRooms();
-});
-
-/* ────────────────────────────────
-   創立房間（從 createRoomSection）
-──────────────────────────────── */
-window.b2CreateRoomFromSection = async function() {
-    // 取暱稱（複用主模組的 myName，或從 localStorage）
-    const stored = localStorage.getItem('playerName') || '';
-    b2Name = stored || '玩家';
-
-    const roomName = document.getElementById('roomName').value.trim() || '大老二房間';
-    const password = document.getElementById('roomPass').value || '';
-
-    b2IsHost = true;
-    const roomRef = push(ref(b2db, 'big2_room'));
-    b2RoomId = roomRef.key;
-    b2MyId   = push(ref(b2db, `big2_room/${b2RoomId}/players`)).key;
-
-    await set(ref(b2db, `big2_room/${b2RoomId}`), {
-        name: roomName,
-        password,
-        host: b2MyId,
-        status: 'waiting',
-        createdAt: serverTimestamp(),
-        players: {},
-        hands: {}, cardCounts: {}, tableCards: [],
-        tablePlayerId: '', passCount: 0, firstTurn: true,
-        finished: [], turnOrder: [], playerNames: {}, roundNum: 1
-    });
-    await set(ref(b2db, `big2_room/${b2RoomId}/players/${b2MyId}`), {
-        name: b2Name, joined: serverTimestamp()
-    });
-    onDisconnect(ref(b2db, `big2_room/${b2RoomId}/players/${b2MyId}`)).remove();
-
-    b2EnterGame();
-};
-// 讓 showCreateRoom 能呼叫
-window.big2CreateRoomFromSection = window.b2CreateRoomFromSection;
-
-/* ────────────────────────────────
-   首頁「加入」按鈕
-──────────────────────────────── */
-window.b2AttemptJoin = async (id, correctPass) => {
-    if (correctPass && correctPass !== 'undefined' && correctPass !== '') {
-        const input = prompt('此房間有密碼，請輸入：');
-        if (input !== correctPass) { b2Toast('密碼錯誤！'); return; }
-    }
-    // 取暱稱
-    const stored = localStorage.getItem('playerName') || '';
-    if (!stored) {
-        const n = prompt('請輸入你的暱稱：');
-        if (!n || !n.trim()) return;
-        b2Name = n.trim();
-        localStorage.setItem('playerName', b2Name);
-    } else {
-        b2Name = stored;
-    }
-
-    const snap = await get(ref(b2db, `big2_room/${id}`));
-    if (!snap.exists()) { b2Toast('找不到房間'); return; }
-    const rd = snap.val();
-    if (rd.status === 'playing') {
-        // 斷線重連：若有同名玩家且不在線，複用其 key
-        const players = rd.players || {};
-        let reconnKey = null;
-        for (const [k, p] of Object.entries(players)) {
-            if (p.name === b2Name) { reconnKey = k; break; }
+        if (n === 2) {
+            if (counts[0] === 2) {
+                // 對子：用較大那張比大小
+                return { type: 'pair', value: b2CardValue(sorted[1]), lead: sorted[1] };
+            }
+            return null;
         }
-        if (!reconnKey) { b2Toast('遊戲已開始，無法加入新玩家'); return; }
-        b2MyId   = reconnKey;
-        b2RoomId = id;
-        b2IsHost = (rd.host === b2MyId);
-        onDisconnect(ref(b2db, `big2_room/${b2RoomId}/players/${b2MyId}`)).remove();
-        b2EnterGame();
-        return;
-    }
-    // 正常加入等待中的房間
-    b2IsHost = false;
-    b2RoomId = id;
-    b2MyId   = push(ref(b2db, `big2_room/${b2RoomId}/players`)).key;
-    await set(ref(b2db, `big2_room/${b2RoomId}/players/${b2MyId}`), {
-        name: b2Name, joined: serverTimestamp()
-    });
-    onDisconnect(ref(b2db, `big2_room/${b2RoomId}/players/${b2MyId}`)).remove();
-    b2EnterGame();
-};
-
-/* ────────────────────────────────
-   刪除房間
-──────────────────────────────── */
-window.b2DeleteRoom = (id) => {
-    if (confirm('確定刪除此大老二房間？')) remove(ref(b2db, `big2_room/${id}`));
-};
-
-/* ────────────────────────────────
-   進入遊戲畫面 & 訂閱
-──────────────────────────────── */
-function b2EnterGame() {
-    window._b2InGame = true;
-    // 隱藏所有其他區塊，顯示 gameArea + big2-wrapper
-    document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-    const gameArea = document.getElementById('gameArea');
-    gameArea.classList.remove('hidden');
-    // 隱藏其他遊戲 wrappers
-    ['ttt-board','c4-game-wrapper','liar-wrapper','uno-wrapper',
-     'btn-undo','btn-restart-gen','status'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
-    });
-    document.getElementById('big2-wrapper').classList.remove('hidden');
-    document.getElementById('roomDisplayInfo').innerText = '大老二 ' + b2RoomId.slice(-4);
-
-    // 訂閱遊戲資料
-    if (b2UnsubGame) { try { b2UnsubGame(); } catch(e){} }
-    b2UnsubGame = onValue(ref(b2db, `big2_room/${b2RoomId}`), snap => {
-        if (!snap.exists()) { b2Toast('房間已刪除'); b2LeaveCleanup(); return; }
-        b2RenderAll(snap.val());
-    });
-}
-
-/* ────────────────────────────────
-   主渲染
-──────────────────────────────── */
-function b2RenderAll(d) {
-    b2PlayerOrder  = d.turnOrder   || [];
-    b2CurrentTurn  = d.turn        || '';
-    b2TableCards   = b2DecH(d.tableCards || []);
-    b2TableOwnerId = d.tablePlayerId || '';
-    b2FirstTurn    = d.firstTurn !== false;
-    b2PassCount    = d.passCount   || 0;
-    b2PlayerNames  = d.playerNames || {};
-    const finished = d.finished    || [];
-    const players  = d.players     || {};
-    const cardCounts = d.cardCounts || {};
-    b2MyHand = b2DecH((d.hands && d.hands[b2MyId]) || []);
-    const isMyTurn = b2CurrentTurn === b2MyId;
-
-    // 更新房間名稱顯示
-    document.getElementById('big2-room-name-display').textContent = d.name || '---';
-
-    if (d.status === 'waiting') {
-        b2RenderWaiting(players, d.host);
-    } else {
-        b2ShowGameUI();
-        b2RenderOpponents(b2PlayerOrder, cardCounts, b2PlayerNames, finished);
-        b2RenderTable();
-        b2RenderBanner(finished, isMyTurn);
-        b2RenderHand();
-        b2UpdateBtns(finished.includes(b2MyId), isMyTurn);
-        if (d.status==='finished' || finished.length>=b2PlayerOrder.length-1) {
-            b2ShowWinner(finished);
+        if (n === 3) {
+            // 已取消「三條」：任選 3 張皆不可出牌（三同點請用葫蘆或鐵支）
+            return null;
         }
+        if (n === 5) {
+            const isFlush = sorted.every(c => c.suit === sorted[0].suit);
+            const uniqueRankIdxs = [...new Set(sorted.map(c => B2_RANK_ORDER.indexOf(c.rank)))].sort((a,b)=>a-b);
+
+            // 【修正】支援 A-2-3-4-5 和 2-3-4-5-6 順子
+            let isStraight = false;
+            if (uniqueRankIdxs.length === 5) {
+                const normalStraight = uniqueRankIdxs.every((v,i) => i === 0 || v === uniqueRankIdxs[i-1]+1) &&
+                    !(uniqueRankIdxs[0] === 0 && uniqueRankIdxs[4] === 12);
+                const a2345 = JSON.stringify(uniqueRankIdxs) === JSON.stringify([0,1,2,11,12]);
+                const _23456 = JSON.stringify(uniqueRankIdxs) === JSON.stringify([0,1,2,3,12]);
+                isStraight = normalStraight || a2345 || _23456;
+            }
+            const rankIdxs = uniqueRankIdxs;
+
+            // 鐵支（四條）
+            if (counts[0] === 4) {
+                const quadRank = Object.keys(rankCounts).find(r => rankCounts[r] === 4);
+                const quad = sorted.filter(c => c.rank === quadRank);
+                return { type: 'four_of_a_kind', value: b2CardValue(quad[3]), bomb: true, lead: quad[3] };
+            }
+            // 葫蘆
+            if (counts[0] === 3 && counts[1] === 2) {
+                const tripleRank = Object.keys(rankCounts).find(r=>rankCounts[r]===3);
+                const triple = sorted.filter(c=>c.rank===tripleRank);
+                return { type: 'full_house', value: b2CardValue(triple[2]), lead: triple[2] };
+            }
+            // 同花順（炸彈）
+            if (isFlush && isStraight) {
+                return { type: 'straight_flush', value: b2CardValue(sorted[4]), bomb: true, lead: sorted[4] };
+            }
+            // 同花
+            if (isFlush) {
+                return { type: 'flush', value: b2CardValue(sorted[4]), flushSuit: sorted[0].suit, lead: sorted[4] };
+            }
+            // 順子
+            if (isStraight) {
+                return { type: 'straight', value: b2CardValue(sorted[4]), lead: sorted[4] };
+            }
+            return null;
+        }
+        return null;
     }
 
-    // Header status
-    const hdr = document.getElementById('big2-header-status');
-    if (d.status==='waiting') {
-        hdr.textContent = `等待中 (${Object.keys(players).length}人)`;
-        hdr.style.color = '#94a3b8';
-    } else if (isMyTurn) {
-        hdr.textContent = '👉 輪到你出牌！';
-        hdr.style.color = '#d4af37';
-    } else {
-        hdr.textContent = `等待 ${b2PlayerNames[b2CurrentTurn]||'？'}`;
-        hdr.style.color = '#94a3b8';
+    // 比較兩手牌，回傳 true 表示 newPlay 大於 lastPlay
+    function b2CanBeat(newCards, lastPlay) {
+        if (!lastPlay || !lastPlay.type) return true;
+        const newPlay = b2GetHandType(newCards);
+        if (!newPlay) return false;
+
+        // 炸彈蓋一切（除非對方也是更大的炸彈）
+        if (newPlay.bomb && !lastPlay.bomb) return true;
+        if (lastPlay.bomb && !newPlay.bomb) return false;
+
+        // 5張牌型大小順序（非炸彈）: 同花順>鐵支>葫蘆>同花>順子
+        const fiveTypeOrder = { straight: 0, flush: 1, full_house: 2, four_of_a_kind: 3, straight_flush: 4 };
+
+        if (lastPlay.type !== newPlay.type) {
+            // 不同類型比較（5張牌型互比）
+            if (newCards.length === 5) {
+                const no = fiveTypeOrder[newPlay.type] ?? -1;
+                const lo = fiveTypeOrder[lastPlay.type] ?? -1;
+                if (no !== lo) return no > lo;
+            }
+            return false; // 牌型不同（非5張），不能出
+        }
+        // 同型比大小
+        return newPlay.value > lastPlay.value;
     }
-}
 
-/* ────────────────────────────────
-   等待室渲染
-──────────────────────────────── */
-function b2RenderWaiting(players, hostId) {
-    document.getElementById('big2-waiting-panel').style.display = '';
-    document.getElementById('big2-opponents-area').style.display = 'none';
-    document.getElementById('big2-table-area').style.display = 'none';
-    document.getElementById('big2-turn-banner').style.display = 'none';
-    document.getElementById('big2-hand-area').style.display = 'none';
-
-    const list = document.getElementById('big2-waiting-list');
-    list.innerHTML = '';
-    Object.entries(players).forEach(([id, p], i) => {
-        const isMe = id === b2MyId;
-        const isH  = id === hostId;
-        const div = document.createElement('div');
-        div.className = 'big2-waiting-slot';
-        div.innerHTML = `
-            <div class="big2-slot-avatar">${AVATARS[i%AVATARS.length]}</div>
-            <div class="big2-slot-name">${p.name||'玩家'}${isMe?' (我)':''}</div>
-            <div class="big2-slot-badge ${isH?'big2-badge-host':'big2-badge-ready'}">${isH?'房主':'已加入'}</div>`;
-        list.appendChild(div);
-    });
-
-    const count = Object.keys(players).length;
-    const btnStart = document.getElementById('big2-btn-start-game');
-    btnStart.style.display = (b2IsHost && count >= 2) ? '' : 'none';
-}
-
-/* ────────────────────────────────
-   切換到遊戲 UI
-──────────────────────────────── */
-function b2ShowGameUI() {
-    document.getElementById('big2-waiting-panel').style.display = 'none';
-    document.getElementById('big2-opponents-area').style.display = '';
-    document.getElementById('big2-table-area').style.display = '';
-    document.getElementById('big2-turn-banner').style.display = '';
-    document.getElementById('big2-hand-area').style.display = '';
-}
-
-/* ────────────────────────────────
-   對手渲染
-──────────────────────────────── */
-function b2RenderOpponents(order, cardCounts, names, finished) {
-    const area = document.getElementById('big2-opponents-area');
-    area.innerHTML = '';
-    order.filter(id => id !== b2MyId).forEach(id => {
-        const name  = names[id] || id;
-        const count = cardCounts[id] || 0;
-        const isActive = b2CurrentTurn === id;
-        const isDone   = finished.includes(id);
-        const rank     = finished.indexOf(id)+1;
-        const div = document.createElement('div');
-        div.className = 'big2-opponent-box'+(isActive?' active-turn':'')+(isDone?' out':'');
-        const backs = Array.from({length:Math.min(count,13)},()=>'<div class="big2-card-back-mini"></div>').join('');
-        div.innerHTML = `
-            <div class="big2-opp-name">${name}</div>
-            <div class="big2-opp-backs">${backs}</div>
-            <div class="big2-opp-count">${isDone?`第${rank}名🏆`:count+' 張'}</div>`;
-        area.appendChild(div);
-    });
-}
-
-/* ────────────────────────────────
-   桌面牌渲染
-──────────────────────────────── */
-function b2RenderTable() {
-    const area = document.getElementById('big2-played-cards');
-    area.innerHTML = '';
-    if (!b2TableCards.length) {
-        area.innerHTML = '<span style="color:#8a7e60;font-size:.85rem">（尚未出牌）</span>';
-    } else {
-        b2TableCards.forEach(c => {
-            const el = document.createElement('div');
-            el.className = `b2played-card ${SUIT_CLS[c.suit]}`;
-            el.innerHTML = `<div class="b2card-top">${VAL_NAME[c.val]}</div><div class="b2card-suit">${SUIT_SYM[c.suit]}</div><div class="b2card-bot">${VAL_NAME[c.val]}</div>`;
-            area.appendChild(el);
-        });
+    // 牌型中文名
+    function b2TypeName(type) {
+        const names = {
+            single: '單張', pair: '對子',
+            straight: '順子', flush: '同花', full_house: '葫蘆',
+            four_of_a_kind: '鐵支', straight_flush: '同花順'
+        };
+        return names[type] || type;
     }
-    const pi = document.getElementById('big2-play-info');
-    pi.textContent = b2TableOwnerId && b2PlayerNames[b2TableOwnerId]
-        ? `由 ${b2PlayerNames[b2TableOwnerId]} 出牌`
-        : '新的一輪 — 可自由出牌';
-}
 
-/* ────────────────────────────────
-   回合橫幅
-──────────────────────────────── */
-function b2RenderBanner(finished, isMyTurn) {
-    const banner = document.getElementById('big2-turn-banner');
-    if (finished.includes(b2MyId)) {
-        banner.textContent = '你已完成！觀戰中…';
-        banner.className = 'big2-turn-banner other-turn';
-    } else if (isMyTurn) {
-        banner.textContent = '✦ 輪到你出牌 ✦';
-        banner.className = 'big2-turn-banner my-turn';
-    } else {
-        banner.textContent = `等待 ${b2PlayerNames[b2CurrentTurn]||'？'} 出牌…`;
-        banner.className = 'big2-turn-banner other-turn';
-    }
-}
-
-/* ────────────────────────────────
-   手牌渲染
-──────────────────────────────── */
-function b2RenderHand() {
-    const area = document.getElementById('big2-hand-cards');
-    area.innerHTML = '';
-    b2MyHand.forEach((c, i) => {
+    // 建立一張牌DOM（用於中央牌堆）
+    function b2CreateCardPileDOM(card) {
+        const isRed = card.suit === '♥' || card.suit === '♦';
         const el = document.createElement('div');
-        el.className = `b2card ${SUIT_CLS[c.suit]}${b2Selected.has(i)?' selected':''}`;
-        el.innerHTML = `<div class="b2card-top">${VAL_NAME[c.val]}</div><div class="b2card-suit">${SUIT_SYM[c.suit]}</div><div class="b2card-bot">${VAL_NAME[c.val]}</div>`;
-        el.onclick = () => { if (b2Selected.has(i)) b2Selected.delete(i); else b2Selected.add(i); b2RenderHand(); };
-        area.appendChild(el);
-    });
-}
+        el.className = `b2-card-pile ${isRed ? 'red' : 'black'}`;
+        el.innerHTML = `<div class="b2-rank-corner b2-rank-tl">${card.rank}</div>
+            <div class="b2-center-suit">${card.suit}</div>
+            <div class="b2-rank-corner b2-rank-br">${card.rank}</div>`;
+        return el;
+    }
 
-function b2UpdateBtns(isDone, isMyTurn) {
-    document.getElementById('big2-btn-play').disabled = !isMyTurn || isDone;
-    document.getElementById('big2-btn-pass').disabled = !isMyTurn || isDone || !b2TableCards.length || b2TableOwnerId===b2MyId;
-}
-
-/* ────────────────────────────────
-   房主開始遊戲
-──────────────────────────────── */
-window.big2HostStartGame = async () => {
-    const snap = await get(ref(b2db, `big2_room/${b2RoomId}/players`));
-    const ps   = snap.val() || {};
-    const ids  = Object.keys(ps);
-    if (ids.length < 2) { b2Toast('至少需要2位玩家'); return; }
-
-    const deck = b2Shuffle(b2MakeDeck());
-    const n    = ids.length;
-    const hands= {}; let club3Holder='';
-    ids.forEach(id => hands[id]=[]);
-    deck.forEach((c,i) => {
-        const id = ids[i%n];
-        hands[id].push(b2Enc(c));
-        if (c.val===3&&c.suit===0) club3Holder=id;
-    });
-    ids.forEach(id => { hands[id]=b2EncH(b2SortHand(b2DecH(hands[id]))); });
-
-    const si    = ids.indexOf(club3Holder);
-    const order = [...ids.slice(si),...ids.slice(0,si)];
-    const names = {}; ids.forEach(id => names[id]=ps[id].name);
-    const cnts  = {}; ids.forEach(id => cnts[id]=hands[id].length);
-
-    await update(ref(b2db, `big2_room/${b2RoomId}`), {
-        status:'playing', turn:club3Holder, turnOrder:order,
-        tableCards:[], tablePlayerId:'', passCount:0,
-        firstTurn:true, finished:[], roundNum:1,
-        hands, cardCounts:cnts, playerNames:names
-    });
-};
-
-/* ────────────────────────────────
-   出牌
-──────────────────────────────── */
-window.big2PlayCards = async () => {
-    if (b2CurrentTurn !== b2MyId) return;
-    if (!b2Selected.size) { b2Toast('請先選擇要出的牌'); return; }
-    const sel = [...b2Selected].map(i=>b2MyHand[i]);
-    if (!b2ComboType(sel)) { b2Toast('❌ 非合法牌型'); return; }
-    if (b2FirstTurn && !sel.some(c=>c.val===3&&c.suit===0)) { b2Toast('❌ 第一手必須包含 ♣3'); return; }
-    if (b2TableCards.length && !b2Beats(sel, b2TableCards)) { b2Toast('❌ 出的牌必須比桌上的大'); return; }
-
-    const newHand = b2MyHand.filter((_,i)=>!b2Selected.has(i));
-    b2Selected.clear();
-
-    const upd = {};
-    upd[`big2_room/${b2RoomId}/hands/${b2MyId}`]        = b2EncH(newHand);
-    upd[`big2_room/${b2RoomId}/cardCounts/${b2MyId}`]   = newHand.length;
-    upd[`big2_room/${b2RoomId}/tableCards`]              = b2EncH(sel);
-    upd[`big2_room/${b2RoomId}/tablePlayerId`]           = b2MyId;
-    upd[`big2_room/${b2RoomId}/passCount`]               = 0;
-    upd[`big2_room/${b2RoomId}/firstTurn`]               = false;
-
-    let fin = (await get(ref(b2db,`big2_room/${b2RoomId}/finished`))).val()||[];
-    if (newHand.length===0 && !fin.includes(b2MyId)) {
-        fin = [...fin, b2MyId];
-        upd[`big2_room/${b2RoomId}/finished`] = fin;
-        if (fin.length >= b2PlayerOrder.length-1) {
-            const rem = b2PlayerOrder.filter(id=>!fin.includes(id));
-            upd[`big2_room/${b2RoomId}/finished`] = [...fin,...rem];
-            upd[`big2_room/${b2RoomId}/status`]   = 'finished';
-            upd[`big2_room/${b2RoomId}/turn`]      = '';
-            await update(ref(b2db), upd); return;
+    // 建立手牌DOM
+    function b2CreateCardDOM(card, idx, clickable) {
+        const isRed = card.suit === '♥' || card.suit === '♦';
+        const el = document.createElement('div');
+        el.className = `b2-card ${isRed ? 'red' : 'black'}`;
+        el.innerHTML = `<div class="b2-rank-corner b2-rank-tl">${card.rank}</div>
+            <div class="b2-center-suit">${card.suit}</div>
+            <div class="b2-rank-corner b2-rank-br">${card.rank}</div>`;
+        if (big2SelectedIndices.includes(idx)) el.classList.add('selected');
+        if (!clickable) el.classList.add('disabled');
+        if (clickable) {
+            el.onclick = () => {
+                if (big2IsProcessing) return;
+                const i = big2SelectedIndices.indexOf(idx);
+                if (i >= 0) big2SelectedIndices.splice(i, 1);
+                else big2SelectedIndices.push(idx);
+                if (roomDataCache && roomDataCache.type === 'big2') renderBig2Game(roomDataCache);
+            };
         }
+        return el;
     }
-    upd[`big2_room/${b2RoomId}/turn`] = b2NextPlayer(b2MyId, fin);
-    await update(ref(b2db), upd);
-};
 
-/* ────────────────────────────────
-   不出
-──────────────────────────────── */
-window.big2PassRound = async () => {
-    if (b2CurrentTurn !== b2MyId) return;
-    if (!b2TableCards.length || b2TableOwnerId===b2MyId) { b2Toast('現在不能不出'); return; }
-    const fin    = (await get(ref(b2db,`big2_room/${b2RoomId}/finished`))).val()||[];
-    const active = b2PlayerOrder.filter(id=>!fin.includes(id));
-    const newPass= b2PassCount+1;
-    const upd = {};
-    upd[`big2_room/${b2RoomId}/passCount`] = newPass;
-    if (newPass >= active.length-1) {
-        upd[`big2_room/${b2RoomId}/tableCards`]    = [];
-        upd[`big2_room/${b2RoomId}/tablePlayerId`] = '';
-        upd[`big2_room/${b2RoomId}/passCount`]     = 0;
-        upd[`big2_room/${b2RoomId}/turn`]          = b2TableOwnerId;
-    } else {
-        upd[`big2_room/${b2RoomId}/turn`] = b2NextPlayer(b2MyId, fin);
+    // 渲染大老二遊戲畫面
+    function renderBig2Game(data) {
+        document.getElementById('ttt-board').classList.add('hidden');
+        document.getElementById('c4-game-wrapper').classList.add('hidden');
+        document.getElementById('liar-wrapper').classList.add('hidden');
+        document.getElementById('uno-wrapper').classList.add('hidden');
+        document.getElementById('btn-undo').classList.add('hidden');
+        document.getElementById('btn-restart-gen').classList.add('hidden');
+        document.getElementById('status').classList.add('hidden');
+        document.getElementById('big2-wrapper').classList.remove('hidden');
+
+        document.getElementById('roomDisplayInfo').innerText = data.name;
+
+        const users    = data.users || {};
+        const order    = data.playerOrder || Object.keys(users);
+        const onlineUserKeys = Object.keys(users).filter(uid => users[uid] && users[uid].online !== false);
+        const myData   = users[currentUserKey];
+        const isHost   = (data.hostUid === currentUserKey);
+        const myHand   = (data.hands && data.hands[currentUserKey]) || [];
+        const gameState = data.gameState || 'waiting';
+
+        // 遷移：曾誤走 enterRoom 導致房間沒有 hostUid 時，由 uid 字典序最小的在線玩家補寫房主
+        if (gameState === 'waiting' && !data.hostUid && onlineUserKeys.length > 0 && currentUserKey && !big2HostClaimedRooms.has(currentRoomId)) {
+            const designated = [...onlineUserKeys].sort()[0];
+            if (currentUserKey === designated) {
+                big2HostClaimedRooms.add(currentRoomId);
+                update(ref(db, `ongame_room/${currentRoomId}`), {
+                    hostUid: currentUserKey,
+                    hostName: users[currentUserKey]?.name || myName
+                });
+            }
+        }
+
+        document.getElementById('big2-room-name').innerText = data.name + (myHand.length > 0 ? ` | 手牌：${myHand.length}張` : '');
+
+        // 如果不是我的回合，取消選取
+        const isMyTurn = order[data.turnIndex] === currentUserKey;
+        if (!isMyTurn || gameState !== 'playing') big2SelectedIndices = [];
+
+        const statusEl = document.getElementById('big2-turn-status');
+
+        if (gameState === 'waiting') {
+            statusEl.innerText = onlineUserKeys.length < 2 ? `等待更多玩家 (${onlineUserKeys.length}人在線)` : `等待中 (${onlineUserKeys.length}人在線)`;
+            statusEl.style.color = onlineUserKeys.length < 2 ? '#f59e0b' : '#cbd5e1';
+            document.getElementById('big2-btn-start').classList.toggle('hidden', !(isHost && onlineUserKeys.length >= 2));
+            document.getElementById('big2-btn-play').classList.add('hidden');
+            document.getElementById('big2-btn-pass').classList.add('hidden');
+        } else if (gameState === 'playing') {
+            document.getElementById('big2-btn-start').classList.add('hidden');
+            const curName = users[order[data.turnIndex]]?.name || '...';
+            const myPassed = (data.passedPlayers || []).includes(currentUserKey);
+            const myOut = (data.finishedPlayers || []).includes(currentUserKey);
+
+            if (myOut) {
+                statusEl.innerText = '✅ 你已出完牌';
+                statusEl.style.color = '#10b981';
+                document.getElementById('big2-btn-play').classList.add('hidden');
+                document.getElementById('big2-btn-pass').classList.add('hidden');
+            } else if (isMyTurn) {
+                statusEl.innerText = '👉 輪到你了！';
+                statusEl.style.color = '#facc15';
+                document.getElementById('big2-btn-play').classList.toggle('hidden', big2SelectedIndices.length === 0);
+                document.getElementById('big2-btn-pass').classList.toggle('hidden', !data.lastPlay || !data.lastPlay.type);
+            } else {
+                statusEl.innerText = `等待 ${curName}...`;
+                statusEl.style.color = '#cbd5e1';
+                document.getElementById('big2-btn-play').classList.add('hidden');
+                document.getElementById('big2-btn-pass').classList.add('hidden');
+            }
+        } else if (gameState === 'ended') {
+            document.getElementById('big2-btn-start').classList.add('hidden');
+            document.getElementById('big2-btn-play').classList.add('hidden');
+            document.getElementById('big2-btn-pass').classList.add('hidden');
+            document.getElementById('btn-restart-gen').classList.remove('hidden');
+            const finished = data.finishedPlayers || [];
+            let rankHtml = finished.map((uid, idx) => {
+                let badge = idx === 0 ? '🥇 第一名' : idx === 1 ? '🥈 第二名' : idx === 2 ? '🥉 第三名' : `🏅 第${idx+1}名`;
+                const last = idx === finished.length - 1;
+                const style = last ? 'color:#ef4444;' : '';
+                return `<div style="margin:8px 0; ${style}">${badge}：${users[uid]?.name||'未知'}${last?' 😭大老二':''}${idx===0?' 🏆':''}</div>`;
+            }).join('');
+            document.getElementById('win-message').innerHTML = `🃏 大老二結束 🃏<br><div style="font-size:0.45em; line-height:1.6; margin-top:16px; text-align:left; display:inline-block;">${rankHtml}</div>`;
+            document.getElementById('win-overlay').style.display = 'flex';
+        }
+
+        // 中央訊息
+        const centerMsgEl = document.getElementById('big2-center-message');
+        const curAction = data.lastAction || '';
+        if (curAction !== big2LastRenderedAction) {
+            if (big2CenterMsgTimeout) clearTimeout(big2CenterMsgTimeout);
+            centerMsgEl.innerText = curAction;
+            centerMsgEl.style.opacity = '1';
+            big2CenterMsgTimeout = setTimeout(() => { centerMsgEl.style.opacity = '0'; }, 3500);
+            big2LastRenderedAction = curAction;
+        }
+
+        // 對手列
+        const oppContainer = document.getElementById('big2-opponents-container');
+        oppContainer.innerHTML = '';
+        order.forEach((uid, idx) => {
+            if (uid === currentUserKey) return;
+            const u = users[uid]; if (!u) return;
+            const handCount = (data.hands && data.hands[uid]) ? data.hands[uid].length : 0;
+            const isActive  = (gameState === 'playing' && idx === data.turnIndex);
+            const isPassed  = (data.passedPlayers || []).includes(uid);
+            const isOut     = (data.finishedPlayers || []).includes(uid);
+            let rankBadge = '';
+            if (isOut) {
+                const rank = (data.finishedPlayers||[]).indexOf(uid);
+                rankBadge = rank === 0 ? '🥇' : rank === 1 ? '🥈' : rank === 2 ? '🥉' : `${rank+1}.`;
+            }
+            const div = document.createElement('div');
+            div.className = `big2-opp-card${isActive?' active':''}${isPassed&&!isOut?' passed':''}${isOut?' out':''}`;
+            const isOffline = !u.online;
+            let kickBtn = '';
+            if (isHost && gameState === 'waiting') {
+                kickBtn = `<br><button class="btn-sm btn-red" style="margin-top:3px;padding:2px 5px;font-size:0.65rem;" onclick="big2KickPlayer('${uid}')">踢出</button>`;
+            }
+            div.innerHTML = `<div class="opp-name">${isOffline?u.name+' 💤':u.name}</div>
+                <div class="opp-count">${isOut ? rankBadge : handCount}</div>
+                <small style="font-size:0.6rem; color:${isOut?'#10b981':isPassed?'#64748b':'#94a3b8'};">${isOut?'完成':isPassed?'PASS':'cards'}</small>${kickBtn}`;
+            oppContainer.appendChild(div);
+        });
+
+        // 自己的資訊在對手列也顯示一個 "我" 標籤
+        const selfDiv = document.createElement('div');
+        const selfRankBadge = (data.finishedPlayers||[]).includes(currentUserKey) ?
+            (['🥇','🥈','🥉'][(data.finishedPlayers||[]).indexOf(currentUserKey)] || `${(data.finishedPlayers||[]).indexOf(currentUserKey)+1}.`) : '';
+        const isSelfActive = gameState === 'playing' && order[data.turnIndex] === currentUserKey;
+        const isSelfPassed = (data.passedPlayers||[]).includes(currentUserKey);
+        const isSelfOut = (data.finishedPlayers||[]).includes(currentUserKey);
+        selfDiv.className = `big2-opp-card${isSelfActive?' active':''}${isSelfPassed&&!isSelfOut?' passed':''}${isSelfOut?' out':''}`;
+        selfDiv.style.border = isSelfActive ? '' : '1px solid rgba(74,222,128,0.4)';
+        selfDiv.innerHTML = `<div class="opp-name" style="color:#4ade80;">▶ ${(users[currentUserKey]?.name||myName)}</div>
+            <div class="opp-count">${isSelfOut ? selfRankBadge : myHand.length}</div>
+            <small style="font-size:0.6rem; color:${isSelfOut?'#10b981':isSelfPassed?'#64748b':'#4ade80'};">${isSelfOut?'完成':isSelfPassed?'PASS':'我'}</small>`;
+        oppContainer.insertBefore(selfDiv, oppContainer.firstChild);
+
+        // 中央牌堆（最後出的牌）
+        const pileEl = document.getElementById('big2-center-pile');
+        pileEl.innerHTML = '';
+        const lastPlayInfo = document.getElementById('big2-last-play-info');
+        if (data.lastPlay && data.lastPlay.cards && data.lastPlay.cards.length > 0) {
+            lastPlayInfo.innerText = `${data.lastPlay.playerName} 出了 ${b2TypeName(data.lastPlay.type)}`;
+            data.lastPlay.cards.forEach(card => {
+                pileEl.appendChild(b2CreateCardPileDOM(card));
+            });
+        } else {
+            lastPlayInfo.innerText = gameState === 'playing' ? '新的一輪，可任意出牌' : '等待遊戲開始';
+            pileEl.innerHTML = '<div style="color:rgba(255,255,255,0.2); font-size:2em;">🃏</div>';
+        }
+
+        // 我的手牌
+        const handContainer = document.getElementById('big2-my-hand');
+        handContainer.innerHTML = '';
+        const sortedHand = b2SortHand(myHand);
+        sortedHand.forEach((card, idx) => {
+            const canClick = isMyTurn && gameState === 'playing' && !((data.finishedPlayers||[]).includes(currentUserKey));
+            const cardEl = b2CreateCardDOM(card, idx, canClick);
+            if (idx === 0) cardEl.style.marginLeft = '0';
+            handContainer.appendChild(cardEl);
+        });
     }
-    await update(ref(b2db), upd);
-};
 
-function b2NextPlayer(cur, fin) {
-    const active = b2PlayerOrder.filter(id=>!fin.includes(id));
-    return active[(active.indexOf(cur)+1) % active.length];
-}
+    // 開始大老二遊戲 (Host)
+    window.big2StartGame = async () => {
+        const data = roomDataCache;
+        // 【修正】只抓取在線上的玩家，避免把牌發給幽靈玩家導致卡死
+        const users = Object.keys(data.users || {}).filter(uid => data.users[uid].online !== false);
+        if (users.length < 2) {
+            showBig2MessageModal('至少需要2名在線玩家才能開始', '無法開始');
+            return;
+        }
 
-/* ────────────────────────────────
-   勝負顯示
-──────────────────────────────── */
-function b2ShowWinner(fin) {
-    const ov = document.getElementById('big2-winner-overlay');
-    if (ov.style.display==='flex') return;
-    const EM = ['🥇','🥈','🥉','🏅','🏅','🏅','🏅','🏅','🏅','🏅'];
-    document.getElementById('big2-rank-list').innerHTML =
-        fin.map((id,i)=>`${EM[i]||'🏅'} 第${i+1}名：${b2PlayerNames[id]||id}${id===b2MyId?' (你)':''}`).join('<br>');
-    const r = fin.indexOf(b2MyId)+1;
-    document.getElementById('big2-winner-title').textContent =
-        r===1 ? '🏆 恭喜你贏了！' : r>0 ? `遊戲結束！你是第 ${r} 名` : '遊戲結束！';
-    ov.style.display = 'flex';
-}
+        const deck = b2GenerateDeck(); // 已洗牌
+        const hands = {};
+        const n = users.length;
+        const baseCount = Math.floor(52 / n);
+        const remainder = 52 % n;
 
-/* ────────────────────────────────
-   再玩一局
-──────────────────────────────── */
-window.big2ResetToWaiting = async () => {
-    document.getElementById('big2-winner-overlay').style.display = 'none';
-    if (!b2IsHost) { b2Toast('只有房主可以重新開始'); return; }
-    const snap = await get(ref(b2db,`big2_room/${b2RoomId}/players`));
-    const ps   = (snap.val()||{});
-    const ids  = Object.keys(ps);
-    if (ids.length < 2) { b2Toast('需要至少2位玩家'); return; }
-    // 重設為等待中
-    await update(ref(b2db, `big2_room/${b2RoomId}`), {
-        status:'waiting', turn:'', turnOrder:[], tableCards:[],
-        tablePlayerId:'', passCount:0, firstTurn:true,
-        finished:[], hands:{}, cardCounts:{}, playerNames:{}, roundNum:1
+        // 找有梅花3的玩家
+        let club3HolderIdx = -1;
+        let tempHands = {};
+        users.forEach(u => { tempHands[u] = []; });
+
+        // 先平均分牌
+        let deckIdx = 0;
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < baseCount; j++) {
+                tempHands[users[i]].push(deck[deckIdx++]);
+            }
+        }
+        // 剩餘牌先給有梅花3的（若還沒分到），其餘隨機
+        const leftover = deck.slice(deckIdx);
+        if (leftover.length > 0) {
+            // 先找哪個玩家有梅花3
+            let club3Player = null;
+            for (const uid of users) {
+                if (tempHands[uid].some(c => c.suit === '♣' && c.rank === '3')) {
+                    club3Player = uid;
+                    break;
+                }
+            }
+            if (club3Player === null) {
+                // 梅花3在剩餘牌中，直接給隨機玩家
+                club3Player = users[Math.floor(Math.random() * n)];
+            }
+            // 剩餘牌：先給梅花3持有者，再隨機分
+            const remainingPlayers = users.filter(u => u !== club3Player);
+            tempHands[club3Player].push(leftover[0]);
+            for (let i = 1; i < leftover.length; i++) {
+                const rp = remainingPlayers[Math.floor(Math.random() * remainingPlayers.length)];
+                tempHands[rp].push(leftover[i]);
+            }
+        }
+
+        // 排序手牌、找梅花3持有者決定先手
+        let startPlayerIdx = 0;
+        users.forEach((u, i) => {
+            tempHands[u] = b2SortHand(tempHands[u]);
+            hands[u] = tempHands[u];
+            if (tempHands[u].some(c => c.suit === '♣' && c.rank === '3')) startPlayerIdx = i;
+        });
+
+        const shuffledOrder = [...users]; // 保持加入順序，但先手從梅花3開始
+        // 重排使梅花3者排在index 0（用turnIndex指向正確）
+        await update(ref(db, `ongame_room/${currentRoomId}`), {
+            gameState: 'playing',
+            hands,
+            playerOrder: shuffledOrder,
+            turnIndex: startPlayerIdx,
+            finishedPlayers: [],
+            passedPlayers: [],
+            passCount: 0,
+            lastPlay: null,
+            lastAction: '遊戲開始！梅花3先出',
+            status: 'playing',
+            firstTurn: true
+        });
+    };
+
+    // 【新增】大老二踢出玩家功能
+    window.big2KickPlayer = async (uid) => {
+        if (!confirm("確定要踢出此玩家？")) return;
+        const data = roomDataCache;
+        const updates = {};
+
+        updates[`users/${uid}`] = null;
+        updates[`hands/${uid}`] = null;
+
+        if (data.playerOrder) {
+            let newOrder = [...data.playerOrder];
+            const targetIdx = newOrder.indexOf(uid);
+            if (targetIdx > -1) {
+                newOrder.splice(targetIdx, 1);
+                updates[`playerOrder`] = newOrder;
+
+                // 如果遊戲進行中，處理回合順序
+                if (data.gameState === 'playing') {
+                    let newTurnIndex = data.turnIndex;
+                    if (targetIdx < data.turnIndex) {
+                        newTurnIndex--;
+                    } else if (targetIdx === data.turnIndex) {
+                        if (newTurnIndex >= newOrder.length) newTurnIndex = 0;
+                    }
+                    if (newTurnIndex >= newOrder.length) newTurnIndex = 0;
+                    updates[`turnIndex`] = newTurnIndex;
+
+                    if (data.finishedPlayers) {
+                        updates[`finishedPlayers`] = data.finishedPlayers.filter(id => id !== uid);
+                    }
+                }
+            }
+        }
+        await update(ref(db, `ongame_room/${currentRoomId}`), updates);
+    };
+
+    // PASS
+    window.big2Pass = async () => {
+        if (big2IsProcessing) return;
+        const data = roomDataCache;
+        const isMyTurn = data.playerOrder[data.turnIndex] === currentUserKey;
+        if (!isMyTurn || data.gameState !== 'playing') return;
+        if (!data.lastPlay || !data.lastPlay.type) {
+            showBig2MessageModal('此輪你先出，不能 PASS', '提示');
+            return;
+        }
+
+        big2IsProcessing = true;
+        const myName2 = data.users[currentUserKey].name;
+        const order = data.playerOrder;
+        const n = order.length;
+        const finished = data.finishedPlayers || [];
+        let passed = [...(data.passedPlayers || [])];
+
+        if (!passed.includes(currentUserKey)) passed.push(currentUserKey);
+
+        // 下一個有效玩家
+        let nextIdx = (data.turnIndex + 1) % n;
+        let loopCount = 0;
+        while ((finished.includes(order[nextIdx]) || passed.includes(order[nextIdx])) && loopCount < n) {
+            nextIdx = (nextIdx + 1) % n;
+            loopCount++;
+        }
+
+        // 判斷是否全部都pass了（新一輪）
+        const activePlayers = order.filter(u => !finished.includes(u));
+        const allPassed = activePlayers.every(u => u === data.lastPlay.playerUid || passed.includes(u));
+
+        const updates = {};
+        if (allPassed) {
+            // 新的一輪，清除pass記錄、清除lastPlay、從上一輪最後出牌者開始
+            const lastPlayerIdx = order.indexOf(data.lastPlay.playerUid);
+            let newStart = lastPlayerIdx;
+            // 但如果最後出牌者已完成，往後找
+            let lc2 = 0;
+            while (finished.includes(order[newStart]) && lc2 < n) {
+                newStart = (newStart + 1) % n;
+                lc2++;
+            }
+            updates[`ongame_room/${currentRoomId}/turnIndex`] = newStart;
+            updates[`ongame_room/${currentRoomId}/passedPlayers`] = [];
+            updates[`ongame_room/${currentRoomId}/lastPlay`] = null;
+            updates[`ongame_room/${currentRoomId}/lastAction`] = `${myName2} PASS，${data.users[order[newStart]]?.name||'?'}可任意出牌`;
+        } else {
+            updates[`ongame_room/${currentRoomId}/turnIndex`] = nextIdx;
+            updates[`ongame_room/${currentRoomId}/passedPlayers`] = passed;
+            updates[`ongame_room/${currentRoomId}/lastAction`] = `${myName2} PASS`;
+        }
+
+        big2SelectedIndices = [];
+        await update(ref(db), updates);
+        big2IsProcessing = false;
+    };
+
+    // 出牌
+    window.big2PlaySelected = async () => {
+        if (big2IsProcessing || big2SelectedIndices.length === 0) return;
+        const data = roomDataCache;
+        const isMyTurn = data.playerOrder[data.turnIndex] === currentUserKey;
+        if (!isMyTurn || data.gameState !== 'playing') return;
+
+        big2IsProcessing = true;
+        const myHand = b2SortHand(data.hands[currentUserKey] || []);
+        const chosen = big2SelectedIndices.map(i => myHand[i]);
+        const play   = b2GetHandType(chosen);
+
+        if (!play) {
+            showBig2MessageModal('牌型無效！請選擇有效的出牌組合（單張／對子／順子／同花／葫蘆／鐵支／同花順）', '無法出牌');
+            big2IsProcessing = false;
+            return;
+        }
+
+        // 第一輪必須包含梅花3
+        if (data.firstTurn) {
+            const has3c = chosen.some(c => c.suit === '♣' && c.rank === '3');
+            if (!has3c) {
+                showBig2MessageModal('第一輪必須出含梅花3 ♣3 的牌！', '無法出牌');
+                big2IsProcessing = false;
+                return;
+            }
+        }
+
+        // 如果有上家牌，必須出相同張數（炸彈例外）
+        if (data.lastPlay && data.lastPlay.type) {
+            const lastN = data.lastPlay.cards ? data.lastPlay.cards.length : 1;
+            if (!play.bomb && chosen.length !== lastN) {
+                showBig2MessageModal(`必須出相同張數！上家出了 ${lastN} 張`, '無法出牌');
+                big2IsProcessing = false;
+                return;
+            }
+            if (!b2CanBeat(chosen, data.lastPlay)) {
+                showBig2MessageModal(`出不了！必須出比「${b2TypeName(data.lastPlay.type)}」更大的相同牌型（炸彈可例外）`, '無法出牌');
+                big2IsProcessing = false;
+                return;
+            }
+        }
+
+        const myName2 = data.users[currentUserKey].name;
+        const order   = data.playerOrder;
+        const n       = order.length;
+
+        // 更新手牌（從已排序的手牌中移除選取的牌）
+        let newHand = [...myHand];
+        big2SelectedIndices.slice().sort((a,b) => b-a).forEach(i => newHand.splice(i, 1));
+
+        let finishedList = [...(data.finishedPlayers || [])];
+        if (newHand.length === 0 && !finishedList.includes(currentUserKey)) {
+            finishedList.push(currentUserKey);
+
+            // 【新增】觸發「出完了！」動畫
+            const shoutEl = document.getElementById('big2-shout');
+            if (shoutEl) {
+                shoutEl.style.animation = 'none';
+                shoutEl.offsetHeight; // 觸發瀏覽器重繪
+                shoutEl.style.animation = 'unoShoutPop 1.5s forwards';
+            }
+        }
+
+        // 下一個有效玩家
+        let nextIdx = (data.turnIndex + 1) % n;
+        let lc = 0;
+        while (finishedList.includes(order[nextIdx]) && lc < n) {
+            nextIdx = (nextIdx + 1) % n;
+            lc++;
+        }
+
+        const updates = {};
+        updates[`ongame_room/${currentRoomId}/hands/${currentUserKey}`] = newHand;
+        updates[`ongame_room/${currentRoomId}/finishedPlayers`] = finishedList;
+        updates[`ongame_room/${currentRoomId}/turnIndex`] = nextIdx;
+        updates[`ongame_room/${currentRoomId}/passedPlayers`] = [];
+        updates[`ongame_room/${currentRoomId}/lastPlay`] = {
+            type: play.type, value: play.value, bomb: !!play.bomb,
+            cards: chosen, playerUid: currentUserKey, playerName: myName2
+        };
+        updates[`ongame_room/${currentRoomId}/lastAction`] = `${myName2} 出了 ${b2TypeName(play.type)} (${chosen.map(c=>c.suit+c.rank).join(' ')})`;
+        updates[`ongame_room/${currentRoomId}/firstTurn`] = false;
+
+        // 判斷遊戲結束：剩最後一名未完成玩家
+        if (finishedList.length >= n - 1) {
+            // 找最後一個
+            const lastPlayer = order.find(u => !finishedList.includes(u));
+            if (lastPlayer) finishedList.push(lastPlayer);
+            updates[`ongame_room/${currentRoomId}/finishedPlayers`] = finishedList;
+            updates[`ongame_room/${currentRoomId}/gameState`] = 'ended';
+        }
+
+        big2SelectedIndices = [];
+        await update(ref(db), updates);
+        big2IsProcessing = false;
+    };
+
+    // 重置大老二
+    function big2ResetGame() {
+        big2SelectedIndices = [];
+        big2IsProcessing = false;
+        big2LastRenderedAction = '';
+        update(ref(db, `ongame_room/${currentRoomId}`), {
+            gameState: 'waiting',
+            hands: {},
+            playerOrder: null,
+            turnIndex: 0,
+            finishedPlayers: [],
+            passedPlayers: [],
+            passCount: 0,
+            lastPlay: null,
+            lastAction: '準備重新開始',
+            firstTurn: false,
+            status: 'waiting'
+        });
+        closeWinOverlay();
+    }
+
+    // === 大老二 showCreateRoom（新版，直接在此處理 big2）===
+    const _origShowCreateRoom2 = window.showCreateRoom;
+    window.showCreateRoom = (type) => {
+        if (type !== 'big2') { _origShowCreateRoom2(type); return; }
+        selectedGameType = 'big2';
+        const btnInfinite  = document.getElementById('btn-infinite');
+        const btnConfirm   = document.getElementById('btn-confirm');
+        const normalSettings = document.getElementById('normalSettings');
+        const liarSettings   = document.getElementById('liarSettings');
+        const unoSettings    = document.getElementById('unoSettings');
+        const big2Settings   = document.getElementById('big2Settings');
+
+        btnInfinite.classList.add('hidden');
+        normalSettings.classList.add('hidden');
+        liarSettings.classList.add('hidden');
+        if (unoSettings)  unoSettings.classList.add('hidden');
+        if (big2Settings) big2Settings.classList.remove('hidden');
+
+        document.getElementById('createTitle').innerText = '創立 大老二 ♠️♣️ 房間';
+        btnConfirm.innerText = '創立 大老二 房間';
+        btnConfirm.onclick = createRoom;
+        showSection('createRoomSection');
+    };
+
+    // === 大老二 createRoom（新版）===
+    const _origCreateRoom2 = window.createRoom;
+    window.createRoom = () => {
+        if (selectedGameType !== 'big2') { _origCreateRoom2(); return; }
+        const name = document.getElementById('roomName').value || '大老二房間';
+        const pass = document.getElementById('roomPass').value;
+        const roomRef = push(ref(db, 'ongame_room'));
+        big2IsCreating = true;
+        const roomData = {
+            name, password: pass, type: 'big2', users: {}, status: 'waiting', chat: {},
+            gameState: 'waiting', hands: {}, finishedPlayers: [], passedPlayers: [],
+            passCount: 0, lastPlay: null, lastAction: '', firstTurn: false
+        };
+        set(roomRef, roomData).then(() => {
+            handleBig2Join(roomRef.key, roomData);
+        });
+    };
+
+    // === 加入大老二房間 ===
+    window.handleBig2Join = (id, roomData) => {
+        pendingRoomId = id;
+        pendingRoomData = roomData;
+        document.getElementById('modalNameInput').value = myName;
+        document.getElementById('modalTitle').innerText = '👇輸入暱稱進入大老二房間👇';
+        document.getElementById('customNameModal').classList.remove('hidden');
+        document.getElementById('modalNameInput').focus();
+    };
+
+    // attemptJoin is patched via the enterRoom dispatch chain
+
+    // submitNameModal patched directly in the main body above
+
+    function enterBig2Room(id, reconnectKey = null, isRoomCreator = false) {
+        currentRoomId = id;
+        showSection('gameArea');
+        document.getElementById('myNameDisplay').innerText = myName;
+        chatInitTimestamp = Date.now();
+
+        let userRef;
+        if (reconnectKey) {
+            userRef = ref(db, `ongame_room/${id}/users/${reconnectKey}`);
+            currentUserKey = reconnectKey;
+        } else {
+            userRef = push(ref(db, `ongame_room/${id}/users`));
+            currentUserKey = userRef.key;
+        }
+
+        update(userRef, { name: myName, online: true });
+        onDisconnect(userRef).update({ online: false });
+
+        if (isRoomCreator) {
+            if (typeof big2IsCreating !== 'undefined') big2IsCreating = false;
+            update(ref(db, `ongame_room/${id}`), { hostUid: currentUserKey, hostName: myName });
+        } else {
+            // 舊房或曾誤走 enterRoom 導致沒有 hostUid：第一位進房的玩家補上房主
+            get(ref(db, `ongame_room/${id}`)).then((snap) => {
+                const d = snap.val();
+                if (d && d.type === 'big2' && !d.hostUid && (d.gameState === 'waiting' || !d.gameState)) {
+                    update(ref(db, `ongame_room/${id}`), { hostUid: currentUserKey, hostName: myName });
+                }
+            });
+        }
+
+        onValue(ref(db, 'ongame_room/' + id), (snapshot) => {
+            const data = snapshot.val();
+            if (!data) { alert('房間已被刪除或不存在'); leaveRoom(); return; }
+            roomDataCache = data;
+            if (data.type === 'big2') renderBig2Game(data);
+        });
+
+        onValue(ref(db, `ongame_room/${id}/chat`), (snapshot) => {
+            const chatDiv = document.getElementById('chat-msgs');
+            chatDiv.innerHTML = '';
+            const msgs = snapshot.val();
+            if (msgs) {
+                Object.values(msgs).forEach(m => {
+                    const p = document.createElement('div');
+                    p.innerHTML = `<b>${m.user}:</b> ${m.text}`;
+                    chatDiv.appendChild(p);
+                });
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            }
+        });
+
+        onChildAdded(ref(db, `ongame_room/${id}/chat`), (data) => {
+            const msg = data.val();
+            if (msg.time > chatInitTimestamp) spawnFloatingMsg(msg.text);
+        });
+    }
+
+    // resetGame and leaveRoom are patched directly in the main code above
+
+    // === 大廳房間清單：加入 big2 類型顯示 ===
+    // 監聽 ongame_room 時，renderAllRooms 已會處理，只需加 typeName
+    const _origRenderAllRooms = window.renderAllRooms;
+    // (renderAllRooms 是內部函式，改在 onValue 之前 patch typeName)
+    // 直接在既有 onValue ongame_room 後重新 patch renderAllRooms function
+    // 做法：在現有函式中 big2 type會顯示為 "♠大老二"
+    // 我們透過 MutationObserver on allRoomsContainer 做 post-process patch：
+    // 更簡單：重新定義 renderAllRooms（window 版）
+    window.__big2PatchRooms = true;
+
+
+
+    // 大老二對手列自動滾動
+    window.addEventListener('DOMContentLoaded', () => {
+        function setupBig2Scroll() {
+            const checkExist = setInterval(() => {
+                const container = document.querySelector('.big2-opponents-bar');
+                if (container) {
+                    clearInterval(checkExist);
+                    let isUserScrolling = false;
+                    let scrollTimeout;
+                    container.addEventListener('scroll', () => {
+                        isUserScrolling = true;
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => { isUserScrolling = false; }, 3000);
+                    });
+                    const observer = new MutationObserver(() => {
+                        if (isUserScrolling) return;
+                        const activeEl = container.querySelector('.active');
+                        if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    });
+                    observer.observe(container, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+                }
+            }, 1000);
+        }
+        setupBig2Scroll();
     });
-};
-
-/* ────────────────────────────────
-   離開遊戲
-──────────────────────────────── */
-window.big2LeaveGame = () => {
-    if (b2UnsubGame) { try{b2UnsubGame();}catch(e){} b2UnsubGame=null; }
-    if (b2MyId && b2RoomId) {
-        try{ remove(ref(b2db,`big2_room/${b2RoomId}/players/${b2MyId}`)); }catch(e){}
-    }
-    window._b2InGame = false;
-    b2Selected.clear();
-    b2MyHand=[]; b2TableCards=[]; b2PlayerOrder=[];
-    b2RoomId=''; b2MyId=''; b2IsHost=false;
-    document.getElementById('big2-wrapper').classList.add('hidden');
-    document.getElementById('big2-winner-overlay').style.display='none';
-    document.getElementById('gameArea').classList.add('hidden');
-    document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));
-    document.getElementById('mainMenu').classList.remove('hidden');
-};
-
-/* ────────────────────────────────
-   初始化
-──────────────────────────────── */
-// 從 localStorage 同步暱稱
-b2Name = localStorage.getItem('playerName') || '';
 
 </script>
 </body>
